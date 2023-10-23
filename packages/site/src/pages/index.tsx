@@ -5,14 +5,15 @@ import {
   connectSnap,
   getSnap,
   isLocalSnap,
-  sendHello,
+  getKeys,
+  sendTx,
   shouldDisplayReconnectButton,
 } from '../utils';
 import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
+  RequestButton,
   Card,
 } from '../components';
 import { defaultSnapOrigin } from '../config';
@@ -123,9 +124,18 @@ const Index = () => {
     }
   };
 
-  const handleSendHelloClick = async () => {
+  const handleGetKeysClick = async () => {
     try {
-      await sendHello();
+      await getKeys();
+    } catch (e) {
+      console.error(e);
+      dispatch({ type: MetamaskActions.SetError, payload: e });
+    }
+  };
+
+  const handleSendTxClick = async () => {
+    try {
+      await sendTx();
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
@@ -191,13 +201,32 @@ const Index = () => {
         )}
         <Card
           content={{
-            title: 'Send Hello message',
-            description:
-              'Display a custom message within a confirmation screen in MetaMask.',
+            title: 'Connect to AergoNode',
+            description: 'Get WalletAddress & Private Key',
             button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
+              <RequestButton
+                onClick={handleGetKeysClick}
                 disabled={!state.installedSnap}
+                buttonMessage="Connect To Aergo"
+              />
+            ),
+          }}
+          disabled={!state.installedSnap}
+          fullWidth={
+            isMetaMaskReady &&
+            Boolean(state.installedSnap) &&
+            !shouldDisplayReconnectButton(state.installedSnap)
+          }
+        />
+        <Card
+          content={{
+            title: 'Send Transaction',
+            description: 'Get TxHash',
+            button: (
+              <RequestButton
+                onClick={handleSendTxClick}
+                disabled={!state.installedSnap}
+                buttonMessage="Send Transaction"
               />
             ),
           }}

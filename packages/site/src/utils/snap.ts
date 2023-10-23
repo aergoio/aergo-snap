@@ -1,9 +1,10 @@
-import { AergoClient } from '@herajs/client';
 import { MetaMaskInpageProvider } from '@metamask/providers';
+import { Address } from '@herajs/common';
+import { Wallet } from '@herajs/wallet';
+import { v4 as uuidv4 } from 'uuid';
+import { AergoClient } from '@herajs/client';
 import { defaultSnapOrigin } from '../config';
 import { GetSnapsResponse, Snap } from '../types';
-import { encodeAddress } from './crypto/encoding';
-
 /**
  * Get the installed snaps in MetaMask.
  *
@@ -57,16 +58,56 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
 /**
  * Invoke the "hello" method from the example snap.
  */
-export const sendHello = async () => {
+export const getKeys = async () => {
   const response = await window.ethereum.request({
     method: 'wallet_invokeSnap',
-    params: { snapId: defaultSnapOrigin, request: { method: 'hello' } },
+    params: { snapId: defaultSnapOrigin, request: { method: 'get-keys' } },
   });
 
   if (response) {
-    console.log(response, 'response');
+    const address = new Address(response.walletAddress);
+    console.log(address, 'address');
+    const aergo = new AergoClient();
+    console.log(aergo, 'AergoClient');
+    const walletConfig = {
+      appName: 'aergo-snap',
+      instanceId: uuidv4(),
+    };
+    console.log(walletConfig, 'walletConfig');
+    const wallet = new Wallet();
+    wallet.useChain({
+      chainId: 'localhost',
+      nodeUrl: 'http://3.38.108.120:7845',
+    });
+    const account = await wallet.accountManager.getOrAddAccount({
+      chainId: 'localhost',
+      address,
+    });
+    console.log(wallet.keyManager, 'keyManager');
+    console.log(wallet.accountManager, 'accountManager');
+    console.log(account, 'account');
   }
   return response;
+};
+
+export const sendTx = async () => {
+  const response = await window.ethereum.request({
+    method: 'wallet_invokeSnap',
+    params: {
+      snapId: defaultSnapOrigin,
+      request: {
+        method: 'send-tx',
+        params: {
+          from: 'AmPpwgBgDFE6PxfrUQeCXxXMyXGdBNxwbHXhc5vpy6RK9V4aWzPs',
+          to: 'AmQ1kMNzQVnA49MYMrGCbpy2157dFpe4bRLXWStu3Q41CKbpyDF8',
+          amount: '0 aergo',
+        },
+      },
+    },
+  });
+  if (response) {
+    console.log(response, 'response');
+  }
 };
 
 export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');
