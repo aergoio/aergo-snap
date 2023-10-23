@@ -18,23 +18,42 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   request,
 }) => {
   switch (request.method) {
-    case 'hello': {
-      return await getKeys();
+    case 'get-keys': {
+      const result = await snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'confirmation',
+          content: panel([
+            text(`Hello, **${origin}**!`),
+            text('Connect To Aergo Node and Get Wallet Address'),
+          ]),
+        },
+      });
+      if (result) {
+        return await getKeys();
+      }
+      break;
     }
 
-    // return snap.request({
-    //   method: 'snap_dialog',
-    //   params: {
-    //     type: 'confirmation',
-    //     content: panel([
-    //       text(`Hello, **${origin}**!`),
-    //       text('This custom confirmation is just for display purposes.'),
-    //       text(
-    //         'But you can edit the snap source code to make it do something, if you want to!',
-    //       ),
-    //     ]),
-    //   },
-    // });
+    case 'send-tx': {
+      const result = await snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'confirmation',
+          content: panel([
+            text(`Hello, **${origin}**!`),
+            // text(
+            //   `Send Transaction from:${request.args.from} to:${request.args.to} amount:${request.args.amount}`,
+            // ),
+          ]),
+        },
+      });
+      if (result) {
+        return request;
+      }
+      break;
+    }
+
     default:
       throw new Error('Method not found.');
   }
