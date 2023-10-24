@@ -32,7 +32,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       if (result) {
         return await getKeys();
       }
-      break;
+      return false;
     }
 
     case 'send-tx': {
@@ -49,9 +49,34 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
         },
       });
       if (result) {
-        return request;
+        let receipt;
+        const tx = {
+          hash: request.params.hash,
+          nonce: request.params.nonce,
+          account: request.params.from,
+          recipient: request.params.to,
+          amount: request.params.amount,
+          type: 4,
+          payload: request.params.payload,
+          chainIdHash: request.params.amount,
+          sign: request.params.sign,
+        };
+
+        const response = await fetch(
+          `http://temp.aergonode.io/7847/v1/sendSignedTransaction`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tx),
+          },
+        );
+        const responseJson = await response.json();
+
+        return responseJson;
       }
-      break;
+      return false;
     }
 
     default:

@@ -13,5 +13,6 @@ module.exports = {
   ignorePatterns: ['!.eslintrc.js', 'build/'],
   rules: {
     '@typescript-eslint/ban-ts-ignore': 'off',
+    'import/no-named-as-default': 0,
   },
 };
