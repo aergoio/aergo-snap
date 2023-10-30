@@ -23,7 +23,6 @@ export const getKeys = async () => {
   const walletAddress = encodeAddress(compressedPublicKey);
 
   return {
-    aergoBip44Node: await aergoBip44Node(0),
     walletAddress,
   };
 };
