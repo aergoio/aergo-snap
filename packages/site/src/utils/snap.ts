@@ -1,8 +1,7 @@
-import { AergoClient } from '@herajs/client';
 import { MetaMaskInpageProvider } from '@metamask/providers';
 import { defaultSnapOrigin } from '../config';
 import { GetSnapsResponse, Snap } from '../types';
-import { encodeAddress } from './crypto/encoding';
+import { GetKeysResponse } from '../types/response';
 
 /**
  * Get the installed snaps in MetaMask.
@@ -57,16 +56,45 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
 /**
  * Invoke the "hello" method from the example snap.
  */
-export const sendHello = async () => {
-  const response = await window.ethereum.request({
+export const getKeys = async () => {
+  const response = (await window.ethereum.request({
     method: 'wallet_invokeSnap',
-    params: { snapId: defaultSnapOrigin, request: { method: 'hello' } },
-  });
+    params: { snapId: defaultSnapOrigin, request: { method: 'get-keys' } },
+  })) as GetKeysResponse;
 
   if (response) {
-    console.log(response, 'response');
+    // TODO: 이후 메타마스크 Keyring을 통해, Key, Account 관리를 해야한다 (ex:ChainId, 잔고 등...)
+    //! 임시로 사용되는 개인키 저장소
+    window.sessionStorage.setItem('pk', JSON.stringify(response));
   }
   return response;
+};
+
+export const sendTx = async () => {
+  try {
+    const pk = await window.sessionStorage.getItem('pk');
+    if (pk) {
+      const { walletAddress: from } = JSON.parse(pk);
+      const to = 'AmQ1kMNzQVnA49MYMrGCbpy2157dFpe4bRLXWStu3Q41CKbpyDF8';
+      const amount = '10000000000';
+
+      const response = await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId: defaultSnapOrigin,
+          request: {
+            method: 'send-tx',
+            params: { from, to, amount },
+          },
+        },
+      });
+      if (response) {
+        console.log(response, 'response');
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');
