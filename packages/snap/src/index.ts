@@ -41,40 +41,14 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
         params: {
           type: 'confirmation',
           content: panel([
-            text(`Hello, **${origin}**!`),
-            // text(
-            //   `Send Transaction from:${request.args.from} to:${request.args.to} amount:${request.args.amount}`,
-            // ),
+            text(
+              `Send Transaction From:${request.params.from} To:${request.params.to} Amount:${request.params.amount}`,
+            ),
           ]),
         },
       });
       if (result) {
-        let receipt;
-        const tx = {
-          hash: request.params.hash,
-          nonce: request.params.nonce,
-          account: request.params.from,
-          recipient: request.params.to,
-          amount: request.params.amount,
-          type: 4,
-          payload: request.params.payload,
-          chainIdHash: request.params.amount,
-          sign: request.params.sign,
-        };
-
-        const response = await fetch(
-          `http://temp.aergonode.io/7847/v1/sendSignedTransaction`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tx),
-          },
-        );
-        const responseJson = await response.json();
-
-        return responseJson;
+        return result;
       }
       return false;
     }
