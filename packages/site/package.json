@@ -25,13 +25,8 @@
     ]
   },
   "dependencies": {
-    "@herajs/client": "^2.0.1",
-    "@herajs/common": "^2.0.1",
-    "@herajs/crypto": "^2.0.1",
-    "@herajs/wallet": "^2.0.1",
     "@metamask/key-tree": "^9.0.0",
     "@metamask/providers": "^9.0.0",
-    "axios": "^1.5.1",
     "elliptic": "^6.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
