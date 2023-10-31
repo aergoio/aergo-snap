@@ -44,6 +44,7 @@ export const light: DefaultTheme = {
       default: '#FFFFFF',
       alternative: '#F2F4F6',
       inverse: '#141618',
+      transparent: '#F2F4F6',
     },
     icon: {
       default: '#141618',
@@ -83,6 +84,7 @@ export const dark: DefaultTheme = {
       default: '#24272A',
       alternative: '#141618',
       inverse: '#FFFFFF',
+      transparent: 'rgba(88,86,102,.2)',
     },
     icon: {
       default: '#FFFFFF',
