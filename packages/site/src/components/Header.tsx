@@ -1,25 +1,25 @@
-import { useContext } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { connectSnap, getThemePreference, getSnap } from '../utils';
-import { HeaderButtons } from './Buttons';
+import { getThemePreference } from '../utils';
+import { ReactComponent as OptionsSvg } from '../assets/options-vertical.svg';
+import { ReactComponent as ArrowDownSvg } from '../assets/arrow-down.svg';
 import { SnapLogo } from './SnapLogo';
 import { Toggle } from './Toggle';
 
 const HeaderWrapper = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  place-items: center;
   padding: 2.4rem;
   border-bottom: 1px solid ${(props) => props.theme.colors.border.default};
 `;
 
 const Title = styled.p`
   font-size: ${(props) => props.theme.fontSizes.title};
+  white-space: nowrap;
   font-weight: bold;
   margin: 0;
   margin-left: 1.2rem;
+  cursor: default;
   ${({ theme }) => theme.mediaQueries.small} {
     display: none;
   }
@@ -31,10 +31,58 @@ const LogoWrapper = styled.div`
   align-items: center;
 `;
 
+const MiddleContainer = styled.div`
+  width: 80%;
+  text-align: center;
+`;
+
+const AccountName = styled.div`
+  padding: 1rem 0;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover {
+    background: ${(props) => props.theme.colors.background.transparent};
+  }
+`;
+
 const RightContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const NetworkName = styled.div`
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.background.transparent};
+  }
+`;
+
+const OptionsVertical = styled(OptionsSvg)`
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 50%;
+  &:hover {
+    background: ${(props) => props.theme.colors.background.transparent};
+  }
+  path {
+    fill: ${(props) => props.theme.colors.icon.default};
+  }
+`;
+
+const ArrowDown = styled(ArrowDownSvg)`
+  margin-left: 0.5rem;
+  ${({ theme }) => theme.mediaQueries.small} {
+    display: none;
+  }
+  path {
+    fill: ${(props) => props.theme.colors.icon.default};
+  }
 `;
 
 export const Header = ({
@@ -43,34 +91,42 @@ export const Header = ({
   handleToggleClick(): void;
 }) => {
   const theme = useTheme();
-  const [state, dispatch] = useContext(MetaMaskContext);
 
-  const handleConnectClick = async () => {
-    try {
-      await connectSnap();
-      const installedSnap = await getSnap();
-
-      dispatch({
-        type: MetamaskActions.SetInstalled,
-        payload: installedSnap,
-      });
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
+  const handleAccountModal = () => {
+    console.log('handleAccountModal');
   };
+
+  const handleNetworkModal = () => {
+    console.log('handleNetworkModal');
+  };
+
+  const handleOptions = () => {
+    console.log('handleOptions');
+  };
+
   return (
     <HeaderWrapper>
       <LogoWrapper>
         <SnapLogo color={theme.colors.icon.default} size={36} />
-        <Title>template-snap</Title>
+        <Title>Aergo Snap</Title>
       </LogoWrapper>
+      <MiddleContainer onClick={handleAccountModal}>
+        <AccountName>
+          Account1
+          <ArrowDown />
+        </AccountName>
+      </MiddleContainer>
+
       <RightContainer>
+        <NetworkName onClick={handleNetworkModal}>
+          Aergo Mainnet
+          <ArrowDown />
+        </NetworkName>
         <Toggle
           onToggle={handleToggleClick}
           defaultChecked={getThemePreference()}
         />
-        <HeaderButtons state={state} onConnectClick={handleConnectClick} />
+        <OptionsVertical onClick={handleOptions} />
       </RightContainer>
     </HeaderWrapper>
   );
