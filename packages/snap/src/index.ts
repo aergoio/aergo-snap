@@ -1,6 +1,8 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text } from '@metamask/snaps-ui';
 import { getKeys } from './getKeys';
+import { signTx } from './utils/tx';
+import { getBlockNumber, getAccount, sendTransaction } from './aergo';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -12,30 +14,26 @@ import { getKeys } from './getKeys';
  * @returns The result of `snap_dialog`.
  * @throws If the request method is not valid for this snap.
  */
+export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
+    const params: any = request.params;
 
-export const onRpcRequest: OnRpcRequestHandler = async ({
-  origin,
-  request,
-}) => {
-  switch (request.method) {
-    case 'hello': {
-      return await getKeys();
+    switch (request.method) {
+        case 'getAddress': {
+            const { address } = await getKeys();
+            return address;
+        }
+        case 'getBlockNumber': {
+            return await getBlockNumber();
+        }
+        case 'getAccount': {
+            return await getAccount(params?.address);
+        }
+        case 'sendTransaction': {
+            const { key } = await getKeys();
+            return await sendTransaction(await signTx(params.tx, key));
+        }
+
+        default:
+            throw new Error('Method not found.');
     }
-
-    // return snap.request({
-    //   method: 'snap_dialog',
-    //   params: {
-    //     type: 'confirmation',
-    //     content: panel([
-    //       text(`Hello, **${origin}**!`),
-    //       text('This custom confirmation is just for display purposes.'),
-    //       text(
-    //         'But you can edit the snap source code to make it do something, if you want to!',
-    //       ),
-    //     ]),
-    //   },
-    // });
-    default:
-      throw new Error('Method not found.');
-  }
 };
