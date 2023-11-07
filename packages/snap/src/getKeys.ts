@@ -20,9 +20,9 @@ export const getKeys = async () => {
   const { publicKey } = await aergoBip44Node(0);
   const hexToArray = hexToUint8Array(publicKey);
   const compressedPublicKey = secp256k1.compressPublicKey(hexToArray);
-  const walletAddress = encodeAddress(compressedPublicKey);
+  const address = encodeAddress(compressedPublicKey);
 
   return {
-    walletAddress,
+    address,
   };
 };
