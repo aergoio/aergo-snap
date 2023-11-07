@@ -1,6 +1,8 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text } from '@metamask/snaps-ui';
+import { ApiRequestParams } from './types/snapApi';
 import { getKeys } from './getKeys';
+import { logger } from './utils/logger';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -17,22 +19,19 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request,
 }) => {
+  const requestParams = request?.params as unknown as ApiRequestParams;
+  const debugLevel = requestParams?.debugLevel as string;
+  logger.init(debugLevel);
+  console.log(`debugLevel: ${logger.getLogLevel()}`);
+  logger.log(origin, request);
+  if (request.method === 'ping') {
+    logger.log('pong');
+    return 'pong';
+  }
+
   switch (request.method) {
     case 'get-keys': {
-      const result = await snap.request({
-        method: 'snap_dialog',
-        params: {
-          type: 'confirmation',
-          content: panel([
-            text(`Hello, **${origin}**!`),
-            text('Connect To Aergo Node and Get Wallet Address'),
-          ]),
-        },
-      });
-      if (result) {
-        return await getKeys();
-      }
-      return false;
+      return await getKeys();
     }
 
     case 'send-tx': {
