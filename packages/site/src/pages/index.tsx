@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
 import { RequestButton, Card } from '../components';
-import { useAppSelector } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useAergoSnap } from '../hooks/useAergoSnap';
+import { setError } from '../slices/UISlice';
 
 const Container = styled.div`
   display: flex;
@@ -90,11 +92,20 @@ const ErrorMessage = styled.div`
 const Index = () => {
   const { error } = useAppSelector((state) => state.UI);
   const { sendTransaction } = useAergoSnap();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (error.message) {
+      setTimeout(() => {
+        dispatch(setError({}));
+      }, 3000);
+    }
+  }, [error.message]);
 
   return (
     <Container>
       <CardContainer>
-        {error && (
+        {error.message && (
           <ErrorMessage>
             <b>An error happened:</b> {error.message}
           </ErrorMessage>
