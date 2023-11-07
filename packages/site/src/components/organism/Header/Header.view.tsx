@@ -1,9 +1,10 @@
 import { useTheme } from 'styled-components';
 import { useState } from 'react';
-import { getThemePreference } from '../../../utils';
+import { getThemePreference, shortenAddress } from '../../../utils';
 import { SnapLogo } from '../../SnapLogo';
 import { Toggle } from '../../Toggle';
 import { PopIn } from '../../molecule/PopIn';
+import { useAppSelector } from '../../../hooks/redux';
 import {
   HeaderWrapper,
   LogoWrapper,
@@ -22,6 +23,7 @@ export const HeaderView = ({
   handleToggleClick(): void;
 }) => {
   const theme = useTheme();
+  const { address } = useAppSelector((state) => state.wallet);
   const [accountModal, setAccountModal] = useState(false);
   const [networkModal, setNetworkModal] = useState(false);
 
@@ -36,22 +38,14 @@ export const HeaderView = ({
         <Title>Aergo Snap</Title>
       </LogoWrapper>
       <AccountWrapper onClick={() => setAccountModal(true)}>
-        <PopIn
-          isOpen={accountModal}
-          setIsOpen={setAccountModal}
-          showClose={false}
-        ></PopIn>
+        <PopIn isOpen={accountModal} setIsOpen={setAccountModal}></PopIn>
         <AccountName>
-          Account1
+          {shortenAddress(address)}
           <StyledFaChevronDown icon={['fas', 'chevron-down']} />
         </AccountName>
       </AccountWrapper>
       <NetworkWrapper>
-        <PopIn
-          isOpen={networkModal}
-          setIsOpen={setNetworkModal}
-          showClose={false}
-        ></PopIn>
+        <PopIn isOpen={networkModal} setIsOpen={setNetworkModal}></PopIn>
         <NetworkName onClick={() => setNetworkModal(true)}>
           Aergo Mainnet
           <StyledFaChevronDown icon={['fas', 'chevron-down']} />
