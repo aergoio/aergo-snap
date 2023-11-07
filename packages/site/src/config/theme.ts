@@ -62,6 +62,15 @@ export const light: DefaultTheme = {
     primary: {
       default: '#6F4CFF',
       inverse: '#FFFFFF',
+
+      // Blue
+      blue1: '#279ECC',
+      blue2: '#84CEEB',
+      blue3: '#ECF8FD',
+      // Pink
+      pink1: '#E4097D',
+      pink2: '#F894C9',
+      pink3: '#FFF1F9',
     },
     card: {
       default: '#FFFFFF',
@@ -71,6 +80,17 @@ export const light: DefaultTheme = {
       alternative: '#b92534',
       muted: '#d73a4919',
     },
+    grey: {
+      grey1: '#F0F0F0',
+      grey2: '#D8D8D8',
+      grey3: '#BABABA',
+      grey4: '#9C9A9A',
+      grey6: '#686767',
+      grey7: '#454344',
+      grey8: '#231F20',
+      white: '#FFFFFF',
+    },
+    gradation: {},
   },
   ...theme,
 };
@@ -111,6 +131,17 @@ export const dark: DefaultTheme = {
       alternative: '#b92534',
       muted: '#d73a4919',
     },
+    grey: {
+      grey1: '#F0F0F0',
+      grey2: '#D8D8D8',
+      grey3: '#BABABA',
+      grey4: '#9C9A9A',
+      grey6: '#686767',
+      grey7: '#454344',
+      grey8: '#231F20',
+      white: '#FFFFFF',
+    },
+    gradation: {},
   },
   ...theme,
 };
