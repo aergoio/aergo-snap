@@ -1,8 +1,6 @@
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
-import { MetamaskState } from '../hooks';
 import { ReactComponent as FlaskFox } from '../assets/flask_fox.svg';
-import { shouldDisplayReconnectButton } from '../utils';
 
 const Link = styled.a`
   display: flex;
@@ -113,9 +111,9 @@ export const HeaderButtons = ({
     return <ConnectButton onClick={onConnectClick} />;
   }
 
-  if (shouldDisplayReconnectButton(state.installedSnap)) {
-    return <ReconnectButton onClick={onConnectClick} />;
-  }
+  // if (shouldDisplayReconnectButton(state.installedSnap)) {
+  //   return <ReconnectButton onClick={onConnectClick} />;
+  // }
 
   return (
     <ConnectedContainer>
