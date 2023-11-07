@@ -1,22 +1,7 @@
-import { useContext } from 'react';
 import styled from 'styled-components';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import {
-  connectSnap,
-  getSnap,
-  isLocalSnap,
-  getKeys,
-  sendTx,
-  shouldDisplayReconnectButton,
-} from '../utils';
-import {
-  ConnectButton,
-  InstallFlaskButton,
-  ReconnectButton,
-  RequestButton,
-  Card,
-} from '../components';
-import { defaultSnapOrigin } from '../config';
+import { RequestButton, Card } from '../components';
+import { useAppSelector } from '../hooks/redux';
+import { useAergoSnap } from '../hooks/useAergoSnap';
 
 const Container = styled.div`
   display: flex;
@@ -34,25 +19,25 @@ const Container = styled.div`
   }
 `;
 
-const Heading = styled.h1`
-  margin-top: 0;
-  margin-bottom: 2.4rem;
-  text-align: center;
-`;
+// const Heading = styled.h1`
+//   margin-top: 0;
+//   margin-bottom: 2.4rem;
+//   text-align: center;
+// `;
 
-const Span = styled.span`
-  color: ${(props) => props.theme.colors.primary.default};
-`;
+// const Span = styled.span`
+//   color: ${(props) => props.theme.colors.primary.default};
+// `;
 
-const Subtitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.large};
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 0;
-  ${({ theme }) => theme.mediaQueries.small} {
-    font-size: ${({ theme }) => theme.fontSizes.text};
-  }
-`;
+// const Subtitle = styled.p`
+//   font-size: ${({ theme }) => theme.fontSizes.large};
+//   font-weight: 500;
+//   margin-top: 0;
+//   margin-bottom: 0;
+//   ${({ theme }) => theme.mediaQueries.small} {
+//     font-size: ${({ theme }) => theme.fontSizes.text};
+//   }
+// `;
 
 const CardContainer = styled.div`
   display: flex;
@@ -65,24 +50,24 @@ const CardContainer = styled.div`
   margin-top: 1.5rem;
 `;
 
-const Notice = styled.div`
-  background-color: ${({ theme }) => theme.colors.background.alternative};
-  border: 1px solid ${({ theme }) => theme.colors.border.default};
-  color: ${({ theme }) => theme.colors.text.alternative};
-  border-radius: ${({ theme }) => theme.radii.default};
-  padding: 2.4rem;
-  margin-top: 2.4rem;
-  max-width: 60rem;
-  width: 100%;
+// const Notice = styled.div`
+//   background-color: ${({ theme }) => theme.colors.background.alternative};
+//   border: 1px solid ${({ theme }) => theme.colors.border.default};
+//   color: ${({ theme }) => theme.colors.text.alternative};
+//   border-radius: ${({ theme }) => theme.radii.default};
+//   padding: 2.4rem;
+//   margin-top: 2.4rem;
+//   max-width: 60rem;
+//   width: 100%;
 
-  & > * {
-    margin: 0;
-  }
-  ${({ theme }) => theme.mediaQueries.small} {
-    margin-top: 1.2rem;
-    padding: 1.6rem;
-  }
-`;
+//   & > * {
+//     margin: 0;
+//   }
+//   ${({ theme }) => theme.mediaQueries.small} {
+//     margin-top: 1.2rem;
+//     padding: 1.6rem;
+//   }
+// `;
 
 const ErrorMessage = styled.div`
   background-color: ${({ theme }) => theme.colors.error.muted};
@@ -103,148 +88,29 @@ const ErrorMessage = styled.div`
 `;
 
 const Index = () => {
-  const [state, dispatch] = useContext(MetaMaskContext);
-
-  const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
-    ? state.isFlask
-    : state.snapsDetected;
-
-  const handleConnectClick = async () => {
-    try {
-      await connectSnap();
-      const installedSnap = await getSnap();
-
-      dispatch({
-        type: MetamaskActions.SetInstalled,
-        payload: installedSnap,
-      });
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
-
-  const handleGetKeysClick = async () => {
-    try {
-      await getKeys();
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
-
-  const handleSendTxClick = async () => {
-    try {
-      await sendTx();
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
+  const { error } = useAppSelector((state) => state.UI);
+  const { sendTransaction } = useAergoSnap();
 
   return (
     <Container>
-      <Heading>
-        Welcome to <Span>template-snap</Span>
-      </Heading>
-      <Subtitle>
-        Get started by editing <code>src/index.ts</code>
-      </Subtitle>
       <CardContainer>
-        {state.error && (
+        {error && (
           <ErrorMessage>
-            <b>An error happened:</b> {state.error.message}
+            <b>An error happened:</b> {error.message}
           </ErrorMessage>
         )}
-        {!isMetaMaskReady && (
-          <Card
-            content={{
-              title: 'Install',
-              description:
-                'Snaps is pre-release software only available in MetaMask Flask, a canary distribution for developers with access to upcoming features.',
-              button: <InstallFlaskButton />,
-            }}
-            fullWidth
-          />
-        )}
-        {!state.installedSnap && (
-          <Card
-            content={{
-              title: 'Connect',
-              description:
-                'Get started by connecting to and installing the example snap.',
-              button: (
-                <ConnectButton
-                  onClick={handleConnectClick}
-                  disabled={!isMetaMaskReady}
-                />
-              ),
-            }}
-            disabled={!isMetaMaskReady}
-          />
-        )}
-        {shouldDisplayReconnectButton(state.installedSnap) && (
-          <Card
-            content={{
-              title: 'Reconnect',
-              description:
-                'While connected to a local running snap this button will always be displayed in order to update the snap if a change is made.',
-              button: (
-                <ReconnectButton
-                  onClick={handleConnectClick}
-                  disabled={!state.installedSnap}
-                />
-              ),
-            }}
-            disabled={!state.installedSnap}
-          />
-        )}
-        <Card
-          content={{
-            title: 'Connect to AergoNode',
-            description: 'Get WalletAddress & Private Key',
-            button: (
-              <RequestButton
-                onClick={handleGetKeysClick}
-                disabled={!state.installedSnap}
-                buttonMessage="Connect To Aergo"
-              />
-            ),
-          }}
-          disabled={!state.installedSnap}
-          fullWidth={
-            isMetaMaskReady &&
-            Boolean(state.installedSnap) &&
-            !shouldDisplayReconnectButton(state.installedSnap)
-          }
-        />
         <Card
           content={{
             title: 'Send Transaction',
             description: 'Get TxHash',
             button: (
               <RequestButton
-                onClick={handleSendTxClick}
-                disabled={!state.installedSnap}
+                onClick={sendTransaction}
                 buttonMessage="Send Transaction"
               />
             ),
           }}
-          disabled={!state.installedSnap}
-          fullWidth={
-            isMetaMaskReady &&
-            Boolean(state.installedSnap) &&
-            !shouldDisplayReconnectButton(state.installedSnap)
-          }
         />
-        <Notice>
-          <p>
-            Please note that the <b>snap.manifest.json</b> and{' '}
-            <b>package.json</b> must be located in the server root directory and
-            the bundle must be hosted at the location specified by the location
-            field.
-          </p>
-        </Notice>
       </CardContainer>
     </Container>
   );
