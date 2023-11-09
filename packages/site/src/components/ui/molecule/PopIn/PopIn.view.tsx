@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, MutableRefObject, ReactNode } from 'react';
 import { Dialog } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Backdrop } from '../../atom/Backdrop';
+import { Backdrop } from '@ui/atom/Backdrop';
 import { Wrapper, CloseButton, Panel } from './PopIn.style';
 
 type Props = {

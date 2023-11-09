@@ -9,3 +9,7 @@ export const shortenAddress = (address: string, num = 3) => {
     )}`
   );
 };
+
+export const isValidAddress = (toCheck: string) => {
+  return /^Am[0-9A-Za-z]{52}$/u.test(toCheck);
+};

@@ -2,8 +2,8 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { useEffect, useState } from 'react';
 
-import { disableLoading, enableLoadingWithMessage } from '../slices/UISlice';
-import { setProvider } from '../slices/walletSlice';
+import { disableLoading, enableLoadingWithMessage } from 'slices/UISlice';
+import { setProvider } from 'slices/walletSlice';
 import { useAppDispatch } from './redux';
 
 export const useHasMetamask = () => {

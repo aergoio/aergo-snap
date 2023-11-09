@@ -1,14 +1,14 @@
+import { GetKeysResponse } from 'types/response';
+import {
+  setAddress,
+  setForceReconnect,
+  setWalletConnection,
+} from 'slices/walletSlice';
 import {
   disableLoading,
   enableLoadingWithMessage,
   setError,
-} from '../slices/UISlice';
-import {
-  setForceReconnect,
-  setAddress,
-  setWalletConnection,
-} from '../slices/walletSlice';
-import { GetKeysResponse } from '../types/response';
+} from 'slices/UISlice';
 import { useAppDispatch, useAppSelector } from './redux';
 
 export const useAergoSnap = () => {
@@ -78,6 +78,7 @@ export const useAergoSnap = () => {
   const getKeys = async () => {
     dispatch(enableLoadingWithMessage('Getting... Address'));
     try {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       const { address } = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: { snapId, request: { method: 'get-keys' } },

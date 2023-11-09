@@ -3,15 +3,14 @@ import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppSelector } from './hooks/redux';
-import { GlobalStyle } from './config/theme';
-import { ToggleThemeContext } from './Root';
-import { Footer } from './components';
+import { useAppSelector } from 'hooks/redux';
 
-import { LoadingBackdrop, PopIn } from './components/molecule';
-import { useHasMetamask } from './hooks/useHasMetamask';
-import { useAergoSnap } from './hooks/useAergoSnap';
-import { NoMetamaskModal, ConnectModal, Header } from './components/organism';
+import { LoadingBackdrop, PopIn } from '@ui/molecule';
+import { NoMetamaskModal, ConnectModal, Header, Footer } from '@ui/organism';
+import { GlobalStyle } from 'theme/default';
+import { ToggleThemeContext } from './Root';
+
+import { useAergoSnap, useHasMetamask } from './hooks';
 
 library.add(fas);
 

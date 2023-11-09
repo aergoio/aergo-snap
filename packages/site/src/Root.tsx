@@ -1,7 +1,7 @@
 import { createContext, FunctionComponent, ReactNode, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
+import { dark, light } from 'theme/default';
 import { getThemePreference, setLocalStorage } from './utils';
-import { dark, light } from './config/theme';
 
 export type RootProps = {
   children: ReactNode;

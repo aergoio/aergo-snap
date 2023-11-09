@@ -1,6 +1,5 @@
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as FlaskFox } from '../assets/flask_fox.svg';
 
 const Link = styled.a`
   display: flex;
@@ -69,7 +68,7 @@ const ConnectedIndicator = styled.div`
 
 export const InstallFlaskButton = () => (
   <Link href="https://metamask.io/flask/" target="_blank">
-    <FlaskFox />
+    {/* <FlaskFox /> */}
     <ButtonText>Install MetaMask Flask</ButtonText>
   </Link>
 );
@@ -77,7 +76,7 @@ export const InstallFlaskButton = () => (
 export const ConnectButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
-      <FlaskFox />
+      {/* <FlaskFox /> */}
       <ButtonText>Connect</ButtonText>
     </Button>
   );
@@ -86,7 +85,7 @@ export const ConnectButton = (props: ComponentProps<typeof Button>) => {
 export const ReconnectButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
-      <FlaskFox />
+      {/* <FlaskFox /> */}
       <ButtonText>Reconnect</ButtonText>
     </Button>
   );

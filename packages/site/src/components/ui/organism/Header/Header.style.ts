@@ -7,6 +7,7 @@ export const HeaderWrapper = styled.header`
   place-items: center;
   padding: 2.4rem;
   border-bottom: 1px solid ${(props) => props.theme.colors.border.default};
+  box-shadow: ${({ theme }) => theme.shadows.default};
 `;
 
 export const Title = styled.p`
