@@ -33,6 +33,7 @@ export const Wrapper = styled.div`
 
 export const InfoWrapper = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 export const StyledAccountImage = styled(AccountImage)`
