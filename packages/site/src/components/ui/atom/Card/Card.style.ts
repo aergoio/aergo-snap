@@ -23,7 +23,6 @@ export const Wrapper = styled.div<{
   margin-top: 2.4rem;
   margin-bottom: 2.4rem;
   padding: 2.4rem;
-  border: 1px solid ${({ theme }) => theme.colors.border.default};
   border-radius: ${({ theme }) => theme.radii.default};
   box-shadow: ${({ theme }) => theme.shadows.default};
   filter: opacity(${({ disabled }) => (disabled ? '.4' : '1')});
@@ -45,6 +44,6 @@ export const Title = styled.h2`
 `;
 
 export const Description = styled.div`
-  margin-top: 2.4rem;
-  margin-bottom: 2.4rem;
+  /* margin-top: 2.4rem; */
+  /* margin-bottom: 2.4rem; */
 `;

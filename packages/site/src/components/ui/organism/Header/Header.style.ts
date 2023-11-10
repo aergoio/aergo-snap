@@ -6,7 +6,6 @@ export const HeaderWrapper = styled.header`
   grid-template-columns: 1fr 2fr 1fr;
   place-items: center;
   padding: 2.4rem;
-  border-bottom: 1px solid ${(props) => props.theme.colors.border.default};
   box-shadow: ${({ theme }) => theme.shadows.default};
 `;
 
