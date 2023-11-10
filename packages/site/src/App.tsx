@@ -2,15 +2,11 @@ import { FunctionComponent, ReactNode, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-
-import { useAppSelector } from 'hooks/redux';
-
 import { LoadingBackdrop, PopIn } from '@ui/molecule';
 import { NoMetamaskModal, ConnectModal, Header, Footer } from '@ui/organism';
 import { GlobalStyle } from 'theme/default';
 import { ToggleThemeContext } from './Root';
-
-import { useAergoSnap, useHasMetamask } from './hooks';
+import { useAergoSnap, useAppSelector, useHasMetamask } from './hooks';
 
 library.add(fas);
 
@@ -53,15 +49,12 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   return (
     <>
       <GlobalStyle />
-
       <PopIn isOpen={!loading && Boolean(!hasMetamask) && !connected}>
         <NoMetamaskModal />
       </PopIn>
-
       <PopIn isOpen={!loading && Boolean(hasMetamask) && !connected}>
         <ConnectModal />
       </PopIn>
-
       <Wrapper>
         <Header handleToggleClick={toggleTheme} />
         {children}
