@@ -1,4 +1,2 @@
-import { LoadingBackdrop } from './LoadingBackdrop';
-import { PopIn } from './PopIn';
-
-export { LoadingBackdrop, PopIn };
+export { LoadingBackdrop } from './LoadingBackdrop';
+export { PopIn } from './PopIn';
