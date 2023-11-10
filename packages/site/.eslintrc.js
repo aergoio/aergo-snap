@@ -14,5 +14,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/ban-ts-ignore': 'off',
     'import/no-named-as-default': 0,
+    '@typescript-eslint/consistent-type-definitions': 0,
+    'no-void': 0,
   },
 };
