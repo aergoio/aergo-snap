@@ -1,5 +1,3 @@
-import { Header } from './Header';
-import { Footer } from './Footer';
-import { ConnectModal, NoMetamaskModal } from './Modal';
-
-export { Header, Footer, ConnectModal, NoMetamaskModal };
+export { Header } from './Header';
+export { Footer } from './Footer';
+export { ConnectModal, NoMetamaskModal } from './Modal';
