@@ -20,7 +20,8 @@ const theme = {
     small: '1.4rem',
   },
   radii: {
-    default: '24px',
+    // default: '24px',
+    default: '8px',
     button: '8px',
   },
   breakpoints,
@@ -30,7 +31,8 @@ const theme = {
     large: `@media screen and (min-width: ${breakpoints[2]})`,
   },
   shadows: {
-    default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
+    // default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
+    default: '0px 5px 12px rgba(0, 0, 0, 0.1)',
     button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15);',
   },
 };
@@ -57,11 +59,22 @@ export const light: DefaultTheme = {
       inverse: '#FFFFFF',
     },
     border: {
-      default: '#BBC0C5',
+      // default: '#BBC0C5',
+      default: '#f6f6f6',
     },
     primary: {
       default: '#6F4CFF',
       inverse: '#FFFFFF',
+      // Blue
+      blue1: '#279ECC',
+      blue2: '#84CEEB',
+      blue3: '#ECF8FD',
+    },
+    secondary: {
+      // Pink
+      pink1: '#E4097D',
+      pink2: '#F894C9',
+      pink3: '#FFF1F9',
     },
     card: {
       default: '#FFFFFF',
@@ -70,6 +83,20 @@ export const light: DefaultTheme = {
       default: '#d73a49',
       alternative: '#b92534',
       muted: '#d73a4919',
+    },
+    grey: {
+      grey1: '#F0F0F0',
+      grey2: '#D8D8D8',
+      grey3: '#BABABA',
+      grey4: '#9C9A9A',
+      grey6: '#686767',
+      grey7: '#454344',
+      grey8: '#231F20',
+      white: '#FFFFFF',
+    },
+    gradation: {
+      gradation1:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
     },
   },
   ...theme,
@@ -111,6 +138,17 @@ export const dark: DefaultTheme = {
       alternative: '#b92534',
       muted: '#d73a4919',
     },
+    grey: {
+      grey1: '#F0F0F0',
+      grey2: '#D8D8D8',
+      grey3: '#BABABA',
+      grey4: '#9C9A9A',
+      grey6: '#686767',
+      grey7: '#454344',
+      grey8: '#231F20',
+      white: '#FFFFFF',
+    },
+    gradation: {},
   },
   ...theme,
 };

@@ -1,20 +1,24 @@
-import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-type CardProps = {
-  content: {
-    title?: string;
-    description: ReactNode;
-    button?: ReactNode;
-  };
-  disabled?: boolean;
-  fullWidth?: boolean;
-};
+export const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* max-width: 64.8rem; */
+  /* width: 100%; */
+  /* height: 100%; */
+  /* margin-top: 1.5rem; */
+`;
 
-const CardWrapper = styled.div<{ fullWidth?: boolean; disabled: boolean }>`
+export const Wrapper = styled.div<{
+  fullWidth?: boolean;
+  disabled: boolean;
+}>`
   display: flex;
   flex-direction: column;
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : '250px')};
+  align-items: center;
+  /* width: ${({ fullWidth }) => (fullWidth ? '100%' : '250px')}; */
   background-color: ${({ theme }) => theme.colors.card.default};
   margin-top: 2.4rem;
   margin-bottom: 2.4rem;
@@ -32,7 +36,7 @@ const CardWrapper = styled.div<{ fullWidth?: boolean; disabled: boolean }>`
   }
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-size: ${({ theme }) => theme.fontSizes.large};
   margin: 0;
   ${({ theme }) => theme.mediaQueries.small} {
@@ -40,20 +44,7 @@ const Title = styled.h2`
   }
 `;
 
-const Description = styled.div`
+export const Description = styled.div`
   margin-top: 2.4rem;
   margin-bottom: 2.4rem;
 `;
-
-export const Card = ({ content, disabled = false, fullWidth }: CardProps) => {
-  const { title, description, button } = content;
-  return (
-    <CardWrapper fullWidth={fullWidth} disabled={disabled}>
-      {title && (
-        <Title>{title}</Title>
-      )}
-      <Description>{description}</Description>
-      {button}
-    </CardWrapper>
-  );
-};
