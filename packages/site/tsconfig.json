@@ -9,8 +9,8 @@
     "baseUrl": ".",
     "paths": {
       "assets/*": ["src/assets/*"],
+      "ui/*": ["src/ui/*"],
       "components/*": ["src/components/*"],
-      "@ui/*": ["src/components/ui/*"],
       "theme/*": ["src/theme/*"],
       "hooks/*": ["src/hooks/*"],
       "pages/*": ["src/pages/*"],

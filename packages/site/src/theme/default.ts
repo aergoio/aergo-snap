@@ -7,17 +7,41 @@ const breakpoints = ['600px', '768px', '992px'];
  */
 const theme = {
   fonts: {
-    default:
-      '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+    default: 'Outfit-Regular',
+    buttons: 'Outfit-Medium',
     code: 'ui-monospace,Menlo,Monaco,"Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New", monospace',
   },
   fontSizes: {
     heading: '5.2rem',
     mobileHeading: '3.6rem',
+    h1: '3.2rem',
     title: '2.4rem',
     large: '2rem',
-    text: '1.6rem',
-    small: '1.4rem',
+    text: '1.8rem',
+    small: '1.6rem',
+    xsmall: '1.4rem',
+    xxsmall: '1.2rem',
+  },
+  lineHeights: {
+    h1: '5.6rem',
+  },
+  fontWeights: {
+    normal: 'normal',
+    bold: 'bold',
+    300: '300',
+    400: '400',
+    500: '500',
+    600: '600',
+    700: '700',
+  },
+
+  spacing: {
+    xlarge: '3.8rem',
+    large2: '2.4rem',
+    large: '1.6rem',
+    tiny1: '1rem',
+    tiny2: '0.8rem',
+    small: '0.6rem',
   },
   radii: {
     // default: '24px',
@@ -44,7 +68,7 @@ export const light: DefaultTheme = {
   colors: {
     background: {
       default: '#FFFFFF',
-      alternative: '#F2F4F6',
+      alternative: '#f2f4f6',
       inverse: '#141618',
       transparent: '#F2F4F6',
     },
@@ -66,25 +90,47 @@ export const light: DefaultTheme = {
       default: '#6F4CFF',
       inverse: '#FFFFFF',
       // Blue
-      blue1: '#279ECC',
-      blue2: '#84CEEB',
-      blue3: '#ECF8FD',
+      main: '#279ECC',
+      light: '#84CEEB',
+      dark: '#ECF8FD',
+    },
+    'primary-outline': {
+      main: '#279ECC',
     },
     secondary: {
+      inverse: '#FFFFFF',
       // Pink
-      pink1: '#E4097D',
-      pink2: '#F894C9',
-      pink3: '#FFF1F9',
+      main: '#E4097D',
+      light: '#F894C9',
+      dark: '#FFF1F9',
+    },
+    'secondary-outline': {
+      main: '#E4097D',
     },
     card: {
       default: '#FFFFFF',
     },
     error: {
+      inverse: '#FFFFFF',
       default: '#d73a49',
       alternative: '#b92534',
       muted: '#d73a4919',
+      main: '#d73a49',
+    },
+    warning: {
+      inverse: '#FFFFFF',
+      main: '#f66a0a',
+    },
+    info: {
+      inverse: '#FFFFFF',
+      main: '#037DD6',
+    },
+    success: {
+      inverse: '#FFFFFF',
+      main: '#11d899',
     },
     grey: {
+      white: '#FFFFFF',
       grey1: '#F0F0F0',
       grey2: '#D8D8D8',
       grey3: '#BABABA',
@@ -92,11 +138,16 @@ export const light: DefaultTheme = {
       grey6: '#686767',
       grey7: '#454344',
       grey8: '#231F20',
-      white: '#FFFFFF',
     },
     gradation: {
-      gradation1:
+      inverse: '#FFFFFF',
+      border:
         'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
+      main: 'linear-gradient(to right, #279ecc, #a13e99)',
+      // main: 'linear-gradient(to right, #279ecc, #e4097d)',
+      // main: 'linear-gradient(to right, #279ecc, #f894c8)',
+      // main: 'linear-gradient(to right, #279ecc, #fff1f9)',
+      // main: 'linear-gradient(to right, #9a449c, #e30a7d)',
     },
   },
   ...theme,
@@ -124,21 +175,53 @@ export const dark: DefaultTheme = {
       inverse: '#24272A',
     },
     border: {
-      default: '#848C96',
+      default: '#24272A',
     },
     primary: {
       default: '#6F4CFF',
       inverse: '#FFFFFF',
+      // Blue
+      main: '#279ECC',
+      light: '#0F749B',
+      dark: '#093140',
+    },
+    'primary-outline': {
+      main: '#279ECC',
+    },
+    secondary: {
+      inverse: '#FFFFFF',
+      // Pink
+      main: '#F54A92',
+      light: '#972D5A',
+      dark: '#3F1D2F',
+    },
+    'secondary-outline': {
+      main: '#E4097D',
     },
     card: {
       default: '#141618',
     },
     error: {
+      inverse: '#FFFFFF',
       default: '#d73a49',
       alternative: '#b92534',
       muted: '#d73a4919',
+      main: '#d73a49',
+    },
+    warning: {
+      inverse: '#FFFFFF',
+      main: '#f66a0a',
+    },
+    info: {
+      inverse: '#FFFFFF',
+      main: '#037DD6',
+    },
+    success: {
+      inverse: '#FFFFFF',
+      main: '#11d899',
     },
     grey: {
+      white: '#FFFFFF',
       grey1: '#F0F0F0',
       grey2: '#D8D8D8',
       grey3: '#BABABA',
@@ -146,9 +229,21 @@ export const dark: DefaultTheme = {
       grey6: '#686767',
       grey7: '#454344',
       grey8: '#231F20',
-      white: '#FFFFFF',
     },
-    gradation: {},
+    gradation: {
+      inverse: '#FFFFFF',
+      border:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
+      main: 'linear-gradient(to right, #279ecc, #a13e99)',
+      gradation1:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #e4097d)',
+      gradation2:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #f894c8)',
+      gradation3:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #fff1f9)',
+      gradation5:
+        'linear-gradient(#fff, #fff), linear-gradient(to right, #9a449c, #e30a7d)',
+    },
   },
   ...theme,
 };
@@ -160,13 +255,26 @@ export const dark: DefaultTheme = {
  * @returns Global style React component.
  */
 export const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'Outfit-Regular';
+    src: url(../assets/fonts/Outfit-Regular.ttf);
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Outfit-Medium';
+    src: url(../assets/fonts/Outfit-Medium.ttf);
+    font-weight: normal;
+    font-style: normal;
+  }
+
   html {
     /* 62.5% of the base size of 16px = 10px.*/
     font-size: 62.5%;
   }
 
   body {
-    background-color: ${(props) => props.theme.colors.background.default};
+    background-color: ${(props) => props.theme.colors.background.alternative};
     color: ${(props) => props.theme.colors.text.default};
     font-family: ${(props) => props.theme.fonts.default};
     font-size: ${(props) => props.theme.fontSizes.text};
@@ -193,6 +301,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   button {
+    font-family: ${(props) => props.theme.fonts.buttons};
     font-size: ${(props) => props.theme.fontSizes.small};
     border-radius: ${(props) => props.theme.radii.button};
     background-color: ${(props) => props.theme.colors.background.inverse};
@@ -204,11 +313,12 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     transition: all .2s ease-in-out;
 
-    &:hover {
-      background-color: transparent;
-      border: 1px solid ${(props) => props.theme.colors.background.inverse};
-      color: ${(props) => props.theme.colors.text.default};
-    }
+    /* &:hover { */
+      /* background-color: transparent; */
+      /* border: 1px solid ${(props) =>
+        props.theme.colors.background.inverse}; */
+      /* color: ${(props) => props.theme.colors.text.default}; */
+    /* } */
 
     &:disabled,
     &[disabled] {
