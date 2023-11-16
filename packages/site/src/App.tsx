@@ -10,6 +10,10 @@ import { useAergoSnap, useAppSelector, useHasMetamask } from './hooks';
 
 library.add(fas);
 
+import { useAergoSnap, useHasMetamask } from './hooks';
+
+library.add(fas);
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,6 +68,11 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
         <Header handleToggleClick={toggleTheme} />
         {children}
         <Footer />
+        <PopIn isOpen={loading}>
+          {loading && (
+            <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
+          )}
+        </PopIn>
       </Wrapper>
     </>
   );

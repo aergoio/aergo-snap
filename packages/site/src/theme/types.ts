@@ -5,6 +5,7 @@ export enum VariantOptions {
   SECONDARY = 'secondary',
   SECONDARY_OUTLINE = 'secondary-outline',
   GRADATION = 'gradation',
+  SECONDARY = 'secondary',
   SUCCESS = 'success',
   ERROR = 'error',
   WARNING = 'warning',
