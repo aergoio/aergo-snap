@@ -1,7 +1,10 @@
 // ? Button
 export enum VariantOptions {
   PRIMARY = 'primary',
+  PRIMARY_OUTLINE = 'primary-outline',
   SECONDARY = 'secondary',
+  SECONDARY_OUTLINE = 'secondary-outline',
+  GRADATION = 'gradation',
   SUCCESS = 'success',
   ERROR = 'error',
   WARNING = 'warning',
@@ -10,7 +13,10 @@ export enum VariantOptions {
 
 export type Variant =
   | 'primary'
+  | 'primary-outline'
   | 'secondary'
+  | 'secondary-outline'
+  | 'gradation'
   | 'success'
   | 'error'
   | 'warning'
