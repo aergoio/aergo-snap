@@ -34,4 +34,4 @@ const uint8ArrayToHex = function (uint8Array: Uint8Array): string {
   return `0x${hexWithout0x}`;
 };
 
-export { encodeAddress, hexToUint8Array, uint8ArrayToHex };
+export { hexToUint8Array, uint8ArrayToHex, encodeAddress };
