@@ -1,10 +1,12 @@
 import { useTheme } from 'styled-components';
 import { useState } from 'react';
-import { useAppSelector } from 'hooks/redux';
+import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { PopIn } from 'ui/molecule';
 import { AergoSnapLogo } from 'assets/images/AergoSnapLogo';
 import { Toggle } from 'components/Toggle';
 import { getThemePreference } from 'utils/theme';
+import { Network } from 'types';
+import { setActiveNetwork } from 'slices/networkSlice';
 import {
   HeaderWrapper,
   LogoWrapper,
@@ -23,6 +25,7 @@ export const HeaderView = ({
   handleToggleClick(): void;
 }) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const { address } = useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
   const [accountModal, setAccountModal] = useState(false);
@@ -30,6 +33,11 @@ export const HeaderView = ({
 
   const handleOptions = () => {
     console.log('handleOptions');
+  };
+
+  const handleChangeNetwork = (activeNetwork: number) => {
+    dispatch(setActiveNetwork(activeNetwork));
+    setNetworkModal(false);
   };
 
   return (
@@ -53,8 +61,10 @@ export const HeaderView = ({
         <PopIn isOpen={networkModal} setIsOpen={setNetworkModal}>
           <div>
             <ul>
-              {networks?.items.map((network) => (
-                <li>{network.label}</li>
+              {networks?.items.map((network, idx) => (
+                <li onClick={() => handleChangeNetwork(idx)}>
+                  {network.label}
+                </li>
               ))}
             </ul>
           </div>
