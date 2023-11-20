@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { PopIn } from 'ui/molecule';
-import { Token } from 'types/index';
+import { Token } from 'types';
 import { IListProps } from 'ui/molecule/List/List.view';
 import { useAppSelector } from 'hooks/redux';
 import { TokenItem } from './TokenItem';
