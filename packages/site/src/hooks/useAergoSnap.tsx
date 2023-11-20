@@ -1,4 +1,4 @@
-import { GetKeysResponse } from 'types/response';
+import { GetKeysResponse } from 'types/index';
 import {
   setAddress,
   setForceReconnect,
@@ -9,6 +9,9 @@ import {
   enableLoadingWithMessage,
   setError,
 } from 'slices/UISlice';
+import { Network } from 'types';
+import { setNetworks } from 'slices/networkSlice';
+import { Networks } from 'utils/constants';
 import { useAppDispatch, useAppSelector } from './redux';
 
 export const useAergoSnap = () => {
@@ -25,6 +28,7 @@ export const useAergoSnap = () => {
 
   const dispatch = useAppDispatch();
   const { provider, address } = useAppSelector((state) => state.wallet);
+  const { activeNetwork } = useAppSelector((state) => state.networks);
   // const { loader } = useAppSelector((state) => state.UI);
 
   const connectToSnap = () => {
@@ -65,6 +69,8 @@ export const useAergoSnap = () => {
       .then((res: any) => {
         console.log('checkConnection', res === 'pong' ?? 'connected');
         dispatch(setWalletConnection(true));
+        // ? I don't know whether to import network data through the snap background or from inside as a constant object.
+        dispatch(setNetworks(Networks));
         dispatch(disableLoading());
       })
       .catch((err: any) => {
@@ -72,6 +78,7 @@ export const useAergoSnap = () => {
         dispatch(disableLoading());
         //eslint -disable-next-line no-console
         console.log(err);
+        dispatch(setError(err));
       });
   };
 
@@ -86,13 +93,15 @@ export const useAergoSnap = () => {
 
       dispatch(setAddress(address));
       dispatch(disableLoading());
-      // window.sessionStorage.setItem('pk', JSON.stringify(response));
-      // return response;
     } catch (err) {
       console.error(err);
       dispatch(setError(err));
       dispatch(disableLoading());
     }
+  };
+
+  const getWalletData = async (chainId: string, networks?: Network[]) => {
+    console.log(chainId, 'chainId');
   };
 
   const sendTransaction = async () => {
@@ -123,6 +132,7 @@ export const useAergoSnap = () => {
     connectToSnap,
     checkConnection,
     getKeys,
+    getWalletData,
     sendTransaction,
   };
 };
