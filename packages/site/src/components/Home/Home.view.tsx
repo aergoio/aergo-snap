@@ -1,11 +1,19 @@
-import { Card } from '@ui/atom/Card';
+import { Tabs } from 'ui/molecule';
 import { AddressInfo } from './AddressInfo';
-import { HomeWrapper } from './Home.style';
+import { HomeWrapper, Line } from './Home.style';
+import { Transactions } from './Transactions';
+import { TokenList, NftList, Activities } from './TabPanels';
 
 export const HomeView = () => {
   return (
     <HomeWrapper>
-      <Card content={{ description: <AddressInfo /> }} />
+      <AddressInfo />
+      <Transactions />
+      <Line />
+      <Tabs
+        tabs={['Token', 'NFT', 'Activities']}
+        panels={[<TokenList />, <NftList />, <Activities />]}
+      />
     </HomeWrapper>
   );
 };
