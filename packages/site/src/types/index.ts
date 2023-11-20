@@ -25,3 +25,42 @@ export interface Network {
   scanExplorerUrl?: string;
   scanApiUrl?: string;
 }
+
+export type Account = {
+  hash: string;
+  meta: {
+    balance: string;
+    balance_float: number;
+    blockno: number;
+    staking: string;
+    staking_float: number;
+    ts: string;
+  };
+};
+
+export type Transaction = {
+  hash: string;
+  meta: {
+    amount: string;
+    amount_float: number;
+    block_id: string;
+    blockno: number;
+    category: string;
+    contract: string;
+    fee_delegation: boolean;
+    fee_used: string;
+    from: string;
+    gas_limit: number;
+    gas_price: string;
+    gas_used: number;
+    method: string;
+    nonce: number;
+    payload: string;
+    result: string;
+    status: string;
+    to: string;
+    ts: string;
+    tx_idx: number;
+    type: number;
+  };
+};
