@@ -49,9 +49,8 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
 
   useEffect(() => {
     if (provider && networks.items.length > 0) {
-      const { chainId } = networks.items[networks.activeNetwork];
-      // TODO: We need to get wallet data according to chainId.
-      getWalletData(chainId);
+      const network = networks.items[networks.activeNetwork];
+      getWalletData(network);
     }
   }, [networks.activeNetwork, provider]);
 

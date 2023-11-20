@@ -18,20 +18,20 @@ export const TransactionsView = () => {
       </PopIn>
       <ButtonWrapper>
         <Button
-          customIconLeft={<Send />}
-          variant="font-gradation"
-          spacing="xlarge"
-          onClick={() => setSendModal(true)}
-        >
-          Send
-        </Button>
-        <Button
           customIconLeft={<Receive />}
           variant="font-gradation"
           spacing="xlarge"
           onClick={() => setReceiveModal(true)}
         >
           Receive
+        </Button>
+        <Button
+          customIconLeft={<Send />}
+          variant="font-gradation"
+          spacing="xlarge"
+          onClick={() => setSendModal(true)}
+        >
+          Send
         </Button>
       </ButtonWrapper>
     </Wrapper>

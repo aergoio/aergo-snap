@@ -1,4 +1,4 @@
-import { Token } from 'types';
+import { Account, Token } from 'types';
 import { createSlice } from '@reduxjs/toolkit';
 
 export type WalletState = {
@@ -6,6 +6,7 @@ export type WalletState = {
   isLoading: boolean;
   forceReconnect: boolean;
   address: string;
+  account: Account | null;
   tokens: Token[];
   provider?: any;
 };
@@ -15,6 +16,7 @@ const initialState: WalletState = {
   isLoading: false,
   forceReconnect: false,
   address: '',
+  account: null,
   tokens: [],
   provider: undefined,
 };
@@ -35,6 +37,9 @@ export const walletSlice = createSlice({
     setAddress: (state, { payload }) => {
       state.address = payload;
     },
+    setAccount: (state, { payload }) => {
+      state.account = payload;
+    },
     setTokens: (state, { payload }) => {
       state.tokens = payload;
     },
@@ -52,6 +57,7 @@ export const {
   setWalletConnection,
   setForceReconnect,
   setAddress,
+  setAccount,
   setTokens,
   resetWallet,
 } = walletSlice.actions;

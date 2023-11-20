@@ -8,6 +8,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+      "apis/*": ["src/apis/*"],
       "assets/*": ["src/assets/*"],
       "ui/*": ["src/ui/*"],
       "components/*": ["src/components/*"],

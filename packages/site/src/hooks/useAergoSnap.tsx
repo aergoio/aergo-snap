@@ -1,5 +1,6 @@
 import { GetKeysResponse, Network } from 'types';
 import {
+  setAccount,
   setAddress,
   setForceReconnect,
   setWalletConnection,
@@ -11,6 +12,7 @@ import {
 } from 'slices/UISlice';
 import { setNetworks } from 'slices/networkSlice';
 import { Networks } from 'utils/constants';
+import { scanApi } from 'apis/scanApi';
 import { useAppDispatch, useAppSelector } from './redux';
 
 export const useAergoSnap = () => {
@@ -27,8 +29,7 @@ export const useAergoSnap = () => {
 
   const dispatch = useAppDispatch();
   const { provider, address } = useAppSelector((state) => state.wallet);
-  const { activeNetwork } = useAppSelector((state) => state.networks);
-  // const { loader } = useAppSelector((state) => state.UI);
+  const { loader } = useAppSelector((state) => state.UI);
 
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
@@ -99,8 +100,25 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getWalletData = async (chainId: string, networks?: Network[]) => {
-    console.log(chainId, 'chainId');
+  const getWalletData = async (network: Network) => {
+    if (!loader.isLoading) {
+      dispatch(enableLoadingWithMessage('Getting Network Data...'));
+    }
+    const scanApiInstance = await scanApi(network);
+    if (scanApiInstance && address) {
+      try {
+        const account = (
+          await scanApiInstance.get(`accountsBalance?q=_id:${address}`)
+        ).data.hits[0];
+        console.log(account, 'account');
+        dispatch(setAccount(account));
+        dispatch(disableLoading());
+      } catch (err) {
+        console.error(err);
+        dispatch(setError(err));
+        dispatch(disableLoading());
+      }
+    }
   };
 
   const sendTransaction = async () => {
@@ -124,6 +142,7 @@ export const useAergoSnap = () => {
     } catch (err) {
       console.error(err);
       dispatch(setError(err));
+      dispatch(disableLoading());
     }
   };
 
