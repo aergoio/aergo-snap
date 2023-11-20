@@ -53,14 +53,14 @@ export const HeaderView = ({
         <PopIn isOpen={networkModal} setIsOpen={setNetworkModal}>
           <div>
             <ul>
-              {networks.items.map((network) => (
+              {networks?.items.map((network) => (
                 <li>{network.label}</li>
               ))}
             </ul>
           </div>
         </PopIn>
         <NetworkName onClick={() => setNetworkModal(true)}>
-          {`Aergo ${networks.items[networks.activeNetwork].label}`}
+          {`Aergo ${networks?.items[networks.activeNetwork].label}`}
           <StyledFaChevronDown icon={['fas', 'chevron-down']} />
         </NetworkName>
         <Toggle
