@@ -19,10 +19,6 @@ const ToggleWrapper = styled.div`
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
-  margin-right: 2.4rem;
-  ${({ theme }) => theme.mediaQueries.small} {
-    margin-right: 2.4rem;
-  }
 `;
 
 const ToggleInput = styled.input`
@@ -75,6 +71,7 @@ const ToggleContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background.alternative};
   transition: all 0.2s ease;
 `;
+
 const ToggleCircle = styled.div<CheckedProps>`
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   position: absolute;
@@ -87,6 +84,9 @@ const ToggleCircle = styled.div<CheckedProps>`
   background-color: #ffffff;
   box-sizing: border-box;
   transition: all 0.25s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 export const Toggle = ({
