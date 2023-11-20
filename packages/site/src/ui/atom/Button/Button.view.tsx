@@ -2,7 +2,14 @@ import { MouseEvent, ButtonHTMLAttributes, ReactNode } from 'react';
 import { Variant } from 'theme/types';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { CSSProperties } from 'styled-components';
-import { LeftIcon, RightIcon, TextWrapper, Wrapper } from './Button.style';
+import {
+  LeftIcon,
+  RightIcon,
+  TextWrapper,
+  Wrapper,
+  StyledCustomLeftIcon,
+  StyledCustomRightIcon,
+} from './Button.style';
 
 type Props = {
   onClick?: (e: MouseEvent<HTMLElement>) => void;
@@ -50,7 +57,7 @@ export const ButtonView = ({
       borderVisible={borderVisible}
       {...otherProps}
     >
-      {customIconLeft}
+      <StyledCustomLeftIcon>{customIconLeft}</StyledCustomLeftIcon>
       {iconLeft && <LeftIcon icon={['fas', iconLeft]} style={iconStyle} />}
       <TextWrapper
         hasIcons={hasIcons}
@@ -61,7 +68,7 @@ export const ButtonView = ({
         {children}
       </TextWrapper>
       {iconRight && <RightIcon icon={['fas', iconRight]} style={iconStyle} />}
-      {customIconRight}
+      <StyledCustomRightIcon>{customIconRight}</StyledCustomRightIcon>
     </Wrapper>
   );
 };

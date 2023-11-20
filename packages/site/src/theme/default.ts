@@ -57,7 +57,7 @@ const theme = {
   shadows: {
     // default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
     default: '0px 5px 12px rgba(0, 0, 0, 0.1)',
-    button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15);',
+    button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15)',
   },
 };
 
@@ -148,6 +148,11 @@ export const light: DefaultTheme = {
       // main: 'linear-gradient(to right, #279ecc, #f894c8)',
       // main: 'linear-gradient(to right, #279ecc, #fff1f9)',
       // main: 'linear-gradient(to right, #9a449c, #e30a7d)',
+    },
+    'font-gradation': {
+      main: 'linear-gradient(to right, #279ecc, #a13e99)',
+      hover: 'linear-gradient(to right, #279ecc, #a13e99)',
+      shadow: '0px 0px 16.1786px rgba(0, 0, 0, 0.15)',
     },
   },
   ...theme,
@@ -243,6 +248,11 @@ export const dark: DefaultTheme = {
         'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #fff1f9)',
       gradation5:
         'linear-gradient(#fff, #fff), linear-gradient(to right, #9a449c, #e30a7d)',
+    },
+    'font-gradation': {
+      main: 'linear-gradient(to right, #279ecc, #fff1f9)',
+      hover: 'linear-gradient(to right, #279ecc, #a13e99)',
+      shadow: '0 -2px 20px rgba(0, 0, 0, 0.75)',
     },
   },
   ...theme,

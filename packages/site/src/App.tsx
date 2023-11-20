@@ -9,9 +9,6 @@ import { ToggleThemeContext } from './Root';
 import { useAergoSnap, useAppSelector, useHasMetamask } from './hooks';
 
 library.add(fas);
-
-import { useAergoSnap, useHasMetamask } from './hooks';
-
 library.add(fas);
 
 const Wrapper = styled.div`
@@ -30,10 +27,12 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   const { connected, forceReconnect, provider } = useAppSelector(
     (state) => state.wallet,
   );
+  const networks = useAppSelector((state) => state.networks);
   const { loader } = useAppSelector((state) => state.UI);
   const toggleTheme = useContext(ToggleThemeContext);
   const { hasMetamask } = useHasMetamask();
-  const { checkConnection, getKeys } = useAergoSnap();
+  const { checkConnection, getKeys, getWalletData } = useAergoSnap();
+
   useEffect(() => {
     if (!provider) {
       return;
@@ -47,6 +46,14 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
       checkConnection();
     }
   }, [connected, forceReconnect, hasMetamask, provider]);
+
+  useEffect(() => {
+    if (provider && networks.items.length > 0) {
+      const { chainId } = networks.items[networks.activeNetwork];
+      // TODO: We need to get wallet data according to chainId.
+      getWalletData(chainId);
+    }
+  }, [networks.activeNetwork, provider]);
 
   const loading = loader.isLoading;
 

@@ -2,7 +2,7 @@ import { useTheme } from 'styled-components';
 import { useState } from 'react';
 import { useAppSelector } from 'hooks/redux';
 import { PopIn } from 'ui/molecule';
-import { SnapLogo } from 'components/SnapLogo';
+import { AergoSnapLogo } from 'assets/images/AergoSnapLogo';
 import { Toggle } from 'components/Toggle';
 import { getThemePreference } from 'utils/theme';
 import {
@@ -24,6 +24,7 @@ export const HeaderView = ({
 }) => {
   const theme = useTheme();
   const { address } = useAppSelector((state) => state.wallet);
+  const networks = useAppSelector((state) => state.networks);
   const [accountModal, setAccountModal] = useState(false);
   const [networkModal, setNetworkModal] = useState(false);
 
@@ -34,7 +35,7 @@ export const HeaderView = ({
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <SnapLogo color={theme.colors.icon.default} size={36} />
+        <AergoSnapLogo color={theme.colors.icon.default} size={36} />
         <Title>Aergo Snap</Title>
       </LogoWrapper>
       <AccountWrapper>
@@ -50,10 +51,16 @@ export const HeaderView = ({
       </AccountWrapper>
       <NetworkWrapper>
         <PopIn isOpen={networkModal} setIsOpen={setNetworkModal}>
-          <div>networkModal</div>
+          <div>
+            <ul>
+              {networks.items.map((network) => (
+                <li>{network.label}</li>
+              ))}
+            </ul>
+          </div>
         </PopIn>
         <NetworkName onClick={() => setNetworkModal(true)}>
-          Aergo Mainnet
+          {`Aergo ${networks.items[networks.activeNetwork].label}`}
           <StyledFaChevronDown icon={['fas', 'chevron-down']} />
         </NetworkName>
         <Toggle

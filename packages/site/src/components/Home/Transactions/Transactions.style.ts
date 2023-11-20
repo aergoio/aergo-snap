@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 30rem;
+  width: 35rem;
 `;
 
 export const ButtonWrapper = styled.div`

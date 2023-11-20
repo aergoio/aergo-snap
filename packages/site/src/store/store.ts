@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import thunk from 'redux-thunk';
-import { UIReducer, walletReducer } from '../slices';
+import { UIReducer, walletReducer, networkReducer } from '../slices';
 
 const createNoopStorage = () => {
   return {
@@ -35,15 +35,15 @@ const walletPersistConfig = {
   whitelist: ['forceReconnect'],
 };
 
-// const networkPersistConfig = {
-//   key: 'networks',
-//   storage,
-//   whitelist: ['activeNetwork'],
-// };
+const networkPersistConfig = {
+  key: 'networks',
+  storage,
+  whitelist: ['activeNetwork'],
+};
 
 const reducers = combineReducers({
   wallet: persistReducer(walletPersistConfig, walletReducer),
-  //   networks: persistReducer(networkPersistConfig, networkReducer),
+  networks: persistReducer(networkPersistConfig, networkReducer),
   // modals: modalReducer,
   UI: UIReducer,
 });
