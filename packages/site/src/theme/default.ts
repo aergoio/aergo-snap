@@ -37,6 +37,7 @@ const theme = {
 
   spacing: {
     xlarge: '3.8rem',
+    large3: '3rem',
     large2: '2.4rem',
     large: '1.6rem',
     tiny1: '1rem',
