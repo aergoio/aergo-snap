@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const HeaderWrapper = styled.header`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 2fr 2fr 2fr;
   place-items: center;
   padding: 2.4rem;
+  margin-right: ${({ theme }) => theme.spacing.large3};
   /* box-shadow: ${({ theme }) => theme.shadows.default}; */
 `;
 
@@ -44,7 +45,7 @@ export const AccountName = styled.div`
 `;
 
 export const NetworkWrapper = styled.div`
-  margin-left: 1.5rem;
+  /* margin-left: 1.5rem; */
   display: flex;
   flex-direction: row;
   align-items: center;
