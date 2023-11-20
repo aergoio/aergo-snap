@@ -1,4 +1,4 @@
-import { Token } from 'types/index';
+import { Token } from 'types';
 import { Wrapper } from './TokenItem.style';
 
 interface Props {

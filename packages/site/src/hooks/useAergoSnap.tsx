@@ -1,4 +1,4 @@
-import { GetKeysResponse } from 'types/index';
+import { GetKeysResponse, Network } from 'types';
 import {
   setAddress,
   setForceReconnect,
@@ -9,7 +9,6 @@ import {
   enableLoadingWithMessage,
   setError,
 } from 'slices/UISlice';
-import { Network } from 'types';
 import { setNetworks } from 'slices/networkSlice';
 import { Networks } from 'utils/constants';
 import { useAppDispatch, useAppSelector } from './redux';
