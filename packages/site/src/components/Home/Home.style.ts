@@ -5,13 +5,17 @@ export const HomeWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex: 1;
-  /* margin-top: 7.6rem; */
-  /* margin-bottom: 7.6rem; */
-  /* ${({ theme }) => theme.mediaQueries.small} {
-    padding-left: 2.4rem;
-    padding-right: 2.4rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    width: auto;
-  } */
+  width: ${({ theme }) => (theme.mediaQueries.small ? `80vw` : `100vw`)};
+  margin: 0 auto;
+  /* border: 1px solid ${({ theme }) => theme.colors.card.default}; */
+  background-color: ${({ theme }) => theme.colors.background.default};
+  box-shadow: ${({ theme }) => theme.shadows.default};
+`;
+
+export const Line = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${(props) => props.theme.colors.card.inverse};
+  box-shadow: ${(props) => props.theme.shadows.default};
+  opacity: 0.1;
+  margin-top: ${({ theme }) => theme.spacing.large2};
 `;
