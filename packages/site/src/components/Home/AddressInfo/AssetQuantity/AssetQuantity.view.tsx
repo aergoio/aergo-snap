@@ -8,7 +8,7 @@ type Props = {
 export const AssetQuantityView = ({ currencyValue, usdValue }: Props) => {
   return (
     <Wrapper>
-      <Asset>{`${currencyValue} AERGO`}</Asset>
+      <Asset>{`${currencyValue}`}</Asset>
       <Dollor>{`$${usdValue} USD`}</Dollor>
     </Wrapper>
   );
