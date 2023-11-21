@@ -67,9 +67,7 @@ export const useAergoSnap = () => {
         },
       })
       .then((res: any) => {
-        console.log('checkConnection', res === 'pong' ?? 'connected');
         dispatch(setWalletConnection(true));
-        // ? I don't know whether to import network data through the snap background or from inside as a constant object.
         dispatch(setNetworks(Networks));
         dispatch(disableLoading());
       })
@@ -110,7 +108,6 @@ export const useAergoSnap = () => {
         const account = (
           await scanApiInstance.get(`accountsBalance?q=_id:${address}`)
         ).data.hits[0];
-        console.log(account, 'account');
         dispatch(setAccount(account));
         dispatch(disableLoading());
       } catch (err) {

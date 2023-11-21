@@ -1,5 +1,15 @@
 import { Token } from 'types';
-import { Wrapper } from './TokenItem.style';
+import { RoundedIcon } from 'ui/atom/RoundedIcon';
+import { AergoSvg } from 'assets/images';
+import {
+  Wrapper,
+  Content,
+  Top,
+  Bottom,
+  TokenName,
+  Amount,
+  Dollor,
+} from './TokenItem.style';
 
 interface Props {
   token: Token;
@@ -8,10 +18,20 @@ interface Props {
 export const TokenItemView = ({ token }: Props) => {
   return (
     <Wrapper>
-      <span>name:{token.name}</span>
-      <span>hash:{token.hash}</span>
-      <span>contractAddress:{token.contractAddress}</span>
-      <span>amount:{token.amount}</span>
+      <RoundedIcon>
+        <AergoSvg />
+      </RoundedIcon>
+      <Content>
+        <Top>
+          <TokenName>{token.name}</TokenName>
+          <Dollor>{token.usd}</Dollor>
+        </Top>
+        <Bottom>
+          <Amount>{token.amount}</Amount>
+        </Bottom>
+      </Content>
+      {/* <li>hash:{token.hash}</li> */}
+      {/* <li>contractAddress:{token.contractAddress}</li> */}
     </Wrapper>
   );
 };

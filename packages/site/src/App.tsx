@@ -24,7 +24,7 @@ export type AppProps = {
 };
 
 export const App: FunctionComponent<AppProps> = ({ children }) => {
-  const { connected, forceReconnect, provider } = useAppSelector(
+  const { connected, forceReconnect, provider, address } = useAppSelector(
     (state) => state.wallet,
   );
   const networks = useAppSelector((state) => state.networks);
@@ -48,11 +48,11 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   }, [connected, forceReconnect, hasMetamask, provider]);
 
   useEffect(() => {
-    if (provider && networks.items.length > 0) {
+    if (provider && networks.items.length > 0 && address) {
       const network = networks.items[networks.activeNetwork];
       getWalletData(network);
     }
-  }, [networks.activeNetwork, provider]);
+  }, [networks.activeNetwork, provider, address]);
 
   const loading = loader.isLoading;
 

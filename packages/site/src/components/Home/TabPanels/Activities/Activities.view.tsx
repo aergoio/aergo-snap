@@ -2,12 +2,15 @@ import { scanApi } from 'apis/scanApi';
 import { useAppSelector } from 'hooks/redux';
 import { useEffect, useState } from 'react';
 import { Transaction } from 'types';
+import { Loading } from 'ui/atom/Loading';
 
 export const ActivitiesView = () => {
   const [transactions, setTransactions] = useState([]);
   const { address } = useAppSelector((state) => state.wallet);
   const network = useAppSelector((state) => state.networks);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     const getTransactions = async () => {
       const scanApiInstance = await scanApi(
         network.items[network.activeNetwork],
@@ -20,9 +23,10 @@ export const ActivitiesView = () => {
             )
           ).data.hits;
           setTransactions(transactionsData);
-          console.log(transactions, 'transactions');
+          setLoading(false);
         } catch (err) {
           console.error(err);
+          setLoading(false);
         }
       }
     };
@@ -30,8 +34,9 @@ export const ActivitiesView = () => {
   }, []);
   return (
     <>
+      {loading ? <Loading /> : null}
       {transactions.map((transaction: Transaction) => (
-        <ul>
+        <ul key={transaction.hash}>
           <li>{`amount_float: ${transaction.meta.amount_float}`}</li>
           <li>{`category: ${transaction.meta.category}`}</li>
           <li>{`hash: ${transaction.hash}`}</li>

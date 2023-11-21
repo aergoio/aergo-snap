@@ -13,9 +13,10 @@ export type GetKeysResponse = {
 
 export type Token = {
   name: string;
-  hash: string;
-  contractAddress: string;
   amount: string | number;
+  hash: string;
+  contractAddress?: string;
+  usd?: string;
 };
 
 export interface Network {

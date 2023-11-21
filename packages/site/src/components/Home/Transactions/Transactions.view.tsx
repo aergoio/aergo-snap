@@ -1,7 +1,7 @@
 import { Button } from 'ui/atom/Button';
 import { useState } from 'react';
 import { PopIn } from 'ui/molecule';
-import { Send, Receive } from 'assets/images';
+import { SendSvg, ReceiveSvg } from 'assets/images';
 import { Wrapper, ButtonWrapper } from './Transactions.style';
 
 export const TransactionsView = () => {
@@ -18,7 +18,7 @@ export const TransactionsView = () => {
       </PopIn>
       <ButtonWrapper>
         <Button
-          customIconLeft={<Receive />}
+          customIconLeft={<ReceiveSvg />}
           variant="font-gradation"
           spacing="xlarge"
           onClick={() => setReceiveModal(true)}
@@ -26,7 +26,7 @@ export const TransactionsView = () => {
           Receive
         </Button>
         <Button
-          customIconLeft={<Send />}
+          customIconLeft={<SendSvg />}
           variant="font-gradation"
           spacing="xlarge"
           onClick={() => setSendModal(true)}
