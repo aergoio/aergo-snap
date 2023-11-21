@@ -1,8 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { PopIn } from 'ui/molecule';
 import { Token } from 'types';
 import { IListProps } from 'ui/molecule/List/List.view';
 import { useAppSelector } from 'hooks/redux';
+import { formatTokenAmount, moveDecimalPoint } from 'utils/utils';
 import { TokenItem } from './TokenItem';
 import {
   Wrapper,
@@ -11,21 +12,36 @@ import {
   ListWrapper,
 } from './TokenList.style';
 
-const tokens: Token[] = [
-  {
-    name: 'aergo',
-    hash: 'AmMMZxK5EjDTtWtEFhHHbdhVf84AQpGGeZUk5ZaS6Zq2krECBMcf',
-    contractAddress: 'Amhpi4LgVS74YJoZAWXsVgkJfEztYe5KkV3tY7sYtCgXchcKQeCQ',
-    amount: '100',
-  },
-];
+// TODO: Should Add token Spec
 
 export const TokenListView = () => {
   const [importAssetModal, setImportAssetModal] = useState(false);
+  const [tokens, setTokens] = useState([
+    {
+      name: 'AERGO',
+      hash: '',
+      contractAddress: '',
+      amount: '0 AERGO',
+      usd: '$0 USD',
+    },
+  ]);
   const wallet = useAppSelector((state) => state.wallet);
   const handleClickRefresh = () => {
     console.log('handleClickRefresh');
   };
+
+  useEffect(() => {
+    const { account } = wallet;
+    setTokens((prevTokens) => [
+      {
+        ...prevTokens[0],
+        hash: account?.hash || '',
+        amount: formatTokenAmount(account?.meta.balance || '', 'AERGO', 18),
+        usd: `$${moveDecimalPoint(account?.meta.balance || '', -18)} USD`,
+      },
+      ...prevTokens.slice(1),
+    ]);
+  }, [wallet?.account?.hash]);
 
   return (
     <Wrapper>
