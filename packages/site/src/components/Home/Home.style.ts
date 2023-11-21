@@ -12,11 +12,3 @@ export const HomeWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background.default};
   box-shadow: ${({ theme }) => theme.shadows.default};
 `;
-
-export const Line = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${(props) => props.theme.colors.card.inverse};
-  box-shadow: ${(props) => props.theme.shadows.default};
-  opacity: 0.1;
-  margin-top: ${({ theme }) => theme.spacing.large2};
-`;
