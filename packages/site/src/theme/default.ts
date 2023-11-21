@@ -24,6 +24,7 @@ const theme = {
   },
   lineHeights: {
     h1: '5.6rem',
+    c1: '2rem',
   },
   fontWeights: {
     normal: 'normal',
@@ -228,13 +229,13 @@ export const dark: DefaultTheme = {
     },
     grey: {
       white: '#FFFFFF',
-      grey1: '#F0F0F0',
-      grey2: '#D8D8D8',
-      grey3: '#BABABA',
-      grey4: '#9C9A9A',
-      grey6: '#686767',
-      grey7: '#454344',
-      grey8: '#231F20',
+      grey8: '#F0F0F0',
+      grey6: '#D8D8D8',
+      grey4: '#BABABA',
+      grey3: '#9C9A9A',
+      grey2: '#686767',
+      grey1: '#454344',
+      black: '#231F20',
     },
     gradation: {
       inverse: '#FFFFFF',
