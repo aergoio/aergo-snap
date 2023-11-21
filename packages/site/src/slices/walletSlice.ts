@@ -17,7 +17,7 @@ const initialState: WalletState = {
   forceReconnect: false,
   address: '',
   account: null,
-  tokens: [],
+  tokens: [{ name: 'AERGO', amount: '0', hash: '' }],
   provider: undefined,
 };
 
