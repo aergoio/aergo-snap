@@ -1,4 +1,6 @@
 // @ts-ignore
-export { ReactComponent as Send } from './send.svg';
+export { ReactComponent as SendSvg } from './send.svg';
 // @ts-ignore
-export { ReactComponent as Receive } from './receive.svg';
+export { ReactComponent as ReceiveSvg } from './receive.svg';
+// @ts-ignore
+export { ReactComponent as AergoSvg } from './aergo.svg';
