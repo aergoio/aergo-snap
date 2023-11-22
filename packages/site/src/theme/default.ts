@@ -1,6 +1,6 @@
 import { createGlobalStyle, DefaultTheme } from 'styled-components';
 
-const breakpoints = ['600px', '768px', '992px'];
+const breakpoints = ['768px', '800px', '992px'];
 
 /**
  * Common theme properties.
