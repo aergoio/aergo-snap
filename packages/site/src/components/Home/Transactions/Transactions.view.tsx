@@ -3,10 +3,13 @@ import { useState } from 'react';
 import { PopIn } from 'ui/molecule';
 import { SendSvg, ReceiveSvg } from 'assets/images';
 import { Wrapper, ButtonWrapper } from './Transactions.style';
+import { ReconnectButton } from 'components/Buttons';
+import { useAergoSnap } from 'hooks/useAergoSnap';
 
 export const TransactionsView = () => {
   const [receiveModal, setReceiveModal] = useState(false);
   const [sendModal, setSendModal] = useState(false);
+  const { connectToSnap } = useAergoSnap()
 
   return (
     <Wrapper>
@@ -33,6 +36,7 @@ export const TransactionsView = () => {
         >
           Send
         </Button>
+        <ReconnectButton onClick={connectToSnap}/>
       </ButtonWrapper>
     </Wrapper>
   );
