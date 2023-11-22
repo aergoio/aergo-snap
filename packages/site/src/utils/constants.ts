@@ -6,21 +6,21 @@ export const POPOVER_DURATION = 1000;
 
 export const Networks: Network[] = [
   {
-    label: 'mainnet',
+    label: 'Aergo Mainnet',
     chainId: 'aergo.io',
     nodeUrl: 'https://mainnet-api-http.aergo.io',
     scanExplorerUrl: 'https://mainnet.aergoscan.io',
     scanApiUrl: 'https://api2-mainnet.aergoscan.io/v2',
   },
   {
-    label: 'testnet',
+    label: 'Aergo Testnet',
     chainId: 'testnet.aergo.io',
     nodeUrl: 'https://testnet-api-http.aergo.io',
     scanExplorerUrl: 'https://testnet.aergoscan.io',
     scanApiUrl: 'https://api2-testnet.aergoscan.io/v2',
   },
   {
-    label: 'alpha',
+    label: 'Aergo Alpha',
     chainId: 'alpha.aergo.io',
     nodeUrl: 'https://alpha-api-http.aergo.io',
     scanExplorerUrl: 'https://alpha.aergoscan.io',
