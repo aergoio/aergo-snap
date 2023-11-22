@@ -33,6 +33,10 @@ export const StyledTab = styled(Tab)`
   &[aria-selected='true'] {
     color: ${(props) => props.theme.colors.primary.main};
   }
+
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 33vw;
+  }
 `;
 
 export const StyledTabBorder = styled.div`
