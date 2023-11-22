@@ -5,6 +5,7 @@ type CheckedProps = {
 };
 
 export const Wrapper = styled.div`
+  margin-left: ${(props) => props.theme.spacing.large};
   touch-action: pan-x;
   display: inline-block;
   position: relative;
