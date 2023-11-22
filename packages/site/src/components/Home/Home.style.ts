@@ -5,10 +5,11 @@ export const HomeWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex: 1;
-  width: ${({ theme }) => (theme.mediaQueries.small ? `80vw` : `100vw`)};
   margin: 0 auto;
-  min-width: 45rem;
-  /* border: 1px solid ${({ theme }) => theme.colors.card.default}; */
+  width: 80vw;
   background-color: ${({ theme }) => theme.colors.background.default};
   box-shadow: ${({ theme }) => theme.shadows.default};
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 100vw;
+  }
 `;

@@ -1,3 +1,3 @@
 export * from './Buttons';
-export * from './SnapLogo';
-export * from './Toggle';
+export * from './Header';
+export * from './Footer';

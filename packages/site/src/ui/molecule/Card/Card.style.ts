@@ -19,7 +19,6 @@ export const Wrapper = styled.div<{
   flex-direction: column;
   align-items: center;
   /* width: ${({ fullWidth }) => (fullWidth ? '100%' : '250px')}; */
-  /* min-width: 40rem; */
   background-color: ${({ theme }) => theme.colors.card.default};
   margin-top: ${({ theme }) => theme.spacing.large2};
   margin-bottom: ${({ theme }) => theme.spacing.large2};
@@ -28,12 +27,6 @@ export const Wrapper = styled.div<{
   box-shadow: ${({ theme }) => theme.shadows.default};
   filter: opacity(${({ disabled }) => (disabled ? '.4' : '1')});
   align-self: stretch;
-  ${({ theme }) => theme.mediaQueries.small} {
-    width: 100%;
-    margin-top: 1.2rem;
-    margin-bottom: 1.2rem;
-    padding: 1.6rem;
-  }
 `;
 
 export const Title = styled.h2`

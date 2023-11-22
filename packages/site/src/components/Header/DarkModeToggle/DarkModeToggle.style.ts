@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 type CheckedProps = {
   readonly checked: boolean;
 };
 
-const ToggleWrapper = styled.div`
+export const Wrapper = styled.div`
+  margin-left: ${(props) => props.theme.spacing.large};
   touch-action: pan-x;
   display: inline-block;
   position: relative;
@@ -21,7 +21,7 @@ const ToggleWrapper = styled.div`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const ToggleInput = styled.input`
+export const ToggleInput = styled.input`
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -32,7 +32,7 @@ const ToggleInput = styled.input`
   width: 1px;
 `;
 
-const IconContainer = styled.div`
+export const IconContainer = styled.div`
   position: absolute;
   width: 22px;
   height: 22px;
@@ -53,17 +53,17 @@ const IconContainer = styled.div`
   }
 `;
 
-const CheckedContainer = styled(IconContainer)<CheckedProps>`
+export const CheckedContainer = styled(IconContainer)<CheckedProps>`
   opacity: ${({ checked }) => (checked ? 1 : 0)};
   left: 10px;
 `;
 
-const UncheckedContainer = styled(IconContainer)<CheckedProps>`
+export const UncheckedContainer = styled(IconContainer)<CheckedProps>`
   opacity: ${({ checked }) => (checked ? 0 : 1)};
   right: 10px;
 `;
 
-const ToggleContainer = styled.div`
+export const ToggleContainer = styled.div`
   width: 68px;
   height: 36px;
   padding: 0;
@@ -72,7 +72,7 @@ const ToggleContainer = styled.div`
   transition: all 0.2s ease;
 `;
 
-const ToggleCircle = styled.div<CheckedProps>`
+export const ToggleCircle = styled.div<CheckedProps>`
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   position: absolute;
   top: 4px;
@@ -88,33 +88,3 @@ const ToggleCircle = styled.div<CheckedProps>`
     transform: scale(1.05);
   }
 `;
-
-export const Toggle = ({
-  onToggle,
-  defaultChecked = false,
-}: {
-  onToggle(): void;
-  defaultChecked?: boolean;
-}) => {
-  const [checked, setChecked] = useState(defaultChecked);
-
-  const handleChange = () => {
-    onToggle();
-    setChecked(!checked);
-  };
-
-  return (
-    <ToggleWrapper onClick={handleChange}>
-      <ToggleContainer>
-        <CheckedContainer checked={checked}>
-          <span>🌞</span>
-        </CheckedContainer>
-        <UncheckedContainer checked={checked}>
-          <span>🌜</span>
-        </UncheckedContainer>
-      </ToggleContainer>
-      <ToggleCircle checked={checked} />
-      <ToggleInput type="checkbox" aria-label="Toggle Button" />
-    </ToggleWrapper>
-  );
-};

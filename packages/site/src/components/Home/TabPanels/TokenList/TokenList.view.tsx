@@ -20,7 +20,7 @@ export const TokenListView = () => {
     {
       name: 'AERGO',
       hash: '',
-      contractAddress: '',
+      contractAddress: '0x91af0fbb28aba7e31403cb457106ce79397fd4e6',
       amount: '0 AERGO',
       usd: '$0 USD',
     },
@@ -36,8 +36,8 @@ export const TokenListView = () => {
       {
         ...prevTokens[0],
         hash: account?.hash || '',
-        amount: formatTokenAmount(account?.meta.balance || '', 'AERGO', 18),
-        usd: `$${moveDecimalPoint(account?.meta.balance || '', -18)} USD`,
+        amount: formatTokenAmount(account?.meta.balance || '0', 'AERGO', 18),
+        usd: `$${moveDecimalPoint(account?.meta.balance || '0', -18)} USD`,
       },
       ...prevTokens.slice(1),
     ]);

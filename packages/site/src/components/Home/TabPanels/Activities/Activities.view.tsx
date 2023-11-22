@@ -9,6 +9,7 @@ export const ActivitiesView = () => {
   const { address } = useAppSelector((state) => state.wallet);
   const network = useAppSelector((state) => state.networks);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     const getTransactions = async () => {
@@ -31,10 +32,14 @@ export const ActivitiesView = () => {
       }
     };
     getTransactions();
-  }, []);
+  }, [network.activeNetwork]);
+
   return (
     <>
       {loading ? <Loading /> : null}
+      {!loading && transactions.length === 0 ? (
+        <span>No Transactions</span>
+      ) : null}
       {transactions.map((transaction: Transaction) => (
         <ul key={transaction.hash}>
           <li>{`amount_float: ${transaction.meta.amount_float}`}</li>

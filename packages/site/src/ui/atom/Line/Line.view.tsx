@@ -1,5 +1,9 @@
 import { Wrapper } from './Line.style';
 
-export const LineView = () => {
-  return <Wrapper></Wrapper>;
+type Props = {
+  width?: string;
+};
+
+export const LineView = ({ width }: Props) => {
+  return <Wrapper style={{ width }}></Wrapper>;
 };

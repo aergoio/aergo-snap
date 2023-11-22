@@ -2,12 +2,15 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const HeaderWrapper = styled.header`
+  background: ${(props) => props.theme.colors.background.default};
+  width: 80vw;
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr;
+  grid-template-columns: 1fr 2fr 1fr;
   place-items: center;
-  padding: 2.4rem;
-  margin-right: ${({ theme }) => theme.spacing.large3};
-  /* box-shadow: ${({ theme }) => theme.shadows.default}; */
+  padding: 2.4rem 0;
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 100vw;
+  }
 `;
 
 export const Title = styled.p`
@@ -29,6 +32,7 @@ export const LogoWrapper = styled.div`
 `;
 
 export const AccountWrapper = styled.div`
+  margin-right: ${(props) => props.theme.spacing.large};
   width: 80%;
   text-align: center;
 `;
@@ -44,11 +48,21 @@ export const AccountName = styled.div`
   }
 `;
 
-export const NetworkWrapper = styled.div`
-  /* margin-left: 1.5rem; */
+export const MenuSection = styled.div`
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Right = styled.div`
+  margin-right: 4rem;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.small} {
+    margin-right: 1rem;
+  }
 `;
 
 export const NetworkName = styled.div`
@@ -62,8 +76,9 @@ export const NetworkName = styled.div`
   }
 `;
 
-export const StyledFaChevronDown = styled(FontAwesomeIcon)`
+export const StyledFaChevron = styled(FontAwesomeIcon)`
   margin-left: 0.5rem;
+  width: 1.2rem;
   ${({ theme }) => theme.mediaQueries.small} {
     display: none;
   }
