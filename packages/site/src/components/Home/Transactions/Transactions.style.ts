@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.large2};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,7 +9,6 @@ export const Wrapper = styled.div`
 `;
 
 export const ButtonWrapper = styled.div`
-  margin-top: ${(props) => props.theme.spacing.small};
   display: flex;
   justify-content: space-between;
   width: 100%;
