@@ -2,14 +2,16 @@ import { FunctionComponent, ReactNode, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import { LoadingBackdrop, PopIn } from 'ui/molecule';
-import { NoMetamaskModal, ConnectModal, Header, Footer } from 'ui/organism';
+import { NoMetamaskModal, ConnectModal } from 'ui/organism';
 import { GlobalStyle } from 'theme/default';
 import { ToggleThemeContext } from './Root';
 import { useAergoSnap, useAppSelector, useHasMetamask } from './hooks';
+import { Footer, Header } from './components';
 
 library.add(fas);
-library.add(fas);
+library.add(far);
 
 const Wrapper = styled.div`
   display: flex;
