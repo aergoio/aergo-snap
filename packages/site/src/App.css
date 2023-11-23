@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Outfit-Regular';
+  src: url(./assets/fonts/Outfit-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'Outfit-Medium';
+  src: url(./assets/fonts/Outfit-Medium.ttf);
+  font-weight: normal;
+  font-style: normal;
+  font-display: fallback;
+}
