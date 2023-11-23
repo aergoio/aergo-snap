@@ -3,7 +3,6 @@ import { Line } from 'ui/atom/Line';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { setActiveNetwork } from 'slices/networkSlice';
 import { useTheme } from 'styled-components';
-import { AergoSvg } from 'assets/images';
 import { useState } from 'react';
 import { Button } from 'ui/atom/Button';
 import { StyledFaChevron } from '../Header.style';
@@ -14,6 +13,7 @@ import {
   StyledFaCircle,
   NetworkItemWrapper,
   MenuNetworkLabel,
+  StyledAergoSvg,
 } from './NetworkMenu.style';
 
 export const NetworkMenuView = () => {
@@ -47,7 +47,7 @@ export const NetworkMenuView = () => {
         opacity: isPressed ? `0.5` : '1',
       }}
     >
-      <AergoSvg style={{ marginRight: theme.spacing.small, width: '36px' }} />
+      <StyledAergoSvg />
       <Menu.Button
         as="div"
         style={{
