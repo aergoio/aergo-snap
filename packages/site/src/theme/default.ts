@@ -29,11 +29,6 @@ const theme = {
   fontWeights: {
     normal: 'normal',
     bold: 'bold',
-    300: '300',
-    400: '400',
-    500: '500',
-    600: '600',
-    700: '700',
   },
 
   spacing: {
@@ -46,8 +41,7 @@ const theme = {
     small: '0.6rem',
   },
   radii: {
-    // default: '24px',
-    default: '8px',
+    default: '24px',
     button: '8px',
   },
   breakpoints,
@@ -267,19 +261,6 @@ export const dark: DefaultTheme = {
  * @returns Global style React component.
  */
 export const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'Outfit-Regular';
-    src: url(../assets/fonts/Outfit-Regular.ttf);
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Outfit-Medium';
-    src: url(../assets/fonts/Outfit-Medium.ttf);
-    font-weight: normal;
-    font-style: normal;
-  }
-
   html {
     /* 62.5% of the base size of 16px = 10px.*/
     font-size: 62.5%;
@@ -289,7 +270,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.colors.background.alternative};
     color: ${(props) => props.theme.colors.text.default};
     font-family: ${(props) => props.theme.fonts.default};
-    font-size: ${(props) => props.theme.fontSizes.text};
+    font-size: ${(props) => props.theme.fontSizes.small};
     margin: 0;
   }
 
