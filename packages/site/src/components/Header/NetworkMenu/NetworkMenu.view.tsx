@@ -3,8 +3,8 @@ import { Line } from 'ui/atom/Line';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { setActiveNetwork } from 'slices/networkSlice';
 import { useTheme } from 'styled-components';
-import { AergoSvg } from 'assets/images';
 import { useState } from 'react';
+import { Button } from 'ui/atom/Button';
 import { StyledFaChevron } from '../Header.style';
 import {
   MenuItem,
@@ -12,6 +12,8 @@ import {
   Bold,
   StyledFaCircle,
   NetworkItemWrapper,
+  MenuNetworkLabel,
+  StyledAergoSvg,
 } from './NetworkMenu.style';
 
 export const NetworkMenuView = () => {
@@ -23,6 +25,10 @@ export const NetworkMenuView = () => {
     dispatch(setActiveNetwork(activeNetwork));
   };
 
+  const handleConfigureNetwork = () => {
+    console.log('handleConfigureNetwork');
+  };
+
   return (
     <Menu
       as="div"
@@ -31,32 +37,32 @@ export const NetworkMenuView = () => {
       onMouseLeave={() => setIsPressed(false)}
       onBlur={() => setIsPressed(false)}
       style={{
-        minWidth: '160px',
+        position: 'relative',
         border: `1px solid ${theme.colors.grey.grey1}`,
-        borderRadius: '9999px',
+        borderRadius: '24px',
         padding: '1rem 2rem',
         display: 'flex',
         alignItems: 'center',
-        position: 'relative',
         textAlign: 'left',
         opacity: isPressed ? `0.5` : '1',
       }}
     >
-      <AergoSvg style={{ marginRight: theme.spacing.small, width: '36px' }} />
+      <StyledAergoSvg />
       <Menu.Button
         as="div"
         style={{
           width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
-          position: 'relative',
           cursor: 'pointer',
           border: 'none',
           background: 'transparent',
           whiteSpace: 'nowrap',
         }}
       >
-        <span>{`${networks?.items[networks?.activeNetwork]?.label}`}</span>
+        <MenuNetworkLabel>{`${
+          networks?.items[networks?.activeNetwork]?.label
+        }`}</MenuNetworkLabel>
         <StyledFaChevron icon={['fas', 'chevron-down']} />
       </Menu.Button>
       <MenuItems>
@@ -83,6 +89,19 @@ export const NetworkMenuView = () => {
             </NetworkItemWrapper>
           </Menu.Item>
         ))}
+        <Menu.Item>
+          <Button
+            onClick={handleConfigureNetwork}
+            upperCaseOnly={false}
+            style={{
+              width: '90%',
+              marginLeft: theme.spacing.large,
+              marginTop: theme.spacing.tiny1,
+            }}
+          >
+            Configure Network
+          </Button>
+        </Menu.Item>
       </MenuItems>
     </Menu>
   );

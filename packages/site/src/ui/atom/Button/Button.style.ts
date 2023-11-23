@@ -83,7 +83,7 @@ export const Wrapper = styled.button<IButtonProps>`
 export const TextWrapper = styled.span<ITextWrapper>`
   font-family: 'Outfit-Medium';
 
-  font-size: ${(props) => props.fontSize || props.theme.fontSizes.text};
+  font-size: ${(props) => props.fontSize || props.theme.fontSizes.small};
   font-weight: ${(props) =>
     props.hasIcons
       ? props.theme.fontWeights.normal
