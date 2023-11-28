@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #eff5f7;
+  background: ${({ theme }) => theme.colors.background.primary};
 `;
 
 export const ListWrapper = styled(List)`
