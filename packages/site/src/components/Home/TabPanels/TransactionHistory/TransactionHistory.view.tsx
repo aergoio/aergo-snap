@@ -1,5 +1,9 @@
 import { useAppSelector } from 'hooks/redux';
-import { ListWrapper, Wrapper } from './TransactionHistory.style';
+import {
+  ListWrapper,
+  Wrapper,
+  NoTransactions,
+} from './TransactionHistory.style';
 import { TransactionHistoryItem } from './TransactionHistoryItem';
 
 export const TransactionHistoryView = () => {
@@ -18,7 +22,7 @@ export const TransactionHistoryView = () => {
             keyExtractor={(transaction: any) => transaction.hash.toString()}
           />
         ) : (
-          <span>No Transactions</span>
+          <NoTransactions>No Transactions</NoTransactions>
         ))}
     </Wrapper>
   );
