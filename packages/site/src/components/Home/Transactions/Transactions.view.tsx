@@ -1,15 +1,13 @@
-import { Button } from 'ui/atom/Button';
 import { useState } from 'react';
 import { PopIn } from 'ui/molecule';
 import { SendSvg, ReceiveSvg } from 'assets/images';
-import { Wrapper, ButtonWrapper } from './Transactions.style';
-import { ReconnectButton } from 'components/Buttons';
 import { useAergoSnap } from 'hooks/useAergoSnap';
+import { Wrapper, ButtonWrapper, StyledButton } from './Transactions.style';
 
 export const TransactionsView = () => {
   const [receiveModal, setReceiveModal] = useState(false);
   const [sendModal, setSendModal] = useState(false);
-  const { connectToSnap } = useAergoSnap()
+  const { connectToSnap } = useAergoSnap();
 
   return (
     <Wrapper>
@@ -20,23 +18,29 @@ export const TransactionsView = () => {
         <div>sendModal</div>
       </PopIn>
       <ButtonWrapper>
-        <Button
+        <StyledButton
           customIconLeft={<ReceiveSvg />}
           variant="font-gradation"
           spacing="xlarge"
           onClick={() => setReceiveModal(true)}
         >
           Receive
-        </Button>
-        <Button
+        </StyledButton>
+        <StyledButton
           customIconLeft={<SendSvg />}
           variant="font-gradation"
           spacing="xlarge"
           onClick={() => setSendModal(true)}
         >
           Send
-        </Button>
-        <ReconnectButton onClick={connectToSnap}/>
+        </StyledButton>
+        <StyledButton
+          variant="gradation"
+          spacing="xlarge"
+          onClick={connectToSnap}
+        >
+          Reconnect
+        </StyledButton>
       </ButtonWrapper>
     </Wrapper>
   );
