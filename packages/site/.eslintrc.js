@@ -21,5 +21,6 @@ module.exports = {
     'import/no-named-as-default': 0,
     'no-void': 0,
     'import/extensions': 0,
+    'no-negated-condition': 0,
   },
 };
