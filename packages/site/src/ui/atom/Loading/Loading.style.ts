@@ -11,4 +11,6 @@ export const Wrapper = styled.div`
   gap: ${(props) => props.theme.spacing.tiny};
 `;
 
-export const LoadingSpinner = styled(FontAwesomeIcon)``;
+export const LoadingSpinner = styled(FontAwesomeIcon)`
+  height: 3rem;
+`;
