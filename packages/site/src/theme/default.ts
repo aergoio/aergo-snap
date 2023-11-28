@@ -237,9 +237,9 @@ export const dark: DefaultTheme = {
       border:
         'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
       main: 'linear-gradient(to right, #279ecc, #a13e99)',
-      gradation1: 'linear-gradient(to right, #279ecc, #e4097d)',
+      gradation1: 'linear-gradient(to right, #279ecc, #fff1f9)',
       gradation2: 'linear-gradient(to right, #279ecc, #f894c8)',
-      gradation3: 'linear-gradient(to right, #279ecc, #fff1f9)',
+      gradation3: 'linear-gradient(to right, #279ecc, #e4097d)',
       gradation4: 'linear-gradient(to right, #9a449c, #e30a7d)',
     },
     'font-gradation': {
