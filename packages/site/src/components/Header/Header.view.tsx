@@ -31,7 +31,7 @@ export const HeaderView = ({
   };
 
   return (
-    <>
+    <div>
       <HeaderWrapper>
         <LogoWrapper>
           <AergoSnapLogo color={theme.colors.icon.default} size={36} />
@@ -44,7 +44,6 @@ export const HeaderView = ({
           {address ? (
             <AccountName onClick={() => setAccountModal(true)}>
               My Account
-              <StyledFaChevron icon={['fas', 'chevron-down']} />
             </AccountName>
           ) : null}
         </AccountWrapper>
@@ -60,7 +59,7 @@ export const HeaderView = ({
           />
         </Right>
       </HeaderWrapper>
-      <Line width="80%" />
-    </>
+      <Line />
+    </div>
   );
 };

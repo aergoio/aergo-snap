@@ -1,6 +1,7 @@
 import { Token } from 'types';
 import { RoundedIcon } from 'ui/atom/RoundedIcon';
-import { AergoSvg } from 'assets/images';
+import { AergoSnapLogo } from 'assets/images/AergoSnapLogo';
+import { useTheme } from 'styled-components';
 import {
   Wrapper,
   Content,
@@ -16,10 +17,12 @@ interface Props {
 }
 
 export const TokenItemView = ({ token }: Props) => {
+  const theme = useTheme();
+
   return (
     <Wrapper>
       <RoundedIcon>
-        <AergoSvg />
+        <AergoSnapLogo color={theme.colors.icon.default} size={30} />
       </RoundedIcon>
       <Content>
         <Top>

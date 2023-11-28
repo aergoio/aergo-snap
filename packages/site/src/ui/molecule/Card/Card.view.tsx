@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Container, Description, Title, Wrapper } from './Card.style';
+import { Description, Title, Wrapper } from './Card.style';
 
 type CardProps = {
   content: {
@@ -18,12 +18,10 @@ export const CardView = ({
 }: CardProps) => {
   const { title, description, button } = content;
   return (
-    <Container>
-      <Wrapper fullWidth={fullWidth} disabled={disabled}>
-        {title && <Title>{title}</Title>}
-        <Description>{description}</Description>
-        {button}
-      </Wrapper>
-    </Container>
+    <Wrapper fullWidth={fullWidth} disabled={disabled}>
+      {title && <Title>{title}</Title>}
+      <Description>{description}</Description>
+      {button}
+    </Wrapper>
   );
 };

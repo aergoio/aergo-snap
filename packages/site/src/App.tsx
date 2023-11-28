@@ -6,8 +6,14 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { LoadingBackdrop, PopIn } from 'ui/molecule';
 import { NoMetamaskModal, ConnectModal } from 'ui/organism';
 import { GlobalStyle } from 'theme/default';
+import { disableLoading, enableLoadingWithMessage } from 'slices/UISlice';
 import { ToggleThemeContext } from './Root';
-import { useAergoSnap, useAppSelector, useHasMetamask } from './hooks';
+import {
+  useAergoSnap,
+  useAppDispatch,
+  useAppSelector,
+  useHasMetamask,
+} from './hooks';
 import { Footer, Header } from './components';
 
 library.add(fas);
@@ -35,6 +41,7 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   const toggleTheme = useContext(ToggleThemeContext);
   const { hasMetamask } = useHasMetamask();
   const { checkConnection, getKeys, getWalletData } = useAergoSnap();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!provider) {
@@ -51,10 +58,26 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   }, [connected, forceReconnect, hasMetamask, provider]);
 
   useEffect(() => {
-    if (provider && networks.items.length > 0 && address) {
-      const network = networks.items[networks.activeNetwork];
-      getWalletData(network);
-    }
+    const getWalletDataWhenNetworkChange = async () => {
+      try {
+        const network = networks.items[networks.activeNetwork];
+        dispatch(enableLoadingWithMessage('Getting Network Data...'));
+        await getWalletData(network);
+        dispatch(disableLoading());
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getWalletDataWhenNetworkChange();
+
+    const getWalletDataIntervalEvery10Seconds = setInterval(() => {
+      if (provider && networks.items.length > 0 && address) {
+        const network = networks.items[networks.activeNetwork];
+        getWalletData(network);
+      }
+    }, 10000);
+
+    return () => clearInterval(getWalletDataIntervalEvery10Seconds);
   }, [networks.activeNetwork, provider, address]);
 
   const loading = loader.isLoading;
@@ -69,11 +92,6 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
         <ConnectModal />
       </PopIn>
       <Wrapper>
-        <PopIn isOpen={loading}>
-          {loading && (
-            <LoadingBackdrop>{loader.loadingMessage}</LoadingBackdrop>
-          )}
-        </PopIn>
         <Header handleToggleClick={toggleTheme} />
         {children}
         <Footer />

@@ -6,6 +6,7 @@ import {
   StyledTab,
   StyledTabPanel,
   StyledTabBorder,
+  StyledTabPanels,
 } from './Tabs.style';
 
 type Props = {
@@ -31,11 +32,11 @@ export const TabsView = ({ tabs, panels }: Props) => {
             </StyledTab>
           ))}
         </StyledTabList>
-        <Tab.Panels>
+        <StyledTabPanels>
           {panels?.map((panel) => (
             <StyledTabPanel>{panel}</StyledTabPanel>
           ))}
-        </Tab.Panels>
+        </StyledTabPanels>
       </Tab.Group>
     </StyledTabsView>
   );

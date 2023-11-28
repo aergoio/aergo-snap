@@ -3,6 +3,7 @@ import {
   setAccount,
   setAddress,
   setForceReconnect,
+  setTransactions,
   setWalletConnection,
 } from 'slices/walletSlice';
 import {
@@ -29,7 +30,6 @@ export const useAergoSnap = () => {
 
   const dispatch = useAppDispatch();
   const { provider, address } = useAppSelector((state) => state.wallet);
-  const { loader } = useAppSelector((state) => state.UI);
 
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
@@ -99,21 +99,22 @@ export const useAergoSnap = () => {
   };
 
   const getWalletData = async (network: Network) => {
-    if (!loader.isLoading) {
-      dispatch(enableLoadingWithMessage('Getting Network Data...'));
-    }
     const scanApiInstance = await scanApi(network);
     if (scanApiInstance && address) {
       try {
         const account = (
           await scanApiInstance.get(`accountsBalance?q=_id:${address}`)
         ).data.hits[0];
+        const transactions = (
+          await scanApiInstance.get(
+            `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`,
+          )
+        ).data.hits;
         dispatch(setAccount(account));
-        dispatch(disableLoading());
+        dispatch(setTransactions(transactions));
       } catch (err) {
         console.error(err);
         dispatch(setError(err));
-        dispatch(disableLoading());
       }
     }
   };
