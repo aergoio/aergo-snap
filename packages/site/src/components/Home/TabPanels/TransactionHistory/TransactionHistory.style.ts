@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { List } from 'ui/molecule';
 
 export const Wrapper = styled.div`
-  min-height: 44vh;
+  min-height: 42vh;
   position: relative;
   display: flex;
   flex-direction: column;
