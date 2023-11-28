@@ -1,56 +1,77 @@
 import { useAppSelector } from 'hooks/redux';
 import { AccountAddressCopyButton } from 'ui/molecule/AccountAddressCopyButton';
-import { Card } from 'ui/molecule';
 import { formatTokenAmount, moveDecimalPoint } from 'utils/utils';
 import { useEffect, useState } from 'react';
 import {
+  Container,
   Wrapper,
   InfoWrapper,
   StyledAccountImage,
   AssetWrapper,
+  StyledCard,
 } from './AddressInfo.style';
 import { AssetQuantity } from './AssetQuantity';
 
-export const AddressInfoView = () => {
+interface Props {
+  sidebar: number;
+}
+
+export const AddressInfoView = ({ sidebar }: Props) => {
   const { address, connected, account } = useAppSelector(
     (state) => state.wallet,
   );
   const [usd, setUsd] = useState('0');
   // TODO: Add CoinGekco api
   useEffect(() => {
-    if (account?.meta.balance) {
-      setUsd(moveDecimalPoint(account?.meta.balance, -18));
-    } else {
-      setUsd('0');
+    if (sidebar === 0) {
+      if (account?.meta.balance) {
+        setUsd(moveDecimalPoint(account?.meta.balance, -18));
+      } else {
+        setUsd('0');
+      }
+    } else if (sidebar === 1) {
+      if (account?.meta?.staking) {
+        setUsd(moveDecimalPoint(account?.meta?.staking, -18));
+      } else {
+        setUsd('0');
+      }
     }
-  }, [account?.meta.balance]);
+  }, [account?.meta.balance, sidebar]);
 
   return (
-    <Card
-      content={{
-        description: (
-          <Wrapper>
-            <InfoWrapper>
-              <StyledAccountImage
-                connected={connected}
-                address={address}
-                size={50}
-              />
-              <AccountAddressCopyButton address={address} />
-            </InfoWrapper>
-            <AssetWrapper>
-              <AssetQuantity
-                currencyValue={
-                  account
-                    ? formatTokenAmount(account?.meta.balance, 'AERGO', 18)
-                    : '0 AERGO'
-                }
-                usdValue={usd}
-              />
-            </AssetWrapper>
-          </Wrapper>
-        ),
-      }}
-    />
+    <Container>
+      <StyledCard
+        content={{
+          description: (
+            <Wrapper>
+              <InfoWrapper>
+                <StyledAccountImage
+                  connected={connected}
+                  address={address}
+                  size={50}
+                />
+                <AccountAddressCopyButton address={address} />
+              </InfoWrapper>
+              <AssetWrapper>
+                <AssetQuantity
+                  currencyValue={
+                    account
+                      ? formatTokenAmount(
+                          sidebar === 0
+                            ? account?.meta?.balance
+                            : account?.meta?.staking,
+                          'AERGO',
+                          18,
+                        )
+                      : '0 AERGO'
+                  }
+                  usdValue={usd}
+                />
+              </AssetWrapper>
+            </Wrapper>
+          ),
+        }}
+      />
+    </Container>
   );
 };
