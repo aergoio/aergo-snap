@@ -1,8 +1,10 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text } from '@metamask/snaps-ui';
+import { ApiRequestParams } from './types/snapApi';
 import { getKeys } from './getKeys';
 import { signTx } from './utils/tx';
 import { getBlockNumber, getAccount, sendTransaction } from './aergo';
+import { logger } from './utils/logger';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -16,6 +18,15 @@ import { getBlockNumber, getAccount, sendTransaction } from './aergo';
  */
 export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
     const params: any = request.params;
+    const requestParams = request?.params as unknown as ApiRequestParams;
+    const debugLevel = requestParams?.debugLevel as string;
+    logger.init(debugLevel);
+    console.log(`debugLevel: ${logger.getLogLevel()}`);
+    logger.log(origin, request);
+    if (request.method === 'ping') {
+        logger.log('pong');
+        return 'pong';
+    }
 
     switch (request.method) {
         case 'getAddress': {

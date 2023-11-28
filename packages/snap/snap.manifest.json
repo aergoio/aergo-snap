@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example",
+  "description": "Manage Aergo accounts and assets with Metamask.",
+  "proposedName": "Aergo Snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "1Opga35sIHwBiomFQ50SC4MoFSW8qj8jYi1mc8kjzFE=",
+    "shasum": "vRRFd5MA9iohiFzcCoLf5YCvaEaLfsdJ+4bRUQzrwTs=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

@@ -1,8 +1,5 @@
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
-import { MetamaskState } from '../hooks';
-import { ReactComponent as FlaskFox } from '../assets/flask_fox.svg';
-import { shouldDisplayReconnectButton } from '../utils';
 
 const Link = styled.a`
     display: flex;
@@ -70,55 +67,57 @@ const ConnectedIndicator = styled.div`
 `;
 
 export const InstallFlaskButton = () => (
-    <Link href="https://metamask.io/flask/" target="_blank">
-        <FlaskFox />
-        <ButtonText>Install MetaMask Flask</ButtonText>
-    </Link>
+  <Link href="https://metamask.io/flask/" target="_blank">
+    {/* <FlaskFox /> */}
+    <ButtonText>Install MetaMask Flask</ButtonText>
+  </Link>
 );
 
 export const ConnectButton = (props: ComponentProps<typeof Button>) => {
-    return (
-        <Button {...props}>
-            <FlaskFox />
-            <ButtonText>Connect</ButtonText>
-        </Button>
-    );
+  return (
+    <Button {...props}>
+      {/* <FlaskFox /> */}
+      <ButtonText>Connect</ButtonText>
+    </Button>
+  );
 };
 
 export const ReconnectButton = (props: ComponentProps<typeof Button>) => {
-    return (
-        <Button {...props}>
-            <FlaskFox />
-            <ButtonText>Reconnect</ButtonText>
-        </Button>
-    );
+  return (
+    <Button {...props}>
+      {/* <FlaskFox /> */}
+      <ButtonText>Reconnect</ButtonText>
+    </Button>
+  );
 };
 
-export const SendHelloButton = (props: ComponentProps<typeof Button>) => {
-    return <Button {...props}>Send message</Button>;
+export const RequestButton = (props: ComponentProps<typeof Button>) => {
+  return <Button {...props}>{props.buttonMessage}</Button>;
 };
 
-export const CallButton = (props: ComponentProps<typeof Button>) => {
-    return <Button {...props}>Call Method</Button>;
-};
+export const HeaderButtons = ({
+  state,
+  onConnectClick,
+}: {
+  state: MetamaskState;
+  onConnectClick(): unknown;
+}) => {
+  if (!state.isFlask && !state.installedSnap) {
+    return <InstallFlaskButton />;
+  }
 
-export const HeaderButtons = ({ state, onConnectClick }: { state: MetamaskState; onConnectClick(): unknown }) => {
-    if (!state.isFlask && !state.installedSnap) {
-        return <InstallFlaskButton />;
-    }
+  if (!state.installedSnap) {
+    return <ConnectButton onClick={onConnectClick} />;
+  }
 
-    if (!state.installedSnap) {
-        return <ConnectButton onClick={onConnectClick} />;
-    }
+  // if (shouldDisplayReconnectButton(state.installedSnap)) {
+  //   return <ReconnectButton onClick={onConnectClick} />;
+  // }
 
-    if (shouldDisplayReconnectButton(state.installedSnap)) {
-        return <ReconnectButton onClick={onConnectClick} />;
-    }
-
-    return (
-        <ConnectedContainer>
-            <ConnectedIndicator />
-            <ButtonText>Connected</ButtonText>
-        </ConnectedContainer>
-    );
+  return (
+    <ConnectedContainer>
+      <ConnectedIndicator />
+      <ButtonText>Connected</ButtonText>
+    </ConnectedContainer>
+  );
 };
