@@ -47,6 +47,7 @@ export const ButtonView = ({
   ...otherProps
 }: Props) => {
   const hasIcons = iconRight !== undefined || iconLeft !== undefined;
+  const noText = children === undefined;
   return (
     <Wrapper
       variant={variant}
@@ -60,6 +61,7 @@ export const ButtonView = ({
       <StyledCustomLeftIcon>{customIconLeft}</StyledCustomLeftIcon>
       {iconLeft && <LeftIcon icon={['fas', iconLeft]} style={iconStyle} />}
       <TextWrapper
+        noText={noText}
         hasIcons={hasIcons}
         fontSize={fontSize}
         upperCaseOnly={upperCaseOnly}

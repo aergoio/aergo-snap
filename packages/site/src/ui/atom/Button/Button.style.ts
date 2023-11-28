@@ -14,6 +14,7 @@ interface ITextWrapper {
   fontSize?: string;
   upperCaseOnly?: boolean;
   hasIcons: boolean;
+  noText: boolean;
 }
 
 export const Wrapper = styled.button<IButtonProps>`
@@ -89,11 +90,13 @@ export const TextWrapper = styled.span<ITextWrapper>`
       ? props.theme.fontWeights.normal
       : props.theme.fontWeights.bold};
   text-transform: ${(props) => (props.upperCaseOnly ? 'uppercase' : 'initial')};
+  margin: ${(props) =>
+    props.hasIcons && !props.noText ? props.theme.spacing.tiny2 : ''};
 `;
 
 export const LeftIcon = styled(FontAwesomeIcon)`
   font-size: ${(props) => props.theme.fontSizes.large};
-  margin-right: ${(props) => props.theme.spacing.tiny2};
+  /* margin-right: ${(props) => props.theme.spacing.tiny2}; */
 `;
 export const StyledCustomLeftIcon = styled.span`
   font-size: ${(props) => props.theme.fontSizes.large};
@@ -102,7 +105,7 @@ export const StyledCustomLeftIcon = styled.span`
 
 export const RightIcon = styled(FontAwesomeIcon)`
   font-size: ${(props) => props.theme.fontSizes.large};
-  margin-left: ${(props) => props.theme.spacing.tiny2};
+  /* margin-left: ${(props) => props.theme.spacing.tiny2}; */
 `;
 
 export const StyledCustomRightIcon = styled.span`
