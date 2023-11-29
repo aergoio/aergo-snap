@@ -27,6 +27,10 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 72vw;
+
+  ${({ theme }) => theme.mediaQueries.small} {
+    width: 80vw;
+  }
 `;
 
 export const Row = styled.div`
