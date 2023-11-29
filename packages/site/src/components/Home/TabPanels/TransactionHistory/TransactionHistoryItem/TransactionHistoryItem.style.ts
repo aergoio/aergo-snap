@@ -26,11 +26,7 @@ export const StyledCard = styled(Card)``;
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
-
-  /* ${({ theme }) => theme.mediaQueries.small} {
-    width: 60vw;
-  } */
+  width: 72vw;
 `;
 
 export const Row = styled.div`
