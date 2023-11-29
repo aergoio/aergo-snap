@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { AccountImage } from 'ui/atom/AccountImage';
 import { Button } from 'ui/atom/Button';
-import { Card } from 'ui/molecule';
 
 export const Container = styled.div`
   width: 90%;
@@ -37,10 +36,6 @@ export const AssetWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const StyledCard = styled(Card)`
-  width: 40rem;
 `;
 
 export const StyledButton = styled(Button)`

@@ -2,13 +2,13 @@ import { useAppSelector } from 'hooks/redux';
 import { AccountAddressCopyButton } from 'ui/molecule/AccountAddressCopyButton';
 import { formatTokenAmount, moveDecimalPoint } from 'utils/utils';
 import { useEffect, useState } from 'react';
+import { Card } from 'ui/molecule';
 import {
   Container,
   Wrapper,
   InfoWrapper,
   StyledAccountImage,
   AssetWrapper,
-  StyledCard,
 } from './AddressInfo.style';
 import { AssetQuantity } from './AssetQuantity';
 
@@ -40,7 +40,7 @@ export const AddressInfoView = ({ sidebar }: Props) => {
 
   return (
     <Container>
-      <StyledCard
+      <Card
         content={{
           description: (
             <Wrapper>

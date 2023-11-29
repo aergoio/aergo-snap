@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Line } from 'ui/atom/Line';
-import { Card } from 'ui/molecule';
 
 interface StatusProps {
   status: string;
@@ -20,8 +19,6 @@ export const Container = styled.div`
     transform: scale(1.01);
   }
 `;
-
-export const StyledCard = styled(Card)``;
 
 export const Content = styled.div`
   display: flex;

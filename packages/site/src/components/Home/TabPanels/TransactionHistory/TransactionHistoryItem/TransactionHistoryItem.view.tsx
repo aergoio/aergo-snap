@@ -1,9 +1,9 @@
 import { Transaction } from 'types';
 import { useAppSelector } from 'hooks/redux';
 import { shortenAddress } from 'utils/utils';
+import { Card } from 'ui/molecule';
 import {
   Container,
-  StyledCard,
   StyledLine,
   Content,
   Row,
@@ -23,7 +23,8 @@ export const TransactionHistoryItemView = ({ transaction }: Props) => {
   const { address } = useAppSelector((state) => state.wallet);
   return (
     <Container>
-      <StyledCard
+      <Card
+        style={{ padding: '1.5rem' }}
         content={{
           description: (
             <Content key={transaction.hash}>
