@@ -43,6 +43,7 @@ export const Time = styled.span`
 `;
 
 export const Status = styled.span<StatusProps>`
+  font-size: ${(props) => props.theme.fontSizes.xsmall};
   cursor: pointer;
   font-weight: 600;
   padding: 0.3rem 1.3rem;

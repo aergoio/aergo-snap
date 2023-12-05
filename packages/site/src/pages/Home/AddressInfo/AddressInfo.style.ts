@@ -15,6 +15,7 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
+  min-height: 18rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

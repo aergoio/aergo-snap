@@ -27,6 +27,6 @@ export const Bottom = styled.div`
   width: 100%;
 `;
 
-export const AddressWrapper = styled.div`
+export const SidebarContentWrapper = styled.div`
   width: 100%;
 `;

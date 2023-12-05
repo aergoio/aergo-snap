@@ -32,9 +32,9 @@ export const TransactionHistoryItemView = ({ transaction }: Props) => {
                 <Time>{`${transaction.meta.ts
                   .split('.')[0]
                   .replace('T', ' ')}`}</Time>
-                <Status
-                  status={transaction.meta.status}
-                >{`${transaction.meta.status}`}</Status>
+                <Status status={transaction.meta.status}>{`${
+                  transaction.meta.status === 'SUCCESS' ? 'COMPLETE' : 'ERROR'
+                }`}</Status>
               </Row>
               <Row>
                 <FromToStatus

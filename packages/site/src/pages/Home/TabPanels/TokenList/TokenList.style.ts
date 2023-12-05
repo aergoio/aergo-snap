@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import { Button } from 'ui/atom/Button';
-import { List } from 'ui/molecule';
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.5rem 3rem;
+  padding: 0 3rem ${(props) => props.theme.spacing.large};
 `;
 
 export const ButtonWrapper = styled.div`
@@ -16,5 +15,3 @@ export const ButtonWrapper = styled.div`
 export const StyledButton = styled(Button)`
   padding: 0;
 `;
-
-export const ListWrapper = styled(List)``;
