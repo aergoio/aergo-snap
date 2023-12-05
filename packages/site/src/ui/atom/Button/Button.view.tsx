@@ -48,6 +48,7 @@ export const ButtonView = ({
 }: Props) => {
   const hasIcons = iconRight !== undefined || iconLeft !== undefined;
   const noText = children === undefined;
+
   return (
     <Wrapper
       variant={variant}

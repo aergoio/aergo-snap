@@ -63,7 +63,6 @@ export const Wrapper = styled.button<IButtonProps>`
   border-color: ${(props) =>
     props.theme.colors[props.variant || VariantOptions.PRIMARY].main};
   cursor: ${(props) => (props.disabled ? 'initial' : 'pointer')};
-  height: 4.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
