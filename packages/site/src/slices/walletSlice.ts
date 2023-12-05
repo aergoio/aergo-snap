@@ -8,7 +8,9 @@ export type WalletState = {
   address: string;
   account: Account;
   transactions: Transaction[];
-  tokens: Token[];
+  tokens: {
+    [chainIdLabel: string]: Token[];
+  };
   provider?: any;
 };
 
@@ -19,7 +21,11 @@ const initialState: WalletState = {
   address: '',
   account: {} as Account,
   transactions: [],
-  tokens: [],
+  tokens: {
+    'aergo.io/Aergo Mainnet': [],
+    'testnet.aergo.io/Aergo Testnet': [],
+    'alpha.aergo.io/Aergo Alpha': [],
+  },
   provider: undefined,
 };
 
@@ -45,11 +51,11 @@ export const walletSlice = createSlice({
     setTransactions: (state, { payload }) => {
       state.transactions = payload;
     },
-    setToken: (state, { payload }) => {
-      state.tokens = [...state.tokens, payload];
+    setToken: (state, { payload: { chainIdLabel, token } }) => {
+      state.tokens[chainIdLabel] = [...state.tokens[chainIdLabel], token];
     },
-    setTokens: (state, { payload }) => {
-      state.tokens = payload;
+    setTokens: (state, { payload: { chainIdLabel, tokens } }) => {
+      state.tokens[chainIdLabel] = tokens;
     },
     resetWallet: () => {
       return {
