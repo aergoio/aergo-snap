@@ -34,7 +34,6 @@ export const useAergoSnap = () => {
 
   const dispatch = useAppDispatch();
   const { provider, address, tokens } = useAppSelector((state) => state.wallet);
-
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
     provider
@@ -136,24 +135,23 @@ export const useAergoSnap = () => {
         const getTokenBalances = (
           await scanApiInstance.get(`tokenBalance?q=${address}&size=10000`)
         ).data.hits;
+        const chainIdLabel = `${network.chainId}/${network.label}`;
         if (getTokenBalances.length > 0) {
-          // Add TokenBalances
-          const updatedTokens = tokens.map((token) => {
+          // Update Token Balance
+          const updatedTokens = tokens[chainIdLabel].map((token) => {
             const tokenBalance = getTokenBalances.find(
-              (balance: any) => balance.token.hash === token.hash,
+              (tokenBalance: any) => tokenBalance.token.hash === token.hash,
             );
-
             if (tokenBalance) {
               return { ...token, tokenBalance };
             }
             return token;
           });
           if (updatedTokens.length > 0) {
-            dispatch(setTokens(updatedTokens));
+            dispatch(setTokens({ chainIdLabel, tokens: updatedTokens }));
           }
         }
 
-        // TODO: import Asset 된 토큰과 api에서 가져온 잔고를 맞춰서, setTokens해줘야 함. 없으면, 모두 밸런스 0
         dispatch(setAccount(account));
         dispatch(setTransactions(transactions));
       } catch (err) {
