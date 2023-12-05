@@ -6,7 +6,7 @@ export type WalletState = {
   isLoading: boolean;
   forceReconnect: boolean;
   address: string;
-  account: Account | null;
+  account: Account;
   transactions: Transaction[];
   tokens: Token[];
   provider?: any;
@@ -17,9 +17,9 @@ const initialState: WalletState = {
   isLoading: false,
   forceReconnect: false,
   address: '',
-  account: null,
+  account: {} as Account,
   transactions: [],
-  tokens: [{ name: 'AERGO', amount: '0', hash: '' }],
+  tokens: [],
   provider: undefined,
 };
 
@@ -45,6 +45,9 @@ export const walletSlice = createSlice({
     setTransactions: (state, { payload }) => {
       state.transactions = payload;
     },
+    setToken: (state, { payload }) => {
+      state.tokens = [...state.tokens, payload];
+    },
     setTokens: (state, { payload }) => {
       state.tokens = payload;
     },
@@ -64,6 +67,7 @@ export const {
   setAddress,
   setAccount,
   setTransactions,
+  setToken,
   setTokens,
   resetWallet,
 } = walletSlice.actions;
