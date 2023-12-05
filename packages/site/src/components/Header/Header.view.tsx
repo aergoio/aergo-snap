@@ -10,9 +10,9 @@ import {
   HeaderWrapper,
   LogoWrapper,
   AccountWrapper,
+  AccountNameWrapper,
   AccountName,
   Right,
-  StyledFaChevron,
   StyledFaEllipsisV,
   Title,
 } from './Header.style';
@@ -42,9 +42,9 @@ export const HeaderView = ({
             <div>accountModal</div>
           </PopIn>
           {address ? (
-            <AccountName onClick={() => setAccountModal(true)}>
-              My Account
-            </AccountName>
+            <AccountNameWrapper onClick={() => setAccountModal(true)}>
+              <AccountName>My Account</AccountName>
+            </AccountNameWrapper>
           ) : null}
         </AccountWrapper>
         <Right>
