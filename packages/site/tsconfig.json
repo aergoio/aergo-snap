@@ -1,25 +1,25 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "apis/*": ["src/apis/*"],
-      "assets/*": ["src/assets/*"],
-      "ui/*": ["src/ui/*"],
-      "components/*": ["src/components/*"],
-      "theme/*": ["src/theme/*"],
-      "hooks/*": ["src/hooks/*"],
-      "pages/*": ["src/pages/*"],
-      "slices/*": ["src/slices/*"],
-      "store/*": ["src/store/*"],
-      "types": ["src/types"],
-      "utils/*": ["src/utils/*"]
-    }
-  },
-  "include": ["src"]
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "module": "esnext",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
+        "baseUrl": ".",
+        "paths": {
+            "apis/*": ["src/apis/*"],
+            "assets/*": ["src/assets/*"],
+            "ui/*": ["src/ui/*"],
+            "components/*": ["src/components/*"],
+            "theme/*": ["src/theme/*"],
+            "hooks/*": ["src/hooks/*"],
+            "pages/*": ["src/pages/*"],
+            "slices/*": ["src/slices/*"],
+            "store/*": ["src/store/*"],
+            "types": ["src/types"],
+            "utils/*": ["src/utils/*"]
+        }
+    },
+    "include": ["src"]
 }
