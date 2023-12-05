@@ -72,6 +72,9 @@ export const MenuNetworkLabel = styled.span`
   color: ${(props) => props.theme.colors.grey.grey6};
   font-weight: 500;
   font-size: 16px;
+  :hover {
+    opacity: 0.75;
+  }
 `;
 
 export const StyledAergoSvg = styled(AergoSvg)`
