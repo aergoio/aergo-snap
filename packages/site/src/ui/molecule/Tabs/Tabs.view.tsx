@@ -1,5 +1,6 @@
 import { Tab } from '@headlessui/react';
 import { useState, ReactNode } from 'react';
+import { CSSProperties } from 'styled-components';
 import {
   StyledTabsView,
   StyledTabList,
@@ -12,13 +13,14 @@ import {
 type Props = {
   tabs: string[];
   panels?: ReactNode[];
+  style?: CSSProperties;
 };
 
-export const TabsView = ({ tabs, panels }: Props) => {
+export const TabsView = ({ tabs, panels, style }: Props) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
-    <StyledTabsView>
+    <StyledTabsView style={style}>
       <Tab.Group
         manual
         selectedIndex={tabIndex}

@@ -17,7 +17,6 @@ import {
 } from './NetworkMenu.style';
 
 export const NetworkMenuView = () => {
-  const [isPressed, setIsPressed] = useState(false);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const networks = useAppSelector((state) => state.networks);
@@ -32,10 +31,6 @@ export const NetworkMenuView = () => {
   return (
     <Menu
       as="div"
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
-      onMouseLeave={() => setIsPressed(false)}
-      onBlur={() => setIsPressed(false)}
       style={{
         position: 'relative',
         border: `1px solid ${theme.colors.grey.grey1}`,
@@ -44,7 +39,6 @@ export const NetworkMenuView = () => {
         display: 'flex',
         alignItems: 'center',
         textAlign: 'left',
-        opacity: isPressed ? `0.5` : '1',
       }}
     >
       <StyledAergoSvg />

@@ -6,6 +6,8 @@ export type UIState = {
     loadingMessage: string;
   };
   error: any;
+  sidebar: number;
+  tokenType: 'ARC1' | 'ARC2';
 };
 
 const initialState: UIState = {
@@ -18,6 +20,8 @@ const initialState: UIState = {
     message: '',
     data: {},
   },
+  sidebar: 0,
+  tokenType: 'ARC1',
 };
 
 export const UISlice = createSlice({
@@ -35,10 +39,21 @@ export const UISlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
     },
+    setSidebar: (state, { payload }) => {
+      state.sidebar = payload;
+    },
+    setTokenType: (state, { payload }) => {
+      state.tokenType = payload;
+    },
   },
 });
 
-export const { enableLoadingWithMessage, disableLoading, setError } =
-  UISlice.actions;
+export const {
+  enableLoadingWithMessage,
+  disableLoading,
+  setError,
+  setSidebar,
+  setTokenType,
+} = UISlice.actions;
 
 export default UISlice.reducer;

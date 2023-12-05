@@ -7,7 +7,7 @@ const Link = styled.a`
   align-items: center;
   justify-content: center;
   font-size: ${(props) => props.theme.fontSizes.small};
-  border-radius: ${(props) => props.theme.radii.button};
+  border-radius: ${(props) => props.theme.radii.rect};
   border: 1px solid ${(props) => props.theme.colors.background.inverse};
   background-color: ${(props) => props.theme.colors.background.inverse};
   color: ${(props) => props.theme.colors.text.inverse};
@@ -50,7 +50,7 @@ const ConnectedContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: ${(props) => props.theme.fontSizes.small};
-  border-radius: ${(props) => props.theme.radii.button};
+  border-radius: ${(props) => props.theme.radii.rect};
   border: 1px solid ${(props) => props.theme.colors.background.inverse};
   background-color: ${(props) => props.theme.colors.background.inverse};
   color: ${(props) => props.theme.colors.text.inverse};

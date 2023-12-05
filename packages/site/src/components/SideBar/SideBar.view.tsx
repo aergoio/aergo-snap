@@ -1,5 +1,7 @@
 import { Line } from 'ui/atom/Line';
 import { Dispatch, SetStateAction } from 'react';
+import { useAppDispatch, useAppSelector } from 'hooks/redux';
+import { setSidebar } from 'slices/UISlice';
 import {
   Container,
   Wrapper,
@@ -7,12 +9,10 @@ import {
   StyledButtonText,
 } from './SideBar.style';
 
-interface Props {
-  sidebar: number;
-  setSidebar: Dispatch<SetStateAction<number>>;
-}
+export const SideBarView = () => {
+  const { sidebar } = useAppSelector((state) => state.UI);
+  const dispatch = useAppDispatch();
 
-export const SideBarView = ({ sidebar, setSidebar }: Props) => {
   return (
     <Container>
       <Wrapper>
@@ -20,7 +20,7 @@ export const SideBarView = ({ sidebar, setSidebar }: Props) => {
           iconLeft="user"
           backgroundTransparent
           upperCaseOnly={false}
-          onClick={() => setSidebar(0)}
+          onClick={() => dispatch(setSidebar(0))}
           textStyle={sidebar === 0 ? { fontWeight: 'bold' } : {}}
         >
           <StyledButtonText>Account Balance</StyledButtonText>
@@ -29,10 +29,19 @@ export const SideBarView = ({ sidebar, setSidebar }: Props) => {
           iconLeft="coins"
           backgroundTransparent
           upperCaseOnly={false}
-          onClick={() => setSidebar(1)}
+          onClick={() => dispatch(setSidebar(1))}
           textStyle={sidebar === 1 ? { fontWeight: 'bold' } : {}}
         >
           <StyledButtonText>Staked Balance</StyledButtonText>
+        </StyledButton>
+        <StyledButton
+          iconLeft="money-bill-trend-up"
+          backgroundTransparent
+          upperCaseOnly={false}
+          onClick={() => dispatch(setSidebar(2))}
+          textStyle={sidebar === 2 ? { fontWeight: 'bold' } : {}}
+        >
+          <StyledButtonText>Voting Power</StyledButtonText>
         </StyledButton>
       </Wrapper>
       <Line vertical />

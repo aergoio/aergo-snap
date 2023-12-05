@@ -19513,6 +19513,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.48.2":
+  version: 7.48.2
+  resolution: "react-hook-form@npm:7.48.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 39652d08f78f16e5234049ceeb794d8bcd4d146772aca99c6db8c5aea8926cd4a230d02098886a441074deefbc24ffcb5ed57bc7cb0009d950115f5b3e627f12
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -20872,11 +20881,13 @@ __metadata:
     gatsby-plugin-styled-components: ^5.24.0
     gatsby-plugin-svgr: ^3.0.0-beta.0
     jdenticon: ^3.2.0
+    lodash: ^4.17.21
     path: ^0.12.7
     prettier: ^2.2.1
     prettier-plugin-packagejson: ^2.2.18
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-hook-form: ^7.48.2
     react-is: ^18.2.0
     react-popper-tooltip: ^4.4.2
     react-redux: ^8.1.3

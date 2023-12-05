@@ -38,10 +38,18 @@ export const AccountWrapper = styled.div`
   text-align: center;
 `;
 
-export const AccountName = styled.div`
+export const AccountNameWrapper = styled.div`
   width: 100%;
-  padding: 1rem 1.5rem;
+  transition: background 0.3s;
+  &:hover {
+    background: ${(props) => props.theme.colors.background.transparent};
+  }
+  cursor: pointer;
+  padding: 1rem 0rem;
   border-radius: 0.5rem;
+`;
+
+export const AccountName = styled.span`
   white-space: nowrap;
   font-weight: 600;
   font-size: ${(props) => props.theme.fontSizes.text};
@@ -49,11 +57,6 @@ export const AccountName = styled.div`
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  cursor: pointer;
-  transition: transform 0.3s;
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const MenuSection = styled.div`
