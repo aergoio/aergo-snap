@@ -1,8 +1,11 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import { GetKeysResponse, Network } from 'types';
 import {
   setAccount,
   setAddress,
   setForceReconnect,
+  setTokens,
   setTransactions,
   setWalletConnection,
 } from 'slices/walletSlice';
@@ -14,6 +17,7 @@ import {
 import { setNetworks } from 'slices/networkSlice';
 import { Networks } from 'utils/constants';
 import { scanApi } from 'apis/scanApi';
+import { formatTokenAmount } from 'utils/utils';
 import { useAppDispatch, useAppSelector } from './redux';
 
 export const useAergoSnap = () => {
@@ -29,7 +33,7 @@ export const useAergoSnap = () => {
   };
 
   const dispatch = useAppDispatch();
-  const { provider, address } = useAppSelector((state) => state.wallet);
+  const { provider, address, tokens } = useAppSelector((state) => state.wallet);
 
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
@@ -105,11 +109,51 @@ export const useAergoSnap = () => {
         const account = (
           await scanApiInstance.get(`accountsBalance?q=_id:${address}`)
         ).data.hits[0];
+        if (account) {
+          // 1. account Balance, staking Balance bigInt to Aergo Amount
+          // 2. USD Change Api
+          account.meta.unstaked_balance = (
+            BigInt(account?.meta?.balance) - BigInt(account?.meta?.staking)
+          ).toString();
+
+          account.meta.unstaked_balance_formatAmount = formatTokenAmount(
+            account.meta.unstaked_balance,
+            'AERGO',
+            18,
+          );
+
+          account.meta.staking_formatAmount = formatTokenAmount(
+            account.meta.staking,
+            'AERGO',
+            18,
+          );
+        }
         const transactions = (
           await scanApiInstance.get(
             `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`,
           )
         ).data.hits;
+        const getTokenBalances = (
+          await scanApiInstance.get(`tokenBalance?q=${address}&size=10000`)
+        ).data.hits;
+        if (getTokenBalances.length > 0) {
+          // Add TokenBalances
+          const updatedTokens = tokens.map((token) => {
+            const tokenBalance = getTokenBalances.find(
+              (balance: any) => balance.token.hash === token.hash,
+            );
+
+            if (tokenBalance) {
+              return { ...token, tokenBalance };
+            }
+            return token;
+          });
+          if (updatedTokens.length > 0) {
+            dispatch(setTokens(updatedTokens));
+          }
+        }
+
+        // TODO: import Asset 된 토큰과 api에서 가져온 잔고를 맞춰서, setTokens해줘야 함. 없으면, 모두 밸런스 0
         dispatch(setAccount(account));
         dispatch(setTransactions(transactions));
       } catch (err) {
