@@ -5,7 +5,7 @@ const breakpoints = ['845px', '900px', '992px'];
 /**
  * Common theme properties.
  */
-const theme = {
+export const theme = {
   fonts: {
     default: 'Outfit-Regular',
     buttons: 'Outfit-Medium',
@@ -39,10 +39,11 @@ const theme = {
     tiny1: '1rem',
     tiny2: '0.8rem',
     small: '0.6rem',
+    xsmall: '0.4rem',
   },
   radii: {
-    default: '24px',
-    button: '8px',
+    rounded: '24px',
+    rect: '8px',
   },
   breakpoints,
   mediaQueries: {
@@ -106,7 +107,7 @@ export const light: DefaultTheme = {
       main: '#E4097D',
     },
     card: {
-      default: '#FFFFFF',
+      default: '#fdfdfd',
     },
     error: {
       inverse: '#FFFFFF',
@@ -203,7 +204,7 @@ export const dark: DefaultTheme = {
       main: '#E4097D',
     },
     card: {
-      default: '#141618',
+      default: '#222831',
     },
     error: {
       inverse: '#FFFFFF',
@@ -295,7 +296,7 @@ export const GlobalStyle = createGlobalStyle`
   button {
     font-family: ${(props) => props.theme.fonts.buttons};
     font-size: ${(props) => props.theme.fontSizes.small};
-    border-radius: ${(props) => props.theme.radii.button};
+    border-radius: ${(props) => props.theme.radii.rect};
     background-color: ${(props) => props.theme.colors.background.inverse};
     color: ${(props) => props.theme.colors.text.inverse};
     border: 1px solid ${(props) => props.theme.colors.background.inverse};

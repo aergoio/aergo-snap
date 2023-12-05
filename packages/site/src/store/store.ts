@@ -32,7 +32,7 @@ const persistConfig = {
 const walletPersistConfig = {
   key: 'wallet',
   storage,
-  whitelist: ['forceReconnect'],
+  whitelist: ['forceReconnect', 'tokens'],
 };
 
 const networkPersistConfig = {
