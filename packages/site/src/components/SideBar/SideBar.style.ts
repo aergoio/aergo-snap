@@ -3,7 +3,10 @@ import { Button } from 'ui/atom/Button';
 
 export const Container = styled.div`
   display: flex;
-  min-width: 2rem;
+  z-index: 2;
+  @media screen and (max-width: 900px) {
+    min-width: 1rem;
+  }
 `;
 
 export const Wrapper = styled.div`
@@ -11,6 +14,11 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-top: 1rem;
+  min-width: 21rem;
+  min-height: 32rem;
+  @media screen and (max-width: 900px) {
+    min-width: 1rem;
+  }
 `;
 
 export const StyledButton = styled(Button)`
