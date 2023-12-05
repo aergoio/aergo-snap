@@ -29,11 +29,12 @@ export const LogoWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 0 2rem;
 `;
 
 export const AccountWrapper = styled.div`
   margin-right: ${(props) => props.theme.spacing.large};
-  width: 80%;
+  width: 100%;
   text-align: center;
 `;
 
@@ -42,9 +43,16 @@ export const AccountName = styled.div`
   padding: 1rem 1.5rem;
   border-radius: 0.5rem;
   white-space: nowrap;
+  font-weight: 600;
+  font-size: ${(props) => props.theme.fontSizes.text};
+  background: ${(props) => props.theme.colors.gradation.gradation1};
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   cursor: pointer;
+  transition: transform 0.3s;
   &:hover {
-    background: ${(props) => props.theme.colors.background.transparent};
+    transform: scale(1.1);
   }
 `;
 
@@ -79,11 +87,8 @@ export const NetworkName = styled.div`
 export const StyledFaChevron = styled(FontAwesomeIcon)`
   margin-left: 0.5rem;
   width: 1.2rem;
-  ${({ theme }) => theme.mediaQueries.small} {
-    display: none;
-  }
   path {
-    fill: ${(props) => props.theme.colors.icon.default};
+    fill: ${(props) => props.theme.colors.grey.grey4};
   }
 `;
 

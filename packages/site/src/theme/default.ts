@@ -1,6 +1,6 @@
 import { createGlobalStyle, DefaultTheme } from 'styled-components';
 
-const breakpoints = ['768px', '800px', '992px'];
+const breakpoints = ['845px', '900px', '992px'];
 
 /**
  * Common theme properties.
@@ -52,7 +52,8 @@ const theme = {
   },
   shadows: {
     // default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
-    default: '0px 5px 12px rgba(0, 0, 0, 0.1)',
+    // default: '0px 5px 12px rgba(0, 0, 0, 0.1)',
+    default: '0 40px 20px -30px rgba(102,111,128,.1)',
     button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15)',
   },
 };
@@ -67,6 +68,7 @@ export const light: DefaultTheme = {
       alternative: '#f2f4f6',
       inverse: '#141618',
       transparent: '#F2F4F6',
+      primary: '#eff5f7',
     },
     icon: {
       default: '#141618',
@@ -140,10 +142,10 @@ export const light: DefaultTheme = {
       border:
         'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
       main: 'linear-gradient(to right, #279ecc, #a13e99)',
-      // main: 'linear-gradient(to right, #279ecc, #e4097d)',
-      // main: 'linear-gradient(to right, #279ecc, #f894c8)',
-      // main: 'linear-gradient(to right, #279ecc, #fff1f9)',
-      // main: 'linear-gradient(to right, #9a449c, #e30a7d)',
+      gradation1: 'linear-gradient(to right, #279ecc, #e4097d)',
+      gradation2: 'linear-gradient(to right, #279ecc, #f894c8)',
+      gradation3: 'linear-gradient(to right, #279ecc, #fff1f9)',
+      gradation4: 'linear-gradient(to right, #9a449c, #e30a7d)',
     },
     'font-gradation': {
       main: 'linear-gradient(to right, #279ecc, #a13e99)',
@@ -164,6 +166,7 @@ export const dark: DefaultTheme = {
       alternative: '#141618',
       inverse: '#FFFFFF',
       transparent: 'rgba(88,86,102,.2)',
+      primary: '#24272A',
     },
     icon: {
       default: '#FFFFFF',
@@ -236,14 +239,10 @@ export const dark: DefaultTheme = {
       border:
         'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #a13e99)',
       main: 'linear-gradient(to right, #279ecc, #a13e99)',
-      gradation1:
-        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #e4097d)',
-      gradation2:
-        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #f894c8)',
-      gradation3:
-        'linear-gradient(#fff, #fff), linear-gradient(to right, #279ecc, #fff1f9)',
-      gradation5:
-        'linear-gradient(#fff, #fff), linear-gradient(to right, #9a449c, #e30a7d)',
+      gradation1: 'linear-gradient(to right, #279ecc, #fff1f9)',
+      gradation2: 'linear-gradient(to right, #279ecc, #f894c8)',
+      gradation3: 'linear-gradient(to right, #279ecc, #e4097d)',
+      gradation4: 'linear-gradient(to right, #9a449c, #e30a7d)',
     },
     'font-gradation': {
       main: 'linear-gradient(to right, #279ecc, #fff1f9)',

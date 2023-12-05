@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Container, Description, Title, Wrapper } from './Card.style';
+import { CSSProperties } from 'styled-components';
+import { Description, Title, Wrapper } from './Card.style';
 
 type CardProps = {
   content: {
@@ -9,21 +10,21 @@ type CardProps = {
   };
   disabled?: boolean;
   fullWidth?: boolean;
+  style?: CSSProperties;
 };
 
 export const CardView = ({
   content,
   disabled = false,
   fullWidth,
+  style,
 }: CardProps) => {
   const { title, description, button } = content;
   return (
-    <Container>
-      <Wrapper fullWidth={fullWidth} disabled={disabled}>
-        {title && <Title>{title}</Title>}
-        <Description>{description}</Description>
-        {button}
-      </Wrapper>
-    </Container>
+    <Wrapper style={style} fullWidth={fullWidth} disabled={disabled}>
+      {title && <Title>{title}</Title>}
+      <Description>{description}</Description>
+      {button}
+    </Wrapper>
   );
 };

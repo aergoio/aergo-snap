@@ -16,7 +16,7 @@ export const StyledTab = styled(Tab)`
   width: 26vw;
   padding: 8px 16px;
   cursor: pointer;
-
+  white-space: nowrap;
   color: ${(props) => props.theme.colors.text.default};
   border: none;
   padding: 0;
@@ -46,6 +46,6 @@ export const StyledTabBorder = styled.div`
   }
 `;
 
-export const StyledTabPanel = styled(Tab.Panel)`
-  padding: 16px;
-`;
+export const StyledTabPanels = styled(Tab.Panels)``;
+
+export const StyledTabPanel = styled(Tab.Panel)``;

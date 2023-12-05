@@ -4,6 +4,7 @@ import { Token } from 'types';
 import { IListProps } from 'ui/molecule/List/List.view';
 import { useAppSelector } from 'hooks/redux';
 import { formatTokenAmount, moveDecimalPoint } from 'utils/utils';
+import { useAergoSnap } from 'hooks/useAergoSnap';
 import { TokenItem } from './TokenItem';
 import {
   Wrapper,
@@ -16,6 +17,7 @@ import {
 
 export const TokenListView = () => {
   const [importAssetModal, setImportAssetModal] = useState(false);
+  const { getWalletData } = useAergoSnap();
   const [tokens, setTokens] = useState([
     {
       name: 'AERGO',
@@ -26,8 +28,11 @@ export const TokenListView = () => {
     },
   ]);
   const wallet = useAppSelector((state) => state.wallet);
+  const networks = useAppSelector((state) => state.networks);
+  const { loader } = useAppSelector((state) => state.UI);
   const handleClickRefresh = () => {
-    console.log('handleClickRefresh');
+    const network = networks.items[networks.activeNetwork];
+    getWalletData(network);
   };
 
   useEffect(() => {
@@ -41,7 +46,7 @@ export const TokenListView = () => {
       },
       ...prevTokens.slice(1),
     ]);
-  }, [wallet?.account?.hash]);
+  }, [wallet?.account?.meta?.blockno]);
 
   return (
     <Wrapper>

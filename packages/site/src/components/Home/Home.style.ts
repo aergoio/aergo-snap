@@ -13,3 +13,20 @@ export const HomeWrapper = styled.div`
     width: 100vw;
   }
 `;
+
+export const Top = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  ${({ theme }) => theme.mediaQueries.small} {
+    justify-content: center;
+  }
+`;
+
+export const Bottom = styled.div`
+  width: 100%;
+`;
+
+export const AddressWrapper = styled.div`
+  width: 100%;
+`;

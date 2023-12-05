@@ -1,3 +1,5 @@
+import { Wrapper } from './NftList.style';
+
 export const NftListView = () => {
-  return <>NftListView</>;
+  return <Wrapper>NftListView</Wrapper>;
 };
