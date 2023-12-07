@@ -1,6 +1,5 @@
-import { getBIP44AddressKeyDeriver } from '@metamask/key-tree';
-import { encodeAddress } from './utils/encode';
-import { ec } from 'elliptic';
+import { getBIP44AddressKeyDeriver, secp256k1 } from '@metamask/key-tree';
+import { encodeAddress, hexToUint8Array } from './utils/encode';
 
 export const getKeys = async () => {
     // Get the Aergo node, corresponding to the path m/44'/441'.
@@ -18,19 +17,14 @@ export const getKeys = async () => {
     const aergoBip44Node = await getBIP44AddressKeyDeriver(aergoBip44Entropy);
 
     // uncompressed publicKey -> compressed publicKey -> base58Check to public
-    // const { publicKey } = await aergoBip44Node(0);
-    // const hexToArray = hexToUint8Array(publicKey);
-    // const compressedPublicKey = secp256k1.compressPublicKey(hexToArray);
-    // const walletAddress = encodeAddress(compressedPublicKey);
-
-    const node: any = await aergoBip44Node(0);
-    const secp256k1 = new ec('secp256k1');
-    const key = secp256k1.keyFromPrivate(node.privateKey);
-    const address = addressFromPublicKey(key.getPublic());
+    const node = await aergoBip44Node(0);
+    const hexToArray = hexToUint8Array(node.publicKey!);
+    const compressedPublicKey = secp256k1.compressPublicKey(hexToArray);
+    const address = encodeAddress(compressedPublicKey);
 
     return {
         address,
-        key,
+        key: node.privateKeyBytes,
     };
 };
 
