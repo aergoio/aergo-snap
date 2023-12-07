@@ -1,8 +1,9 @@
-import { ec } from 'elliptic';
+import { sign } from '@noble/secp256k1';
+import { secp256k1 } from '@noble/curves/secp256k1';
 
 import { decodeAddress, encodeAddress, fromNumber, fromBigInt, fromHexString, bufferOrB58, decodeToBytes, encodeBuffer, ByteEncoding } from './encode';
 
-const signTx = async (tx: any, key: ec.KeyPair) => {
+const signTx = async (tx: any, key: Uint8Array) => {
     tx.sign = await signTransaction(tx, key, 'base58');
     const hash = await hashTransaction(tx, 'base58');
 
@@ -20,18 +21,18 @@ const signTx = async (tx: any, key: ec.KeyPair) => {
     };
 };
 
-const signTransaction = async (tx: any, key: ec.KeyPair, enc: ByteEncoding = 'base58') => {
+const signTransaction = async (tx: any, key: Uint8Array, enc: ByteEncoding = 'base58') => {
     const msgHash = (await hashTransaction(tx, 'bytes', false)) as Buffer;
     return signMessage(msgHash, key, enc);
 };
 
-const signMessage = async (msgHash: Buffer, key: ec.KeyPair, enc: ByteEncoding = 'base58') => {
-    const sig = key.sign(msgHash);
+const signMessage = async (msgHash: Buffer, key: Uint8Array, enc: ByteEncoding = 'base58') => {
+    const sig = await sign(msgHash, key);
     return encodeSignature(sig, enc);
 };
 
-const encodeSignature = (sig: ec.Signature, enc: ByteEncoding = 'base58') => {
-    return encodeBuffer(Buffer.from(sig.toDER()), enc);
+const encodeSignature = (sig: Uint8Array, enc: ByteEncoding = 'base58') => {
+    return encodeBuffer(sig, enc);
 };
 
 const hashTransaction = async (tx: any, encoding: ByteEncoding | 'bytes' = 'base58', includeSign = true) => {
@@ -93,11 +94,8 @@ const inferType = (tx: any) => {
 };
 
 const hash = (data: Buffer) => {
-    const secp256k1 = new ec('secp256k1');
-
-    const h = secp256k1.hash();
+    const h = secp256k1.CURVE.hash.create();
     h.update(data);
-
     return Buffer.from(h.digest());
 };
 

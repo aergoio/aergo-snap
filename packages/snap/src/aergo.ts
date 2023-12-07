@@ -1,4 +1,3 @@
-import { ec } from 'elliptic';
 import { signTx } from './utils/tx';
 
 const setNode = async (params: any) => {
@@ -369,7 +368,7 @@ const sendSignedTransaction = async (params: any, key: any) => {
 };
 
 interface MyModule {
-    [key: string]: (params: any, key?: ec.KeyPair) => Promise<string>;
+    [key: string]: (params: any, key?: any) => Promise<string>;
 }
 
 const myModule: MyModule = {

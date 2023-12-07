@@ -67,7 +67,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
             const func = funcAergo[request.method];
             if (func) {
                 try {
-                    return await func(request.params);
+                    return JSON.parse(await func(request.params));
                 } catch (err) {
                     return { err: err ? JSON.stringify(err) : 'Error: Network Error' };
                 }
