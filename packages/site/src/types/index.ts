@@ -11,14 +11,6 @@ export type GetKeysResponse = {
   address: string;
 };
 
-export type Token = {
-  name: string;
-  amount: string | number;
-  hash: string;
-  contractAddress?: string;
-  usd?: string;
-};
-
 export interface Network {
   label: string;
   chainId: string;
@@ -35,7 +27,13 @@ export type Account = {
     blockno: number;
     staking: string;
     staking_float: number;
+    staking_formatAmount: string;
+    staking_usd: string;
     ts: string;
+    unstaked_balance: string;
+    unstaked_balance_formatAmount: string;
+    unstaked_balance_usd: string;
+    usd: string;
   };
 };
 
@@ -64,4 +62,46 @@ export type Transaction = {
     tx_idx: number;
     type: number;
   };
+};
+
+export type Token = {
+  hash: string;
+  meta: {
+    blockno: number;
+    comment: string;
+    creator: string;
+    decimals: number;
+    email: string;
+    homepage_url: string;
+    image_url: string;
+    name: string;
+    name_lower: string;
+    owner: string;
+    regdate: string;
+    supply: string;
+    supply_float: number;
+    symbol: string;
+    symbol_lower: string;
+    token_address: string;
+    total_transfer: number;
+    tx_id: string;
+    type: string;
+    verified_status: string;
+    image?: string;
+    url?: string;
+  };
+  tokenBalance?: TokenBalance;
+};
+
+export type TokenBalance = {
+  hash: string;
+  meta: {
+    account: string;
+    address: string;
+    balance: string;
+    balance_float: string;
+    ts: string;
+    type: string;
+  };
+  token: Token;
 };

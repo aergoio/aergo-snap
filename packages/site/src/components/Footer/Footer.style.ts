@@ -16,7 +16,7 @@ export const PoweredByButton = styled.a`
   align-items: center;
   justify-content: center;
   padding: 1.2rem;
-  border-radius: ${({ theme }) => theme.radii.button};
+  border-radius: ${({ theme }) => theme.radii.rect};
   box-shadow: ${({ theme }) => theme.shadows.button};
   background-color: ${({ theme }) => theme.colors.background.alternative};
 `;

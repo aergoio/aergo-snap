@@ -28,7 +28,7 @@ export const Panel = styled(Dialog.Panel)`
   position: relative;
   flex-direction: column;
   align-items: center;
-  width: 376px;
+  /* width: 376px; */
   box-shadow: 0px 14px 24px -6px rgba(106, 115, 125, 0.2);
   border-radius: 8px;
   background-color: ${(props) => props.theme.colors.background.default};

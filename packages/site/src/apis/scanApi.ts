@@ -10,7 +10,6 @@ const scanApiInstance = (baseURL: string): AxiosInstance =>
     },
   });
 
-// ? I wonder if it would be better to move the request method of ScanApi from the site to the snaps background.
 export const scanApi = async (
   network: Network,
 ): Promise<AxiosInstance | null> => {

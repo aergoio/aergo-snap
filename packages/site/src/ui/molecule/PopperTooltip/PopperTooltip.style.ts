@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
 `;
 
 export const PopperContainer = styled.div<IDiv>`
-  border-radius: ${(props) => props.theme.radii.default};
+  border-radius: ${(props) => props.theme.radii.rounded};
   background-color: ${(props) => props.theme.colors.grey.white};
   padding: ${(props) => props.theme.spacing.large};
   text-align: center;
