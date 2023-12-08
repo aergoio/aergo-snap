@@ -1,4 +1,3 @@
-import { sign } from '@noble/secp256k1';
 import { secp256k1 } from '@noble/curves/secp256k1';
 
 import { decodeAddress, encodeAddress, fromNumber, fromBigInt, fromHexString, bufferOrB58, decodeToBytes, encodeBuffer, ByteEncoding } from './encode';
@@ -27,8 +26,8 @@ const signTransaction = async (tx: any, key: Uint8Array, enc: ByteEncoding = 'ba
 };
 
 const signMessage = async (msgHash: Buffer, key: Uint8Array, enc: ByteEncoding = 'base58') => {
-    const sig = await sign(msgHash, key);
-    return encodeSignature(sig, enc);
+    const sig = secp256k1.sign(msgHash, key);
+    return encodeSignature(sig.toDERRawBytes(), enc);
 };
 
 const encodeSignature = (sig: Uint8Array, enc: ByteEncoding = 'base58') => {
