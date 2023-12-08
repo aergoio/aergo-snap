@@ -12,7 +12,7 @@ export const HomeView = () => {
   return (
     <HomeWrapper>
       <Top>
-        {sidebar = == 0 ? (
+        {sidebar === 0 ? (
           <SidebarContentWrapper>
             <AddressInfo />
             <Transactions />
