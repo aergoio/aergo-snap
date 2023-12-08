@@ -1,22 +1,15 @@
 import { useAppSelector } from 'hooks/redux';
 import { Asset, Dollor, Wrapper } from './AssetQuantity.style';
+import { formatTokenAmount } from 'utils/utils';
 
 export const AssetQuantityView = () => {
-  const { account } = useAppSelector((state) => state.wallet);
+  const { accountBalance } = useAppSelector((state) => state.wallet);
   const { sidebar } = useAppSelector((state) => state.UI);
 
   return (
     <Wrapper>
-      <Asset>
-        {sidebar === 0
-          ? account?.meta?.unstaked_balance_formatAmount || '0 AERGO'
-          : account?.meta?.staking_formatAmount || '0 AERGO'}
-      </Asset>
-      <Dollor>
-        {sidebar === 0
-          ? account?.meta?.unstaked_balance_usd || '$ 0 USD'
-          : account?.meta?.staking_usd || '$ 0 USD'}
-      </Dollor>
+      <Asset>{formatTokenAmount(accountBalance || '0', 'AERGO', 18)}</Asset>
+      <Dollor>{formatTokenAmount(accountBalance || '0', 'AERGO', 18)}</Dollor>
     </Wrapper>
   );
 };

@@ -8,7 +8,7 @@ export const shortenAddress = (address: string, num = 3) => {
   return (
     Boolean(address) &&
     `${address.substring(0, num + 2)}...${address.substring(
-      address.length - num - 1,
+      address.length - num - 1
     )}`
   );
 };
@@ -61,7 +61,7 @@ export function moveDecimalPoint(str: string, digits: number): string {
 export function formatTokenAmount(
   amount: string,
   unit: string,
-  decimals: number,
+  decimals: number
 ) {
   return `${moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
 }

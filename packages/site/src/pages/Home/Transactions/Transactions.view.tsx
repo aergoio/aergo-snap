@@ -35,13 +35,13 @@ export const TransactionsView = () => {
         >
           Send
         </StyledButton>
-        <StyledButton
+        {/* <StyledButton
           variant="gradation"
           spacing="xlarge"
           onClick={connectToSnap}
         >
           Reconnect
-        </StyledButton>
+        </StyledButton> */}
       </ButtonWrapper>
     </Wrapper>
   );

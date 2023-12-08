@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { InputWithLabel } from 'ui/atom/InputWithLabel';
 import { debounce } from 'lodash';
 import { scanApi } from 'apis/scanApi';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
-import { Button } from 'ui/atom/Button';
 import { Token } from 'types';
 import { setToken } from 'slices/walletSlice';
+import { useAergoSnap } from 'hooks/useAergoSnap';
 
-export const CustomView = () => {
-  const networks = useAppSelector((state) => state.networks);
+interface Props {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const CustomView = ({ setIsOpen }: Props) => {
+  const { network, chainIdLabel } = useAppSelector((state) => state.networks);
   const { tokens } = useAppSelector((state) => state.wallet);
   const { tokenType } = useAppSelector((state) => state.UI);
   const dispatch = useAppDispatch();
@@ -17,9 +21,8 @@ export const CustomView = () => {
 
   useEffect(() => {
     const debouncedSetContractAddress = debounce(async (value) => {
-      const network = networks.items[networks.activeNetwork];
       const scanApiInstance = await scanApi(network);
-      if (scanApiInstance) {
+      if (scanApiInstance && value) {
         try {
           const getTokenByContractAddress = (
             await scanApiInstance.get(`token?q=_id:${value}&type:${tokenType}`)
@@ -38,23 +41,18 @@ export const CustomView = () => {
   }, [contractAddress]);
 
   const handleAddTokenByCustomAddress = () => {
-    // if (!tokens.some(addedToken => addedToken.hash === searchedToken?.hash)) {
-    //     dispatch(setToken(searchedToken));
-    // } else {
-    //     console.log(`Already Added ${searchedToken?.meta?.name}`);
-    // }
-
     const payload = {
-      chainIdLabel: networks.chainIdLabel,
+      chainIdLabel,
       token: searchedToken,
     };
-    if (tokens[networks.chainIdLabel]) {
+    if (tokens[chainIdLabel]) {
       if (
-        !tokens[networks.chainIdLabel].some(
+        !tokens[chainIdLabel].some(
           (addedToken) => addedToken?.hash === searchedToken?.hash,
         )
       ) {
         dispatch(setToken(payload));
+        setIsOpen(false);
       } else {
         console.log(`Already Added ${searchedToken?.meta?.name}`);
       }

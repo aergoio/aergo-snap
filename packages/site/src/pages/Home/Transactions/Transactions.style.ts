@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Button } from 'ui/atom/Button';
 
 export const Wrapper = styled.div`
-  width: 90%;
   margin-bottom: ${({ theme }) => theme.spacing.large2};
   display: flex;
   align-items: center;

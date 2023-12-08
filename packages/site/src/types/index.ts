@@ -17,25 +17,8 @@ export interface Network {
   nodeUrl: string;
   scanExplorerUrl?: string;
   scanApiUrl?: string;
+  web3Url?: string;
 }
-
-export type Account = {
-  hash: string;
-  meta: {
-    balance: string;
-    balance_float: number;
-    blockno: number;
-    staking: string;
-    staking_float: number;
-    staking_formatAmount: string;
-    staking_usd: string;
-    ts: string;
-    unstaked_balance: string;
-    unstaked_balance_formatAmount: string;
-    unstaked_balance_usd: string;
-    usd: string;
-  };
-};
 
 export type Transaction = {
   hash: string;

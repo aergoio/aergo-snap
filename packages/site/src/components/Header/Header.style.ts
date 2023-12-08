@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const HeaderWrapper = styled.header`
   background: ${(props) => props.theme.colors.background.default};
+  position: relative;
   width: 80vw;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -26,6 +27,7 @@ export const Title = styled.p`
 `;
 
 export const LogoWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -66,7 +68,7 @@ export const MenuSection = styled.div`
 `;
 
 export const Right = styled.div`
-  margin-right: 4rem;
+  margin-right: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
