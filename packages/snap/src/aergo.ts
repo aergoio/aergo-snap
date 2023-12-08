@@ -243,7 +243,7 @@ const getChainInfo = async () => {
 };
 
 const getConsensusInfo = async () => {
-    const response = await fetch(buildUrl(`${await getApiUrl()}/getConsensusInfo`, data));
+    const response = await fetch(`${await getApiUrl()}/getConsensusInfo`);
     return response.text();
 };
 
