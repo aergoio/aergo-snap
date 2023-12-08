@@ -29,7 +29,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
     switch (request.method) {
         case 'getAddress': {
             const { address } = await getKeys();
-            return address;
+            return { address };
         }
         case 'sendTransaction': {
             const tx: any = request.params;

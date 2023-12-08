@@ -27,10 +27,3 @@ export const getKeys = async () => {
         key: node.privateKeyBytes,
     };
 };
-
-const addressFromPublicKey = (publicKey: any) => {
-    const len = publicKey.curve.p.byteLength();
-    const x = publicKey.getX().toArray('be', len);
-    const address = Uint8Array.from([publicKey.getY().isEven() ? 0x02 : 0x03].concat(x));
-    return encodeAddress(address);
-};

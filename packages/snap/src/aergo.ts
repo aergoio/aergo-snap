@@ -11,7 +11,8 @@ const setNode = async (params: any) => {
         params: { operation: 'update', newState: { aergoNodeUrl: url } },
     });
 
-    return url;
+    const result = { url };
+    return JSON.stringify(result);
 };
 
 const getNode = async () => {
@@ -21,13 +22,17 @@ const getNode = async () => {
     });
 
     if (persistedData && !!persistedData.aergoNodeUrl) {
-        return persistedData.aergoNodeUrl.toString();
+        const result = { url: persistedData.aergoNodeUrl.toString() };
+        return JSON.stringify(result);
     }
-    return 'http://localhost';
+
+    const result = { url: 'http://localhost' };
+    return JSON.stringify(result);
 };
 
 const getApiUrl = async () => {
-    return (await getNode()) + '/v1';
+    const node = JSON.parse(await getNode());
+    return node.url + '/v1';
 };
 
 const createQueryString = (params: any) => {
