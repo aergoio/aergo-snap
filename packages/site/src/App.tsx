@@ -33,9 +33,8 @@ export type AppProps = {
 };
 
 export const App: FunctionComponent<AppProps> = ({ children }) => {
-  const { connected, forceReconnect, provider, address } = useAppSelector(
-    (state) => state.wallet,
-  );
+  const { connected, forceReconnect, provider, address, tokens } =
+    useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
   const { loader } = useAppSelector((state) => state.UI);
   const toggleTheme = useContext(ToggleThemeContext);
@@ -69,7 +68,9 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
       }
     };
     getWalletDataWhenNetworkChange();
+  }, [networks.activeNetwork, provider, address]);
 
+  useEffect(() => {
     const getWalletDataIntervalEvery10Seconds = setInterval(() => {
       if (provider && networks.items.length > 0 && address) {
         const network = networks.items[networks.activeNetwork];
@@ -78,7 +79,7 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     }, 10000);
 
     return () => clearInterval(getWalletDataIntervalEvery10Seconds);
-  }, [networks.activeNetwork, provider, address]);
+  }, [networks.activeNetwork, provider, address, tokens]);
 
   const loading = loader.isLoading;
 

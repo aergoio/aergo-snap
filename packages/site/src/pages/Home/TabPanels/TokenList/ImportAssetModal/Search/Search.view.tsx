@@ -27,6 +27,7 @@ export const SearchView = () => {
               `tokenVerified?q=(name_lower:*${value.toLowerCase()}* OR symbol_lower:*${value.toLowerCase()}*) AND type:${tokenType}`,
             )
           ).data.hits;
+
           setSearchedToken(getSearchedToken);
         } catch (e) {
           console.error(e);
@@ -38,6 +39,21 @@ export const SearchView = () => {
 
     return () => debouncedSetSearch.cancel();
   }, [search]);
+
+  const handleAddTokenBySearch = (token: Token) => {
+    const payload = { chainIdLabel: networks.chainIdLabel, token };
+    if (tokens[networks.chainIdLabel]) {
+      if (
+        !tokens[networks.chainIdLabel].some(
+          (addedToken) => addedToken.hash === token.hash,
+        )
+      ) {
+        dispatch(setToken(payload));
+      } else {
+        console.log(`Already Added ${token.meta.name}`);
+      }
+    }
+  };
 
   return (
     <>
@@ -51,9 +67,7 @@ export const SearchView = () => {
         render={(token: Token) => (
           <span
             onClick={() => {
-              !tokens.some((addedToken) => addedToken.hash === token.hash)
-                ? dispatch(setToken(token))
-                : console.log(`Already Added ${token.meta.name}`);
+              handleAddTokenBySearch(token);
             }}
           >
             {token.meta.name}
