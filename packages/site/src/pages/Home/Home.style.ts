@@ -15,6 +15,7 @@ export const HomeWrapper = styled.div`
 `;
 
 export const Top = styled.div`
+  min-height: 31.8rem;
   width: 100%;
   display: flex;
   justify-content: center;

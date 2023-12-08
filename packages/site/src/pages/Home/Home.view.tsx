@@ -1,6 +1,5 @@
 import { Tabs } from 'ui/molecule';
 import { Line } from 'ui/atom/Line';
-import { SideBar } from 'components/SideBar';
 import { useAppSelector } from 'hooks/redux';
 import { AddressInfo } from './AddressInfo';
 import { HomeWrapper, Top, Bottom, SidebarContentWrapper } from './Home.style';
@@ -13,8 +12,7 @@ export const HomeView = () => {
   return (
     <HomeWrapper>
       <Top>
-        <SideBar />
-        {sidebar === 0 ? (
+        {sidebar = == 0 ? (
           <SidebarContentWrapper>
             <AddressInfo />
             <Transactions />
@@ -30,7 +28,7 @@ export const HomeView = () => {
           panels={[
             <TokenList tokenType="ARC1" />,
             <TokenList tokenType="ARC2" />,
-            <TransactionHistory />,
+            <TransactionHistory />
           ]}
         />
       </Bottom>

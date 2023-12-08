@@ -6,7 +6,7 @@ export type WalletState = {
   isLoading: boolean;
   forceReconnect: boolean;
   address: string;
-  account: Account;
+  accountBalance: string;
   transactions: Transaction[];
   tokens: {
     [chainIdLabel: string]: Token[];
@@ -19,14 +19,15 @@ const initialState: WalletState = {
   isLoading: false,
   forceReconnect: false,
   address: '',
-  account: {} as Account,
+  accountBalance: '',
   transactions: [],
   tokens: {
     'aergo.io/Aergo Mainnet': [],
     'testnet.aergo.io/Aergo Testnet': [],
     'alpha.aergo.io/Aergo Alpha': [],
+    'bmt.aergo.io/BMT': []
   },
-  provider: undefined,
+  provider: undefined
 };
 
 export const walletSlice = createSlice({
@@ -45,8 +46,8 @@ export const walletSlice = createSlice({
     setAddress: (state, { payload }) => {
       state.address = payload;
     },
-    setAccount: (state, { payload }) => {
-      state.account = payload;
+    setAccountBalance: (state, { payload }) => {
+      state.accountBalance = payload;
     },
     setTransactions: (state, { payload }) => {
       state.transactions = payload;
@@ -57,13 +58,16 @@ export const walletSlice = createSlice({
     setTokens: (state, { payload: { chainIdLabel, tokens } }) => {
       state.tokens[chainIdLabel] = tokens;
     },
-    resetWallet: () => {
+    resetWallet: (state) => {
       return {
         ...initialState,
-        forceReconnect: true,
+        address: state.address,
+        tokens: state.tokens,
+        provider: state.provider
+        // forceReconnect: true
       };
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -71,11 +75,11 @@ export const {
   setWalletConnection,
   setForceReconnect,
   setAddress,
-  setAccount,
+  setAccountBalance,
   setTransactions,
   setToken,
   setTokens,
-  resetWallet,
+  resetWallet
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

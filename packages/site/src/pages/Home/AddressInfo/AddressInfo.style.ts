@@ -3,7 +3,6 @@ import { AccountImage } from 'ui/atom/AccountImage';
 import { Button } from 'ui/atom/Button';
 
 export const Container = styled.div`
-  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;

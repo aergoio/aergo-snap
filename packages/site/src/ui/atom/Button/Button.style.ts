@@ -81,6 +81,7 @@ export const Wrapper = styled.button<IButtonProps>`
 `;
 
 export const TextWrapper = styled.span<ITextWrapper>`
+  white-space: nowrap;
   font-family: 'Outfit-Medium';
 
   font-size: ${(props) => props.fontSize || props.theme.fontSizes.small};

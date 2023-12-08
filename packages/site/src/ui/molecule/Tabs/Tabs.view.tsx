@@ -7,7 +7,7 @@ import {
   StyledTab,
   StyledTabPanel,
   StyledTabBorder,
-  StyledTabPanels,
+  StyledTabPanels
 } from './Tabs.style';
 
 type Props = {
@@ -28,15 +28,15 @@ export const TabsView = ({ tabs, panels, style }: Props) => {
       >
         <StyledTabList>
           {tabs.map((name, idx) => (
-            <StyledTab>
+            <StyledTab key={`${name}${idx}`}>
               {name}
               <StyledTabBorder aria-selected={tabIndex === idx} />
             </StyledTab>
           ))}
         </StyledTabList>
         <StyledTabPanels>
-          {panels?.map((panel) => (
-            <StyledTabPanel>{panel}</StyledTabPanel>
+          {panels?.map((panel, idx) => (
+            <StyledTabPanel key={`${panel}${idx}`}>{panel}</StyledTabPanel>
           ))}
         </StyledTabPanels>
       </Tab.Group>

@@ -11,7 +11,7 @@ import {
   Bottom,
   TokenName,
   Amount,
-  Dollor,
+  Dollor
 } from './TokenItem.style';
 
 interface Props {
@@ -38,7 +38,7 @@ export const TokenItemView = ({ token }: Props) => {
               {formatTokenAmount(
                 token?.tokenBalance?.meta?.balance || '0',
                 token?.meta?.symbol || '',
-                token?.meta?.decimals || 0,
+                token?.meta?.decimals || 0
               )}
             </Dollor>
           </Top>
@@ -47,7 +47,7 @@ export const TokenItemView = ({ token }: Props) => {
               {formatTokenAmount(
                 token?.tokenBalance?.meta?.balance || '0',
                 token?.meta?.symbol || '',
-                token?.meta?.decimals || 0,
+                token?.meta?.decimals || 0
               )}
             </Amount>
           </Bottom>

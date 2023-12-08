@@ -14,12 +14,12 @@ import {
   AccountName,
   Right,
   StyledFaEllipsisV,
-  Title,
+  Title
 } from './Header.style';
 import { NetworkMenu } from './NetworkMenu';
 
 export const HeaderView = ({
-  handleToggleClick,
+  handleToggleClick
 }: {
   handleToggleClick(): void;
 }) => {
