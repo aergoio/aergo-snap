@@ -61,8 +61,8 @@ export const useAergoSnap = () => {
         params: { snapId, request: { method: 'getAddress' } }
       })) as GetKeysResponse;
 
-      console.log('address', address);
-      dispatch(setAddress(address));
+      console.log('address', address.address);
+      dispatch(setAddress(address.address));
       dispatch(disableLoading());
     } catch (err) {
       // console.error(err);
