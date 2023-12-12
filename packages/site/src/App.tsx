@@ -12,7 +12,7 @@ import {
   useAergoSnap,
   useAppDispatch,
   useAppSelector,
-  useHasMetamask,
+  useHasMetamask
 } from './hooks';
 import { Footer, Header } from './components';
 
@@ -52,29 +52,33 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     }
 
     if (hasMetamask && !connected && !forceReconnect) {
-      checkConnection();
+      const network = networks.items[networks.activeNetwork];
+      checkConnection(network);
     }
   }, [connected, forceReconnect, hasMetamask, provider]);
 
   useEffect(() => {
+    dispatch(enableLoadingWithMessage('Getting Network Data...'));
     const getWalletDataWhenNetworkChange = async () => {
       try {
         const network = networks.items[networks.activeNetwork];
-        dispatch(enableLoadingWithMessage('Getting Network Data...'));
-        await getWalletData(network);
+        await checkConnection(network);
+        await getWalletData(network, address);
         dispatch(disableLoading());
       } catch (e) {
         console.error(e);
       }
     };
-    getWalletDataWhenNetworkChange();
+    if (address) {
+      getWalletDataWhenNetworkChange();
+    }
   }, [networks.activeNetwork, provider, address]);
 
   useEffect(() => {
     const getWalletDataIntervalEvery10Seconds = setInterval(() => {
       if (provider && networks.items.length > 0 && address) {
         const network = networks.items[networks.activeNetwork];
-        getWalletData(network);
+        getWalletData(network, address);
       }
     }, 10000);
 

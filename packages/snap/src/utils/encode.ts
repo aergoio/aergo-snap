@@ -32,7 +32,8 @@ const hexToUint8Array = function (hexString: string): Uint8Array {
 
 const uint8ArrayToHex = function (uint8Array: Uint8Array): string {
     let hexWithout0x = '';
-    for (const byte of uint8Array) {
+    for (let i = 0; i < uint8Array.length; i++) {
+        const byte = uint8Array[i];
         hexWithout0x += `00${byte.toString(16)}`.slice(-2);
     }
 
@@ -40,7 +41,7 @@ const uint8ArrayToHex = function (uint8Array: Uint8Array): string {
     return `0x${hexWithout0x}`;
 };
 
-const decodeAddress = (encodedString: string): Uint8Array | null => {
+const decodeAddress = (encodedString: string): Uint8Array => {
     const base58Check = scureBase58check(sha256);
 
     // Base58Check 디코딩을 시도합니다.
@@ -50,7 +51,7 @@ const decodeAddress = (encodedString: string): Uint8Array | null => {
     if (decodedArray && decodedArray.length > 0 && decodedArray[0] === 0x42) {
         return decodedArray.subarray(1);
     } else {
-        return null; // 유효한 디코딩이 아닐 경우 null 반환
+        throw new Error(`Invalid address format ${encodedString}`);
     }
 };
 

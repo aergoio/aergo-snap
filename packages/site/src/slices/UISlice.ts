@@ -13,15 +13,15 @@ export type UIState = {
 const initialState: UIState = {
   loader: {
     isLoading: false,
-    loadingMessage: '',
+    loadingMessage: ''
   },
   error: {
     code: 0,
     message: '',
-    data: {},
+    data: {}
   },
   sidebar: 0,
-  tokenType: 'ARC1',
+  tokenType: 'ARC1'
 };
 
 export const UISlice = createSlice({
@@ -44,8 +44,8 @@ export const UISlice = createSlice({
     },
     setTokenType: (state, { payload }) => {
       state.tokenType = payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -53,7 +53,7 @@ export const {
   disableLoading,
   setError,
   setSidebar,
-  setTokenType,
+  setTokenType
 } = UISlice.actions;
 
 export default UISlice.reducer;

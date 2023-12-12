@@ -15,11 +15,11 @@ export const TokenListView = ({ tokenType }: Props) => {
   const dispatch = useAppDispatch();
   const [importAssetModal, setImportAssetModal] = useState(false);
   const { getWalletData } = useAergoSnap();
-  const { tokens } = useAppSelector((state) => state.wallet);
+  const { tokens, address } = useAppSelector((state) => state.wallet);
   const { network, chainIdLabel } = useAppSelector((state) => state.networks);
 
   const handleClickRefresh = () => {
-    getWalletData(network);
+    getWalletData(network, address);
   };
 
   useEffect(() => {
@@ -34,8 +34,8 @@ export const TokenListView = ({ tokenType }: Props) => {
       {tokenType === 'ARC1' ? <AergoToken /> : null}
       <List
         data={
-          tokens[chainIdLabel].filter(
-            (token) => token?.meta?.type === tokenType,
+          tokens[chainIdLabel]?.filter(
+            (token) => token?.meta?.type === tokenType
           ) || []
         }
         render={(token: any) => <TokenItem token={token} />}

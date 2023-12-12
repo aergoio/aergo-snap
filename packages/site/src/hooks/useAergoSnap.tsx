@@ -2,23 +2,23 @@
 /* eslint-disable array-callback-return */
 import { GetKeysResponse, Network, NodeResponse } from 'types';
 import {
-  setAccount,
+  setAccountBalance,
   setAddress,
   setForceReconnect,
   setTokens,
   setTransactions,
-  setWalletConnection,
+  setWalletConnection
 } from 'slices/walletSlice';
 import {
   disableLoading,
   enableLoadingWithMessage,
-  setError,
+  setError
 } from 'slices/UISlice';
 import { setNetworks } from 'slices/networkSlice';
 import { Networks } from 'utils/constants';
 import { scanApi } from 'apis/scanApi';
-import { formatTokenAmount } from 'utils/utils';
 import { useAppDispatch, useAppSelector } from './redux';
+import { resetWallet } from 'slices/walletSlice';
 
 export const useAergoSnap = () => {
   const snapId = process.env.REACT_APP_SNAP_ID
@@ -27,21 +27,19 @@ export const useAergoSnap = () => {
   const snapVersion = process.env.REACT_APP_SNAP_VERSION
     ? process.env.REACT_APP_SNAP_VERSION
     : '*';
-  const debugLevel = 'all';
-  const defaultParam = {
-    debugLevel,
-  };
 
   const dispatch = useAppDispatch();
   const { provider, address, tokens } = useAppSelector((state) => state.wallet);
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
+    //* Set Public Networks: Constants objects
+    dispatch(setNetworks(Networks));
     provider
       .request({
         method: 'wallet_requestSnaps',
         params: {
-          [snapId]: { version: snapVersion },
-        },
+          [snapId]: { version: snapVersion }
+        }
       })
       .then(() => {
         dispatch(setWalletConnection(true));
@@ -54,83 +52,75 @@ export const useAergoSnap = () => {
       });
   };
 
-  const checkConnection = () => {
-    dispatch(enableLoadingWithMessage('Connecting...'));
-    provider
-      .request({
-        method: 'wallet_invokeSnap',
-        params: {
-          snapId,
-          request: {
-            method: 'ping',
-            params: {
-              ...defaultParam,
-            },
-          },
-        },
-      })
-      .then((res: any) => {
-        dispatch(setWalletConnection(true));
-        dispatch(setNetworks(Networks));
-        dispatch(disableLoading());
-      })
-      .catch((err: any) => {
-        dispatch(setWalletConnection(false));
-        dispatch(disableLoading());
-        //eslint -disable-next-line no-console
-        console.log(err);
-        dispatch(setError(err));
-      });
-  };
-
   const getKeys = async () => {
     dispatch(enableLoadingWithMessage('Getting... Address'));
     try {
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      const { address } = (await window.ethereum.request({
+      const address = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
-        params: { snapId, request: { method: 'getAddress' } },
+        params: { snapId, request: { method: 'getAddress' } }
       })) as GetKeysResponse;
 
       console.log('address', address);
       dispatch(setAddress(address));
       dispatch(disableLoading());
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       dispatch(setError(err));
       dispatch(disableLoading());
     }
   };
 
-  const getWalletData = async (network: Network) => {
+  const checkConnection = async (network: Network) => {
+    dispatch(enableLoadingWithMessage('Connecting to Web3'));
+    try {
+      const connectToWeb3 = JSON.parse(
+        await provider.request({
+          method: 'wallet_invokeSnap',
+          params: {
+            snapId,
+            request: {
+              method: 'ping',
+              params: {
+                node: network.web3Url
+              }
+            }
+          }
+        })
+      );
+      if (connectToWeb3.url === 'undefined') {
+        //* Not Found Web3 Url, Error Notification
+        dispatch(resetWallet());
+        console.log('Not founded web3');
+      }
+      console.log(`Connected Web3 Url: ${connectToWeb3.url}`);
+      dispatch(setWalletConnection(true));
+      dispatch(disableLoading());
+    } catch (err) {
+      dispatch(setWalletConnection(false));
+      dispatch(disableLoading());
+      dispatch(setError(err));
+    }
+  };
+
+  const getWalletData = async (network: Network, address: string) => {
+    const { balance } = (await window.ethereum.request({
+      method: 'wallet_invokeSnap',
+      params: {
+        snapId,
+        request: { method: 'getBalance', params: { account: address } }
+      }
+    })) as any;
+    if (balance) {
+      dispatch(setAccountBalance(balance));
+    }
+
     const scanApiInstance = await scanApi(network);
     if (scanApiInstance && address) {
       try {
-        const account = (
-          await scanApiInstance.get(`accountsBalance?q=_id:${address}`)
-        ).data.hits[0];
-        if (account) {
-          // 1. account Balance, staking Balance bigInt to Aergo Amount
-          // 2. USD Change Api
-          account.meta.unstaked_balance = (
-            BigInt(account?.meta?.balance) - BigInt(account?.meta?.staking)
-          ).toString();
-
-          account.meta.unstaked_balance_formatAmount = formatTokenAmount(
-            account.meta.unstaked_balance,
-            'AERGO',
-            18,
-          );
-
-          account.meta.staking_formatAmount = formatTokenAmount(
-            account.meta.staking,
-            'AERGO',
-            18,
-          );
-        }
         const transactions = (
           await scanApiInstance.get(
-            `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`,
+            `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`
           )
         ).data.hits;
         const getTokenBalances = (
@@ -141,7 +131,7 @@ export const useAergoSnap = () => {
           // Update Token Balance
           const updatedTokens = tokens[chainIdLabel].map((token) => {
             const tokenBalance = getTokenBalances.find(
-              (tokenBalance: any) => tokenBalance.token.hash === token.hash,
+              (tokenBalance: any) => tokenBalance.token.hash === token.hash
             );
             if (tokenBalance) {
               return { ...token, tokenBalance };
@@ -153,7 +143,6 @@ export const useAergoSnap = () => {
           }
         }
 
-        dispatch(setAccount(account));
         dispatch(setTransactions(transactions));
       } catch (err) {
         console.error(err);
@@ -166,7 +155,7 @@ export const useAergoSnap = () => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
-        params: { snapId, request: { method: 'setNode', params: { node } } },
+        params: { snapId, request: { method: 'setNode', params: { node } } }
       })) as NodeResponse;
 
       console.log('setNode', data);
@@ -181,7 +170,7 @@ export const useAergoSnap = () => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
-        params: { snapId, request: { method: 'getNode' } },
+        params: { snapId, request: { method: 'getNode' } }
       })) as NodeResponse;
 
       console.log('getNode', data);
@@ -198,8 +187,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getState', params: { account: address } },
-        },
+          request: { method: 'getState', params: { account: address } }
+        }
       })) as any;
 
       console.log('getState', data);
@@ -216,8 +205,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getProof', params: { account: address } },
-        },
+          request: { method: 'getProof', params: { account: address } }
+        }
       })) as any;
 
       console.log('getProof', data);
@@ -234,8 +223,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getNameInfo', params: { name, number } },
-        },
+          request: { method: 'getNameInfo', params: { name, number } }
+        }
       })) as any;
 
       console.log('getNameInfo', data);
@@ -252,8 +241,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getBalance', params: { account: address } },
-        },
+          request: { method: 'getBalance', params: { account: address } }
+        }
       })) as any;
 
       console.log('getBalance', data);
@@ -277,8 +266,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getBlock', params },
-        },
+          request: { method: 'getBlock', params }
+        }
       })) as any;
 
       console.log('getBlock', data);
@@ -295,8 +284,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getBlockNumber' },
-        },
+          request: { method: 'getBlockNumber' }
+        }
       })) as any;
 
       console.log('getBlockNumber', data);
@@ -310,7 +299,7 @@ export const useAergoSnap = () => {
   const getBlockBody = async (
     value: string | number,
     offset: number = 0,
-    size: number = 10,
+    size: number = 10
   ) => {
     const params: {
       hash?: string;
@@ -319,7 +308,7 @@ export const useAergoSnap = () => {
       size: number;
     } = {
       offset,
-      size,
+      size
     };
 
     if (typeof value === 'string') params.hash = value;
@@ -330,8 +319,8 @@ export const useAergoSnap = () => {
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getBlockBody', params },
-        },
+          request: { method: 'getBlockBody', params }
+        }
       })) as any;
 
       console.log('getBlockBody', data);
@@ -346,7 +335,7 @@ export const useAergoSnap = () => {
     height: number,
     offset: number = 0,
     size: number = 10,
-    asc: boolean = true,
+    asc: boolean = true
   ) => {
     try {
       const data = (await window.ethereum.request({
@@ -359,10 +348,10 @@ export const useAergoSnap = () => {
               height,
               offset,
               size,
-              asc,
-            },
-          },
-        },
+              asc
+            }
+          }
+        }
       })) as any;
 
       console.log('listBlockHeaders', data);
@@ -388,9 +377,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getBlockMetadata',
-            params,
-          },
-        },
+            params
+          }
+        }
       })) as any;
 
       console.log('getBlockMetadata', data);
@@ -409,9 +398,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getTransaction',
-            params: { hash },
-          },
-        },
+            params: { hash }
+          }
+        }
       })) as any;
 
       console.log('getTransaction', data);
@@ -430,9 +419,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getTransactionReceipt',
-            params: { hash },
-          },
-        },
+            params: { hash }
+          }
+        }
       })) as any;
 
       console.log('getTransactionReceipt', data);
@@ -458,9 +447,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getBlockTransactionReceipts',
-            params,
-          },
-        },
+            params
+          }
+        }
       })) as any;
 
       console.log('getBlockTransactionReceipts', data);
@@ -479,9 +468,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getBlockTX',
-            params: { hash },
-          },
-        },
+            params: { hash }
+          }
+        }
       })) as any;
 
       console.log('getBlockTX', data);
@@ -500,9 +489,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'call',
-            params: { address, name, query },
-          },
-        },
+            params: { address, name, query }
+          }
+        }
       })) as any;
 
       console.log('call', data);
@@ -518,7 +507,7 @@ export const useAergoSnap = () => {
     eventName: string,
     argFilter: string,
     range: number | { blockfrom?: number; blockto?: number },
-    desc: boolean = true,
+    desc: boolean = true
   ) => {
     const params: {
       address: string;
@@ -532,7 +521,7 @@ export const useAergoSnap = () => {
       address,
       eventName,
       argFilter,
-      desc,
+      desc
     };
     if (typeof range === 'number') {
       params.recentBlockCnt = range;
@@ -548,9 +537,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getPastEvents',
-            params: params,
-          },
-        },
+            params: params
+          }
+        }
       })) as any;
 
       return data;
@@ -568,9 +557,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getABI',
-            params: { address },
-          },
-        },
+            params: { address }
+          }
+        }
       })) as any;
 
       console.log('getABI', data);
@@ -589,9 +578,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'queryContractState',
-            params: { address },
-          },
-        },
+            params: { address }
+          }
+        }
       })) as any;
 
       console.log('queryContractState', data);
@@ -617,9 +606,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getBlockTransactionCount',
-            params,
-          },
-        },
+            params
+          }
+        }
       })) as any;
 
       console.log('getBlockTransactionCount', data);
@@ -637,9 +626,9 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'getChainInfo',
-          },
-        },
+            method: 'getChainInfo'
+          }
+        }
       })) as any;
 
       console.log('getChainInfo', data);
@@ -657,9 +646,9 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'getConsensusInfo',
-          },
-        },
+            method: 'getConsensusInfo'
+          }
+        }
       })) as any;
 
       console.log('getConsensusInfo', data);
@@ -678,9 +667,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getAccountVotes',
-            params: { account: address },
-          },
-        },
+            params: { account: address }
+          }
+        }
       })) as any;
 
       console.log('getAccountVotes', data);
@@ -699,9 +688,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getNodeInfo',
-            params: { component },
-          },
-        },
+            params: { component }
+          }
+        }
       })) as any;
 
       console.log('getNodeInfo', data);
@@ -720,9 +709,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getChainId',
-            params: { noHidden, showSelf },
-          },
-        },
+            params: { noHidden, showSelf }
+          }
+        }
       })) as any;
 
       console.log('getChainId', data);
@@ -741,9 +730,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getServerInfo',
-            params: { key },
-          },
-        },
+            params: { key }
+          }
+        }
       })) as any;
 
       console.log('getServerInfo', data);
@@ -762,9 +751,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getStaking',
-            params: { account: address },
-          },
-        },
+            params: { account: address }
+          }
+        }
       })) as any;
 
       console.log('getStaking', data);
@@ -783,9 +772,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getVotes',
-            params: { count },
-          },
-        },
+            params: { count }
+          }
+        }
       })) as any;
 
       console.log('getVotes', data);
@@ -804,9 +793,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'metric',
-            params: { type },
-          },
-        },
+            params: { type }
+          }
+        }
       })) as any;
 
       console.log('metric', data);
@@ -825,9 +814,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getEnterpriseConfig',
-            params: { key },
-          },
-        },
+            params: { key }
+          }
+        }
       })) as any;
 
       console.log('getEnterpriseConfig', data);
@@ -846,9 +835,9 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getConfChangeProgress',
-            params: { hash },
-          },
-        },
+            params: { hash }
+          }
+        }
       })) as any;
 
       console.log('getConfChangeProgress', data);
@@ -858,6 +847,7 @@ export const useAergoSnap = () => {
       dispatch(setError(err));
     }
   };
+
   const chainStat = async () => {
     try {
       const data = (await window.ethereum.request({
@@ -865,9 +855,9 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'chainStat',
-          },
-        },
+            method: 'chainStat'
+          }
+        }
       })) as any;
 
       console.log('chainStat', data);
@@ -878,12 +868,29 @@ export const useAergoSnap = () => {
     }
   };
 
-  const sendTransaction = async () => {
+  const sendTransaction = async (params: {
+    from: string;
+    to: string;
+    amount: string;
+    type: number;
+    nonce?: number;
+    chainIdHash?: string;
+    payloadJson?: {
+      name: string;
+      args?: any[];
+    };
+  }) => {
     dispatch(enableLoadingWithMessage('Getting... SendTransaction'));
     try {
-      // enlist-disable-next-line @typescript-eslint/no-shadow
-      const info = await getBlockNumber();
-      const account = await getState(address);
+      if (!params.nonce) {
+        const account = await getState(address);
+        params.nonce = account.nonce + 1;
+      }
+
+      if (!params.chainIdHash) {
+        const info = await getBlockNumber();
+        params.chainIdHash = info.chainIdHash;
+      }
 
       const sendTransaction = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
@@ -891,19 +898,46 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'sendTransaction',
-            params: {
-              from: address,
-              to: 'AmNdzAYv3dYKFtPRgfUMGppGwBJS2JvZLRTF9gRruF49vppEepgj',
-              amount: '100000000000000000',
-              type: 4,
-              nonce: account.nonce + 1,
-              chainIdHash: info.chainIdHash,
-            },
-          },
-        },
+            params
+          }
+        }
       })) as any;
 
       console.log('sendTransaction', sendTransaction);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
+  const sendAergo = async (to: string, amount: string) => {
+    dispatch(enableLoadingWithMessage('Getting... sendAergo'));
+    try {
+      const info = await getBlockNumber();
+      const account = await getState(address);
+
+      const sendAergo = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendTransaction',
+            params: {
+              from: address,
+              to,
+              amount,
+              type: 4,
+              nonce: account.nonce + 1,
+              chainIdHash: info.chainIdHash
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendAergo', sendAergo);
 
       dispatch(disableLoading());
     } catch (err) {
@@ -951,5 +985,6 @@ export const useAergoSnap = () => {
     getEnterpriseConfig,
     getConfChangeProgress,
     chainStat,
+    sendAergo
   };
 };

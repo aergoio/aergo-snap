@@ -10,12 +10,13 @@ import {
   Bottom,
   TokenName,
   Amount,
-  Dollor,
+  Dollor
 } from './TokenItem.style';
+import { formatTokenAmount } from 'utils/utils';
 
 export const AergoTokenView = () => {
   const theme = useTheme();
-  const { account } = useAppSelector((state) => state.wallet);
+  const { accountBalance } = useAppSelector((state) => state.wallet);
 
   return (
     <div style={{ width: '100%' }}>
@@ -26,11 +27,13 @@ export const AergoTokenView = () => {
         <Content>
           <Top>
             <TokenName>AERGO</TokenName>
-            <Dollor>{account?.meta?.unstaked_balance_usd || '$ 0 USD'}</Dollor>
+            <Dollor>
+              {formatTokenAmount(accountBalance || '0', 'AERGO', 18)}
+            </Dollor>
           </Top>
           <Bottom>
             <Amount>
-              {account?.meta?.unstaked_balance_formatAmount || '0 AERGO'}
+              {formatTokenAmount(accountBalance || '0', 'AERGO', 18)}
             </Amount>
           </Bottom>
         </Content>

@@ -8,7 +8,7 @@ const setNode = async (params: any) => {
 
   await snap.request({
     method: 'snap_manageState',
-    params: { operation: 'update', newState: { aergoNodeUrl: url } },
+    params: { operation: 'update', newState: { aergoNodeUrl: url } }
   });
 
   const result = { url };
@@ -18,7 +18,7 @@ const setNode = async (params: any) => {
 const getNode = async () => {
   const persistedData = await snap.request({
     method: 'snap_manageState',
-    params: { operation: 'get' },
+    params: { operation: 'get' }
   });
 
   if (persistedData && !!persistedData.aergoNodeUrl) {
@@ -38,7 +38,7 @@ const getApiUrl = async () => {
 const createQueryString = (params: any) => {
   return Object.keys(params)
     .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`,
+      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
     )
     .join('&');
 };
@@ -55,7 +55,7 @@ const getAccounts = async () => {
 
 const getState = async (params: any) => {
   const data: { account: string } = {
-    account: params.account,
+    account: params.account
   };
 
   const response = await fetch(buildUrl(`${await getApiUrl()}/getState`, data));
@@ -65,7 +65,7 @@ const getState = async (params: any) => {
 const getProof = async (params: any) => {
   const data: { account: string; compressed?: boolean } = {
     account: params.account,
-    compressed: false,
+    compressed: false
   };
   if (params.compressed) data.compressed = params.compressed;
 
@@ -76,22 +76,22 @@ const getProof = async (params: any) => {
 const getNameInfo = async (params: any) => {
   const data: { name: string; number: number } = {
     name: params.name,
-    number: params.number,
+    number: params.number
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getNameInfo`, data),
+    buildUrl(`${await getApiUrl()}/getNameInfo`, data)
   );
   return response.text();
 };
 
 const getBalance = async (params: any) => {
   const data: { account: string } = {
-    account: params.account,
+    account: params.account
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBalance`, data),
+    buildUrl(`${await getApiUrl()}/getBalance`, data)
   );
   return response.text();
 };
@@ -114,7 +114,7 @@ const getBlockBody = async (params: any) => {
   const data: { hash?: string; number?: number; offset: number; size: number } =
     {
       offset: 0,
-      size: 10,
+      size: 10
     };
   if (params.hash) data.hash = params.hash;
   if (params.number) data.number = params.number;
@@ -122,7 +122,7 @@ const getBlockBody = async (params: any) => {
   if (params.size) data.size = params.size;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockBody`, data),
+    buildUrl(`${await getApiUrl()}/getBlockBody`, data)
   );
   return response.text();
 };
@@ -132,7 +132,7 @@ const listBlockHeaders = async (params: any) => {
     height: params.height,
     offset: 0,
     size: 10,
-    asc: true,
+    asc: true
   };
 
   if (params.offset) data.offset = params.offset;
@@ -140,7 +140,7 @@ const listBlockHeaders = async (params: any) => {
   if (params.asc) data.asc = params.asc;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/listBlockHeaders`, data),
+    buildUrl(`${await getApiUrl()}/listBlockHeaders`, data)
   );
   return response.text();
 };
@@ -151,29 +151,29 @@ const getBlockMetadata = async (params: any) => {
   if (params.number) data.number = params.number;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockMetadata`, data),
+    buildUrl(`${await getApiUrl()}/getBlockMetadata`, data)
   );
   return response.text();
 };
 
 const getTransaction = async (params: any) => {
   const data: { hash: string } = {
-    hash: params.hash,
+    hash: params.hash
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getTransaction`, data),
+    buildUrl(`${await getApiUrl()}/getTransaction`, data)
   );
   return response.text();
 };
 
 const getTransactionReceipt = async (params: any) => {
   const data: { hash: string } = {
-    hash: params.hash,
+    hash: params.hash
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getTransactionReceipt`, data),
+    buildUrl(`${await getApiUrl()}/getTransactionReceipt`, data)
   );
   return response.text();
 };
@@ -184,18 +184,18 @@ const getBlockTransactionReceipts = async (params: any) => {
   if (params.number) data.number = params.number;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTransactionReceipts`, data),
+    buildUrl(`${await getApiUrl()}/getBlockTransactionReceipts`, data)
   );
   return response.text();
 };
 
 const getBlockTX = async (params: any) => {
   const data: { hash: string } = {
-    hash: params.hash,
+    hash: params.hash
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTX`, data),
+    buildUrl(`${await getApiUrl()}/getBlockTX`, data)
   );
   return response.text();
 };
@@ -203,7 +203,7 @@ const getBlockTX = async (params: any) => {
 const call = async (params: any) => {
   const data: { address: string; name: string; query?: string } = {
     address: params.address,
-    name: params.name,
+    name: params.name
   };
   if (params.query) data.query = JSON.stringify(params.query);
 
@@ -223,7 +223,7 @@ const getPastEvents = async (params: any) => {
   } = {
     address: params.address,
     eventName: params.eventName,
-    desc: true,
+    desc: true
   };
   if (params.blockfrom) data.blockfrom = params.blockfrom;
   if (params.blockto) data.blockto = params.blockto;
@@ -232,14 +232,14 @@ const getPastEvents = async (params: any) => {
   if (params.recentBlockCnt) data.recentBlockCnt = params.recentBlockCnt;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getPastEvents`, data),
+    buildUrl(`${await getApiUrl()}/getPastEvents`, data)
   );
   return response.text();
 };
 
 const getABI = async (params: any) => {
   const data: { address: string } = {
-    address: params.address,
+    address: params.address
   };
 
   const response = await fetch(buildUrl(`${await getApiUrl()}/getABI`, data));
@@ -254,14 +254,14 @@ const queryContractState = async (params: any) => {
     compressed: boolean;
   } = {
     address: params.address,
-    compressed: false,
+    compressed: false
   };
   if (params.varname1) data.varname1 = params.varname1;
   if (params.varname2) data.varname2 = params.varname2;
   if (params.compressed) data.compressed = params.compressed;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/queryContractState`, data),
+    buildUrl(`${await getApiUrl()}/queryContractState`, data)
   );
   return response.text();
 };
@@ -272,7 +272,7 @@ const getBlockTransactionCount = async (params: any) => {
   if (params.number) data.number = params.number;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTransactionCount`, data),
+    buildUrl(`${await getApiUrl()}/getBlockTransactionCount`, data)
   );
   return response.text();
 };
@@ -289,23 +289,23 @@ const getConsensusInfo = async () => {
 
 const getAccountVotes = async (params: any) => {
   const data: { account: string } = {
-    account: params.account,
+    account: params.account
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getAccountVotes`, data),
+    buildUrl(`${await getApiUrl()}/getAccountVotes`, data)
   );
   return response.text();
 };
 
 const getNodeInfo = async (params: any) => {
   const data: { timeout: number; component?: string } = {
-    timeout: 3,
+    timeout: 3
   };
   if (params.component) data.component = params.component;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getNodeInfo`, data),
+    buildUrl(`${await getApiUrl()}/getNodeInfo`, data)
   );
   return response.text();
 };
@@ -313,13 +313,13 @@ const getNodeInfo = async (params: any) => {
 const getChainId = async (params: any) => {
   const data: { noHidden: boolean; showSelf: boolean } = {
     noHidden: false,
-    showSelf: true,
+    showSelf: true
   };
   if (params.noHidden) data.noHidden = params.noHidden;
   if (params.showSelf) data.showSelf = params.showSelf;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getChainId`, data),
+    buildUrl(`${await getApiUrl()}/getChainId`, data)
   );
   return response.text();
 };
@@ -329,25 +329,25 @@ const getServerInfo = async (params: any) => {
   if (params.key) data.key = params.key;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getServerInfo`, data),
+    buildUrl(`${await getApiUrl()}/getServerInfo`, data)
   );
   return response.text();
 };
 
 const getStaking = async (params: any) => {
   const data: { account: string } = {
-    account: params.account,
+    account: params.account
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getStaking`, data),
+    buildUrl(`${await getApiUrl()}/getStaking`, data)
   );
   return response.text();
 };
 
 const getVotes = async (params: any) => {
   const data: { count: number } = {
-    count: params.count,
+    count: params.count
   };
 
   const response = await fetch(buildUrl(`${await getApiUrl()}/getVotes`, data));
@@ -356,7 +356,7 @@ const getVotes = async (params: any) => {
 
 const metric = async (params: any) => {
   const data: { type: string } = {
-    type: 'P2P_NETWORK',
+    type: 'P2P_NETWORK'
   };
   if (params.type) data.type = params.type;
 
@@ -369,7 +369,7 @@ const getEnterpriseConfig = async (params: any) => {
   if (params.key) data.key = params.key;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getEnterpriseConfig`, data),
+    buildUrl(`${await getApiUrl()}/getEnterpriseConfig`, data)
   );
   return response.text();
 };
@@ -378,7 +378,7 @@ const getConfChangeProgress = async (params: any) => {
   const data: { hash: string } = { hash: params.hash };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getConfChangeProgress`, data),
+    buildUrl(`${await getApiUrl()}/getConfChangeProgress`, data)
   );
   return response.text();
 };
@@ -398,7 +398,7 @@ const sendSignedTransaction = async (params: any, key: any) => {
     chainIdHash: string;
     payloadJson?: {
       name: string;
-      args?: [any];
+      args?: any[];
     };
   } = {
     from: params.from,
@@ -406,7 +406,7 @@ const sendSignedTransaction = async (params: any, key: any) => {
     amount: params.amount,
     type: params.type ? params.type : 4,
     nonce: params.nonce,
-    chainIdHash: params.chainIdHash,
+    chainIdHash: params.chainIdHash
   };
 
   if (params.payloadJson) {
@@ -419,9 +419,9 @@ const sendSignedTransaction = async (params: any, key: any) => {
   const response = await fetch(`${await getApiUrl()}/sendSignedTransaction`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(data)
   });
   return response.text();
 };
@@ -464,7 +464,7 @@ const myModule: MyModule = {
   getEnterpriseConfig,
   getConfChangeProgress,
   chainStat,
-  sendSignedTransaction,
+  sendSignedTransaction
 };
 
 export default myModule;

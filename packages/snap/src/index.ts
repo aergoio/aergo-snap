@@ -1,9 +1,7 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text, copyable, divider, heading } from '@metamask/snaps-ui';
-import { ApiRequestParams } from './types/snapApi';
 import { getKeys } from './getKeys';
 import funcAergo from './aergo';
-import { logger } from './utils/logger';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -17,16 +15,11 @@ import { logger } from './utils/logger';
  */
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
-  request,
+  request
 }) => {
-  const requestParams = request?.params as unknown as ApiRequestParams;
-  const debugLevel = requestParams?.debugLevel as string;
-  logger.init(debugLevel);
-  console.log(`debugLevel: ${logger.getLogLevel()}`);
-  logger.log(origin, request);
   if (request.method === 'ping') {
-    logger.log('pong');
-    return 'pong';
+    const connectToWeb3 = await funcAergo.setNode(request.params);
+    return connectToWeb3;
   }
 
   switch (request.method) {
@@ -41,7 +34,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
         heading(`From`),
         copyable(`${tx.from}`),
         heading(`To`),
-        copyable(`${tx.to}`),
+        copyable(`${tx.to}`)
       ];
       if (tx.amount) {
         pn.push(heading(`Amount`));
@@ -62,8 +55,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
         method: 'snap_dialog',
         params: {
           type: 'confirmation',
-          content: panel(pn),
-        },
+          content: panel(pn)
+        }
       });
       if (result) {
         const { key } = await getKeys();
