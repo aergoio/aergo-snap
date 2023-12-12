@@ -37,11 +37,27 @@ export const CustomView = () => {
     return () => debouncedSetContractAddress.cancel();
   }, [contractAddress]);
 
-  const importTokenByCustomAddress = () => {
-    if (!tokens.some((addedToken) => addedToken.hash === searchedToken?.hash)) {
-      dispatch(setToken(searchedToken));
-    } else {
-      console.log(`Already Added ${searchedToken?.meta?.name}`);
+  const handleAddTokenByCustomAddress = () => {
+    // if (!tokens.some(addedToken => addedToken.hash === searchedToken?.hash)) {
+    //     dispatch(setToken(searchedToken));
+    // } else {
+    //     console.log(`Already Added ${searchedToken?.meta?.name}`);
+    // }
+
+    const payload = {
+      chainIdLabel: networks.chainIdLabel,
+      token: searchedToken,
+    };
+    if (tokens[networks.chainIdLabel]) {
+      if (
+        !tokens[networks.chainIdLabel].some(
+          (addedToken) => addedToken?.hash === searchedToken?.hash,
+        )
+      ) {
+        dispatch(setToken(payload));
+      } else {
+        console.log(`Already Added ${searchedToken?.meta?.name}`);
+      }
     }
   };
 
@@ -72,12 +88,7 @@ export const CustomView = () => {
         label="Decimals"
         value={searchedToken?.meta?.decimals || ''}
       />
-      <Button
-        enabled={Boolean(searchedToken?.hash)}
-        onClick={importTokenByCustomAddress}
-      >
-        Import
-      </Button>
+      <span onClick={handleAddTokenByCustomAddress}>Import</span>
     </>
   );
 };

@@ -3,6 +3,7 @@ import { PopIn } from 'ui/molecule';
 import { SendSvg, ReceiveSvg } from 'assets/images';
 import { useAergoSnap } from 'hooks/useAergoSnap';
 import { Wrapper, ButtonWrapper, StyledButton } from './Transactions.style';
+import { SendModal } from './SendModal';
 
 export const TransactionsView = () => {
   const [receiveModal, setReceiveModal] = useState(false);
@@ -15,7 +16,7 @@ export const TransactionsView = () => {
         <div>receiveModal</div>
       </PopIn>
       <PopIn isOpen={sendModal} setIsOpen={setSendModal}>
-        <div>sendModal</div>
+        <SendModal />
       </PopIn>
       <ButtonWrapper>
         <StyledButton

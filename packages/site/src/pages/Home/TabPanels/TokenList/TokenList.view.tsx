@@ -7,8 +7,6 @@ import { AergoToken, TokenItem } from './TokenItem';
 import { Wrapper, ButtonWrapper, StyledButton } from './TokenList.style';
 import { ImportAssetModal } from './ImportAssetModal';
 
-// TODO: 프론트에서 등록한 토큰과 tokenBalance에서 조회 한 balance를 일치 시켜줘야 한다.
-
 interface Props {
   tokenType: 'ARC1' | 'ARC2';
 }
@@ -18,9 +16,9 @@ export const TokenListView = ({ tokenType }: Props) => {
   const [importAssetModal, setImportAssetModal] = useState(false);
   const { getWalletData } = useAergoSnap();
   const { tokens } = useAppSelector((state) => state.wallet);
-  const networks = useAppSelector((state) => state.networks);
+  const { network, chainIdLabel } = useAppSelector((state) => state.networks);
+
   const handleClickRefresh = () => {
-    const network = networks.items[networks.activeNetwork];
     getWalletData(network);
   };
 
@@ -35,7 +33,11 @@ export const TokenListView = ({ tokenType }: Props) => {
       </PopIn>
       {tokenType === 'ARC1' ? <AergoToken /> : null}
       <List
-        data={tokens.filter((token) => token?.meta?.type === tokenType) || []}
+        data={
+          tokens[chainIdLabel].filter(
+            (token) => token?.meta?.type === tokenType,
+          ) || []
+        }
         render={(token: any) => <TokenItem token={token} />}
         keyExtractor={(token: any) => token.hash.toString()}
       />
