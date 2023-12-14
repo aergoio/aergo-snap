@@ -199,17 +199,17 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getProof = async (address: string) => {
+  const getStateAndProof = async (address: string) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getProof', params: { account: address } }
+          request: { method: 'getStateAndProof', params: { account: address } }
         }
       })) as any;
 
-      console.log('getProof', data);
+      console.log('getStateAndProof', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -278,17 +278,17 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getBlockNumber = async () => {
+  const blockchain = async () => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
-          request: { method: 'getBlockNumber' }
+          request: { method: 'blockchain' }
         }
       })) as any;
 
-      console.log('getBlockNumber', data);
+      console.log('blockchain', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -390,20 +390,20 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getTransaction = async (hash: string) => {
+  const getTx = async (hash: string) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
           request: {
-            method: 'getTransaction',
+            method: 'getTx',
             params: { hash }
           }
         }
       })) as any;
 
-      console.log('getTransaction', data);
+      console.log('getTx', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -411,20 +411,20 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getTransactionReceipt = async (hash: string) => {
+  const getReceipt = async (hash: string) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
           request: {
-            method: 'getTransactionReceipt',
+            method: 'getReceipt',
             params: { hash }
           }
         }
       })) as any;
 
-      console.log('getTransactionReceipt', data);
+      console.log('getReceipt', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -432,7 +432,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getBlockTransactionReceipts = async (value: string | number) => {
+  const getReceipts = async (value: string | number) => {
     try {
       const params: { hash?: string; number?: number } = {};
       if (typeof value === 'string') {
@@ -446,13 +446,13 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'getBlockTransactionReceipts',
+            method: 'getReceipts',
             params
           }
         }
       })) as any;
 
-      console.log('getBlockTransactionReceipts', data);
+      console.log('getReceipts', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -460,20 +460,20 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getBlockTX = async (hash: string) => {
+  const getBlockTx = async (hash: string) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
           request: {
-            method: 'getBlockTX',
+            method: 'getBlockTx',
             params: { hash }
           }
         }
       })) as any;
 
-      console.log('getBlockTX', data);
+      console.log('getBlockTx', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -481,20 +481,24 @@ export const useAergoSnap = () => {
     }
   };
 
-  const call = async (address: string, name: string, query: string[] = []) => {
+  const queryContract = async (
+    address: string,
+    name: string,
+    query: string[] = []
+  ) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
           request: {
-            method: 'call',
+            method: 'queryContract',
             params: { address, name, query }
           }
         }
       })) as any;
 
-      console.log('call', data);
+      console.log('queryContract', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -502,7 +506,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getPastEvents = async (
+  const listEvents = async (
     address: string,
     eventName: string,
     argFilter: string,
@@ -536,11 +540,13 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'getPastEvents',
+            method: 'listEvents',
             params: params
           }
         }
       })) as any;
+
+      console.log('listEvents', data);
 
       return data;
     } catch (err) {
@@ -570,20 +576,20 @@ export const useAergoSnap = () => {
     }
   };
 
-  const queryContractState = async (address: string) => {
+  const queryContractStateProof = async (address: string) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
           request: {
-            method: 'queryContractState',
+            method: 'queryContractStateProof',
             params: { address }
           }
         }
       })) as any;
 
-      console.log('queryContractState', data);
+      console.log('queryContractStateProof', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -591,7 +597,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getBlockTransactionCount = async (value: string | number) => {
+  const getTxCount = async (value: string | number) => {
     try {
       const params: { hash?: string; number?: number } = {};
       if (typeof value === 'string') {
@@ -605,13 +611,13 @@ export const useAergoSnap = () => {
         params: {
           snapId,
           request: {
-            method: 'getBlockTransactionCount',
+            method: 'getTxCount',
             params
           }
         }
       })) as any;
 
-      console.log('getBlockTransactionCount', data);
+      console.log('getTxCount', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -888,7 +894,7 @@ export const useAergoSnap = () => {
       }
 
       if (!params.chainIdHash) {
-        const info = await getBlockNumber();
+        const info = await blockchain();
         params.chainIdHash = info.chainIdHash;
       }
 
@@ -916,7 +922,7 @@ export const useAergoSnap = () => {
   const sendAergo = async (to: string, amount: string) => {
     dispatch(enableLoadingWithMessage('Getting... sendAergo'));
     try {
-      const info = await getBlockNumber();
+      const info = await blockchain();
       const account = await getState(address);
 
       const sendAergo = (await window.ethereum.request({
@@ -956,23 +962,23 @@ export const useAergoSnap = () => {
     setNode,
     getNode,
     getState,
-    getProof,
+    getStateAndProof,
     getNameInfo,
     getBalance,
     getBlock,
-    getBlockNumber,
+    blockchain,
     getBlockBody,
     listBlockHeaders,
     getBlockMetadata,
-    getTransaction,
-    getTransactionReceipt,
-    getBlockTransactionReceipts,
-    getBlockTX,
-    call,
-    getPastEvents,
+    getTx,
+    getReceipt,
+    getReceipts,
+    getBlockTx,
+    queryContract,
+    listEvents,
     getABI,
-    queryContractState,
-    getBlockTransactionCount,
+    queryContractStateProof,
+    getTxCount,
     getChainInfo,
     getConsensusInfo,
     getAccountVotes,

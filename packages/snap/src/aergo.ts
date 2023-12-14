@@ -48,11 +48,6 @@ const buildUrl = (url: string, params: any) => {
   return `${url}?${queryString}`;
 };
 
-const getAccounts = async () => {
-  const response = await fetch(`${await getApiUrl()}/getAccounts`);
-  return response.text();
-};
-
 const getState = async (params: any) => {
   const data: { account: string } = {
     account: params.account
@@ -62,14 +57,16 @@ const getState = async (params: any) => {
   return response.text();
 };
 
-const getProof = async (params: any) => {
+const getStateAndProof = async (params: any) => {
   const data: { account: string; compressed?: boolean } = {
     account: params.account,
     compressed: false
   };
   if (params.compressed) data.compressed = params.compressed;
 
-  const response = await fetch(buildUrl(`${await getApiUrl()}/getProof`, data));
+  const response = await fetch(
+    buildUrl(`${await getApiUrl()}/getStateAndProof`, data)
+  );
   return response.text();
 };
 
@@ -105,8 +102,8 @@ const getBlock = async (params: any) => {
   return response.text();
 };
 
-const getBlockNumber = async () => {
-  const response = await fetch(`${await getApiUrl()}/getBlockNumber`);
+const blockchain = async () => {
+  const response = await fetch(`${await getApiUrl()}/blockchain`);
   return response.text();
 };
 
@@ -156,62 +153,62 @@ const getBlockMetadata = async (params: any) => {
   return response.text();
 };
 
-const getTransaction = async (params: any) => {
+const getTx = async (params: any) => {
+  const data: { hash: string } = {
+    hash: params.hash
+  };
+
+  const response = await fetch(buildUrl(`${await getApiUrl()}/getTx`, data));
+  return response.text();
+};
+
+const getReceipt = async (params: any) => {
   const data: { hash: string } = {
     hash: params.hash
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getTransaction`, data)
+    buildUrl(`${await getApiUrl()}/getReceipt`, data)
   );
   return response.text();
 };
 
-const getTransactionReceipt = async (params: any) => {
-  const data: { hash: string } = {
-    hash: params.hash
-  };
-
-  const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getTransactionReceipt`, data)
-  );
-  return response.text();
-};
-
-const getBlockTransactionReceipts = async (params: any) => {
+const getReceipts = async (params: any) => {
   const data: { hash?: string; number?: number } = {};
   if (params.hash) data.hash = params.hash;
   if (params.number) data.number = params.number;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTransactionReceipts`, data)
+    buildUrl(`${await getApiUrl()}/getReceipts`, data)
   );
   return response.text();
 };
 
-const getBlockTX = async (params: any) => {
+const getBlockTx = async (params: any) => {
   const data: { hash: string } = {
     hash: params.hash
   };
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTX`, data)
+    buildUrl(`${await getApiUrl()}/getBlockTx`, data)
   );
   return response.text();
 };
 
-const call = async (params: any) => {
+const queryContract = async (params: any) => {
   const data: { address: string; name: string; query?: string } = {
     address: params.address,
     name: params.name
   };
   if (params.query) data.query = JSON.stringify(params.query);
 
-  const response = await fetch(buildUrl(`${await getApiUrl()}/call`, data));
+  const response = await fetch(
+    buildUrl(`${await getApiUrl()}/queryContract`, data)
+  );
   return response.text();
 };
 
-const getPastEvents = async (params: any) => {
+const listEvents = async (params: any) => {
   const data: {
     address: string;
     eventName: string;
@@ -232,7 +229,7 @@ const getPastEvents = async (params: any) => {
   if (params.recentBlockCnt) data.recentBlockCnt = params.recentBlockCnt;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getPastEvents`, data)
+    buildUrl(`${await getApiUrl()}/listEvents`, data)
   );
   return response.text();
 };
@@ -246,7 +243,7 @@ const getABI = async (params: any) => {
   return response.text();
 };
 
-const queryContractState = async (params: any) => {
+const queryContractStateProof = async (params: any) => {
   const data: {
     address: string;
     varname1?: string;
@@ -261,18 +258,18 @@ const queryContractState = async (params: any) => {
   if (params.compressed) data.compressed = params.compressed;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/queryContractState`, data)
+    buildUrl(`${await getApiUrl()}/queryContractStateProof`, data)
   );
   return response.text();
 };
 
-const getBlockTransactionCount = async (params: any) => {
+const getTxCount = async (params: any) => {
   const data: { hash?: string; number?: number } = {};
   if (params.hash) data.hash = params.hash;
   if (params.number) data.number = params.number;
 
   const response = await fetch(
-    buildUrl(`${await getApiUrl()}/getBlockTransactionCount`, data)
+    buildUrl(`${await getApiUrl()}/getTxCount`, data)
   );
   return response.text();
 };
@@ -433,25 +430,24 @@ interface MyModule {
 const myModule: MyModule = {
   setNode,
   getNode,
-  getAccounts,
   getState,
-  getProof,
+  getStateAndProof,
   getNameInfo,
   getBalance,
   getBlock,
-  getBlockNumber,
+  blockchain,
   getBlockBody,
   listBlockHeaders,
   getBlockMetadata,
-  getTransaction,
-  getTransactionReceipt,
-  getBlockTransactionReceipts,
-  getBlockTX,
-  call,
-  getPastEvents,
+  getTx,
+  getReceipt,
+  getReceipts,
+  getBlockTx,
+  queryContract,
+  listEvents,
   getABI,
-  queryContractState,
-  getBlockTransactionCount,
+  queryContractStateProof,
+  getTxCount,
   getChainInfo,
   getConsensusInfo,
   getAccountVotes,
