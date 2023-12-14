@@ -8,6 +8,7 @@ interface IButtonProps {
   backgroundTransparent?: boolean;
   spacing?: string;
   borderVisible?: boolean;
+  borderType?: string;
 }
 
 interface ITextWrapper {
@@ -52,7 +53,10 @@ export const Wrapper = styled.button<IButtonProps>`
       ? props.theme.colors[props.variant || VariantOptions.PRIMARY].main
       : props.theme.colors[props.variant || VariantOptions.PRIMARY].inverse};
   opacity: ${(props) => (props.disabled ? '50%' : '100%')};
-  border-radius: 100px;
+  border-radius: ${(props) =>
+    props.borderType === 'rect'
+      ? props.theme.radii.rect
+      : props.theme.radii.rounded}
   border-width: 2px;
   border-style: ${(props) =>
     props.borderVisible ||
@@ -73,10 +77,10 @@ export const Wrapper = styled.button<IButtonProps>`
         : props.theme.spacing.tiny1};
   transition: 0.1s all;
   :hover {
-    opacity: 0.75;
+    opacity: ${(props) => (props.disabled ? '1' : '0.75')};
   }
   :active {
-    opacity: 0.5;
+    opacity: ${(props) => (props.disabled ? '1' : '0.5')};
   }
 `;
 

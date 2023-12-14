@@ -31,12 +31,15 @@ export const Content = styled.div`
 `;
 
 export const Row = styled.div`
+  white-space: nowrap;
   display: flex;
   justify-content: space-between;
   margin-bottom: ${({ theme }) => theme.spacing.small};
+  margin-right: 1rem;
 `;
 
 export const Time = styled.span`
+  white-space: nowrap;
   color: ${({ theme }) => theme.colors.grey.grey4};
   font-weight: 400;
   font-size: 14px;

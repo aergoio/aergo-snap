@@ -27,8 +27,8 @@ export const Networks: Network[] = [
     scanApiUrl: 'https://api2-alpha.aergoscan.io/v2'
   },
   {
-    label: 'BMT',
-    chainId: 'bmt.aergo.io',
+    label: 'Snaps',
+    chainId: 'snap.aergo.io',
     nodeUrl: 'https://nodeconnect.blocko.io',
     scanExplorerUrl: 'https://scanconnect.blocko.io',
     scanApiUrl: 'https://apiconnect.blocko.io/v2',

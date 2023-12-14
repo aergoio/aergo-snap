@@ -4,6 +4,7 @@ import { useTheme } from 'styled-components';
 import { useAppSelector } from 'hooks/redux';
 import { Line } from 'ui/atom/Line';
 import {
+  Container,
   Wrapper,
   Content,
   Top,
@@ -14,12 +15,16 @@ import {
 } from './TokenItem.style';
 import { formatTokenAmount } from 'utils/utils';
 
-export const AergoTokenView = () => {
+interface Props {
+  onClick: () => void;
+}
+
+export const AergoTokenView = ({ onClick }: Props) => {
   const theme = useTheme();
   const { accountBalance } = useAppSelector((state) => state.wallet);
 
   return (
-    <div style={{ width: '100%' }}>
+    <Container onClick={onClick}>
       <Wrapper>
         <RoundedIcon>
           <AergoSnapLogo color={theme.colors.icon.default} size={30} />
@@ -28,7 +33,7 @@ export const AergoTokenView = () => {
           <Top>
             <TokenName>AERGO</TokenName>
             <Dollor>
-              {formatTokenAmount(accountBalance || '0', 'AERGO', 18)}
+              {`$ ${formatTokenAmount(accountBalance || '0', 'USD', 18)}`}
             </Dollor>
           </Top>
           <Bottom>
@@ -41,6 +46,6 @@ export const AergoTokenView = () => {
         {/* <li>contractAddress:{token.contractAddress}</li> */}
       </Wrapper>
       <Line />
-    </div>
+    </Container>
   );
 };

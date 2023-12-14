@@ -15,7 +15,6 @@ export const HomeWrapper = styled.div`
 `;
 
 export const Top = styled.div`
-  min-height: 31.8rem;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -28,6 +27,6 @@ export const Bottom = styled.div`
   width: 100%;
 `;
 
-export const SidebarContentWrapper = styled.div`
+export const AccountInfoWrapper = styled.div`
   width: 100%;
 `;

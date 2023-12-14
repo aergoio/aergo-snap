@@ -14,7 +14,9 @@ export const ListWrapper = styled(List)`
   width: 100%;
 `;
 
-export const NoTransactions = styled.span`
+export const NoActivity = styled.span`
   color: ${({ theme }) => theme.colors.grey.grey3};
   margin-top: ${({ theme }) => theme.spacing.large};
+  width: 100%;
+  text-align: center;
 `;

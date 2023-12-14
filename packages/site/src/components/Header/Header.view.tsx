@@ -37,6 +37,7 @@ export const HeaderView = ({
           <AergoSnapLogo color={theme.colors.icon.default} size={36} />
           <Title>Aergo Snap</Title>
         </LogoWrapper>
+
         <AccountWrapper>
           <PopIn isOpen={accountModal} setIsOpen={setAccountModal}>
             <div>accountModal</div>
