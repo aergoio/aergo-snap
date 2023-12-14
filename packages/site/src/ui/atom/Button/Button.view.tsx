@@ -8,7 +8,7 @@ import {
   TextWrapper,
   Wrapper,
   StyledCustomLeftIcon,
-  StyledCustomRightIcon,
+  StyledCustomRightIcon
 } from './Button.style';
 
 type Props = {
@@ -26,6 +26,7 @@ type Props = {
   iconStyle?: CSSProperties;
   customIconLeft?: ReactNode;
   customIconRight?: ReactNode;
+  borderType?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const ButtonView = ({
@@ -44,6 +45,7 @@ export const ButtonView = ({
   upperCaseOnly = true,
   textStyle,
   iconStyle,
+  borderType = 'rounded',
   ...otherProps
 }: Props) => {
   const hasIcons = iconRight !== undefined || iconLeft !== undefined;
@@ -57,6 +59,7 @@ export const ButtonView = ({
       backgroundTransparent={backgroundTransparent}
       spacing={spacing}
       borderVisible={borderVisible}
+      borderType={borderType}
       {...otherProps}
     >
       <StyledCustomLeftIcon>{customIconLeft}</StyledCustomLeftIcon>

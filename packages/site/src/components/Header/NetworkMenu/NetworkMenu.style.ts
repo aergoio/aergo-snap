@@ -1,6 +1,6 @@
 import {
   FontAwesomeIcon,
-  FontAwesomeIconProps,
+  FontAwesomeIconProps
 } from '@fortawesome/react-fontawesome';
 import { Menu } from '@headlessui/react';
 import { AergoSvg } from 'assets/images';
@@ -9,6 +9,12 @@ import styled from 'styled-components';
 interface StyledFaCircleProps extends FontAwesomeIconProps {
   checked: boolean;
 }
+
+export const Wrapper = styled.div`
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+`;
 
 export const MenuItems = styled(Menu.Items)`
   width: 25rem;
@@ -25,6 +31,10 @@ export const MenuItems = styled(Menu.Items)`
   flex-direction: column;
   padding: ${(props) => props.theme.spacing.large} 0;
   /* gap: 8px; */
+
+  /* ${({ theme }) => theme.mediaQueries.small} {
+    display: none;
+  } */
 `;
 
 export const MenuItem = styled.span`
@@ -80,7 +90,8 @@ export const MenuNetworkLabel = styled.span`
 export const StyledAergoSvg = styled(AergoSvg)`
   margin-right: ${(props) => props.theme.spacing.small};
   width: 36px;
-  ${({ theme }) => theme.mediaQueries.small} {
+
+  @media (max-width: 400px) {
     display: none;
   }
 `;

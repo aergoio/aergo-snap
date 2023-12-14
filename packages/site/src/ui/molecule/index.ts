@@ -5,3 +5,4 @@ export { LoadingBackdrop } from './LoadingBackdrop';
 export { PopIn } from './PopIn';
 export { PopperTooltip } from './PopperTooltip';
 export { Tabs } from './Tabs';
+export { SideBar } from './SideBar';

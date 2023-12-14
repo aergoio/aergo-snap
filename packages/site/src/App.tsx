@@ -6,7 +6,11 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { LoadingBackdrop, PopIn } from 'ui/molecule';
 import { NoMetamaskModal, ConnectModal } from 'ui/organism';
 import { GlobalStyle } from 'theme/default';
-import { disableLoading, enableLoadingWithMessage } from 'slices/UISlice';
+import {
+  disableLoading,
+  enableLoadingWithMessage,
+  setSelectedToken
+} from 'slices/UISlice';
 import { ToggleThemeContext } from './Root';
 import {
   useAergoSnap,
@@ -36,12 +40,11 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
   const { connected, forceReconnect, provider, address, tokens } =
     useAppSelector((state) => state.wallet);
   const networks = useAppSelector((state) => state.networks);
-  const { loader } = useAppSelector((state) => state.UI);
+  const { loader, selectedToken } = useAppSelector((state) => state.UI);
   const toggleTheme = useContext(ToggleThemeContext);
   const { hasMetamask } = useHasMetamask();
   const { checkConnection, getKeys, getWalletData } = useAergoSnap();
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     if (!provider) {
       return;
@@ -64,7 +67,6 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
         const network = networks.items[networks.activeNetwork];
         await checkConnection(network);
         await getWalletData(network, address);
-        dispatch(disableLoading());
       } catch (e) {
         console.error(e);
       }
@@ -72,18 +74,45 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     if (address) {
       getWalletDataWhenNetworkChange();
     }
+    dispatch(disableLoading());
   }, [networks.activeNetwork, provider, address]);
+
+  useEffect(() => {
+    const getWalletDataWhenTokenChange = async () => {
+      try {
+        const network = networks.items[networks.activeNetwork];
+        await getWalletData(
+          network,
+          address,
+          selectedToken !== 'AERGO' ? selectedToken.hash : null
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    if (address) {
+      getWalletDataWhenTokenChange();
+    }
+  }, [selectedToken]);
 
   useEffect(() => {
     const getWalletDataIntervalEvery10Seconds = setInterval(() => {
       if (provider && networks.items.length > 0 && address) {
         const network = networks.items[networks.activeNetwork];
-        getWalletData(network, address);
+        getWalletData(
+          network,
+          address,
+          selectedToken !== 'AERGO' ? selectedToken.hash : null
+        );
       }
-    }, 10000);
+    }, 10000) as any;
 
     return () => clearInterval(getWalletDataIntervalEvery10Seconds);
-  }, [networks.activeNetwork, provider, address, tokens]);
+  }, [networks.activeNetwork, provider, address, tokens, selectedToken]);
+
+  useEffect(() => {
+    dispatch(setSelectedToken('AERGO'));
+  }, []);
 
   const loading = loader.isLoading;
 

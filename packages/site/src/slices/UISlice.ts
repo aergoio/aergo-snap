@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Token } from 'types';
 
 export type UIState = {
   loader: {
@@ -6,8 +7,8 @@ export type UIState = {
     loadingMessage: string;
   };
   error: any;
-  sidebar: number;
   tokenType: 'ARC1' | 'ARC2';
+  selectedToken: string | Token;
 };
 
 const initialState: UIState = {
@@ -20,8 +21,8 @@ const initialState: UIState = {
     message: '',
     data: {}
   },
-  sidebar: 0,
-  tokenType: 'ARC1'
+  tokenType: 'ARC1',
+  selectedToken: 'AERGO'
 };
 
 export const UISlice = createSlice({
@@ -39,11 +40,11 @@ export const UISlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
     },
-    setSidebar: (state, { payload }) => {
-      state.sidebar = payload;
-    },
     setTokenType: (state, { payload }) => {
       state.tokenType = payload;
+    },
+    setSelectedToken: (state, { payload }) => {
+      state.selectedToken = payload;
     }
   }
 });
@@ -52,8 +53,8 @@ export const {
   enableLoadingWithMessage,
   disableLoading,
   setError,
-  setSidebar,
-  setTokenType
+  setTokenType,
+  setSelectedToken
 } = UISlice.actions;
 
 export default UISlice.reducer;

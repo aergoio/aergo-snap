@@ -1,2 +1,3 @@
 export { TokenList } from './TokenList';
-export { TransactionHistory } from './TransactionHistory';
+export { Activity } from './Activity';
+export { Governance } from './Governance';
