@@ -343,7 +343,8 @@ const getStaking = async (params: any) => {
 };
 
 const getVotes = async (params: any) => {
-  const data: { count: number } = {
+  const data: { id: string; count: number } = {
+    id: params.id,
     count: params.count
   };
 

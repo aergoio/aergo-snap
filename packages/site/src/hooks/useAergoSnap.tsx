@@ -770,7 +770,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getVotes = async (count: number) => {
+  const getVotes = async (id?: string, count?: number) => {
     try {
       const data = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
@@ -778,7 +778,7 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getVotes',
-            params: { count }
+            params: { id, count }
           }
         }
       })) as any;
@@ -953,6 +953,87 @@ export const useAergoSnap = () => {
     }
   };
 
+  const sendVote = async (payload: any) => {
+    dispatch(enableLoadingWithMessage('Getting... sendVote'));
+    try {
+      const sendVote = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendVote',
+            params: {
+              from: address,
+              payloadJson: payload
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendVote', sendVote);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
+  const sendStake = async (amount: string) => {
+    dispatch(enableLoadingWithMessage('Getting... sendStake'));
+    try {
+      const sendStake = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendStake',
+            params: {
+              from: address,
+              amount
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendStake', sendStake);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
+  const sendUnStake = async (amount: string) => {
+    dispatch(enableLoadingWithMessage('Getting... sendUnStake'));
+    try {
+      const sendUnStake = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendUnStake',
+            params: {
+              from: address,
+              amount
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendUnStake', sendUnStake);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
   return {
     connectToSnap,
     checkConnection,
@@ -991,6 +1072,9 @@ export const useAergoSnap = () => {
     getEnterpriseConfig,
     getConfChangeProgress,
     chainStat,
-    sendAergo
+    sendAergo,
+    sendVote,
+    sendStake,
+    sendUnStake
   };
 };
