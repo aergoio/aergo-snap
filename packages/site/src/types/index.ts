@@ -116,3 +116,7 @@ export type TokenBalance = {
   };
   token: Token;
 };
+
+export type NodeResponse = {
+  node: string;
+};

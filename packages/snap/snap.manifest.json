@@ -6,7 +6,6 @@
     "type": "git",
     "url": "https://github.com/aergoio/aergo-snap.git"
   },
-  "source": {
     "shasum": "F9TQ1vvJh1okDucb3ia+KPPO3RHM155jlAiXs3QDpsI=",
     "location": {
       "npm": {
