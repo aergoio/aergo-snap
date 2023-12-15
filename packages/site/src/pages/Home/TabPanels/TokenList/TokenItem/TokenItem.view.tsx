@@ -5,6 +5,7 @@ import { formatTokenAmount } from 'utils/utils';
 
 import { DefaultAergo } from 'assets/images';
 import {
+  Container,
   Wrapper,
   Content,
   Top,
@@ -16,11 +17,12 @@ import {
 
 interface Props {
   token?: Token;
+  onClick: () => void;
 }
 // TODO: USD 가격 변환 & Hover효과 추가
-export const TokenItemView = ({ token }: Props) => {
+export const TokenItemView = ({ token, onClick }: Props) => {
   return (
-    <div style={{ width: '100%' }}>
+    <Container onClick={onClick}>
       <Wrapper>
         {token?.meta?.image_url ? (
           <RoundedIcon style={{ padding: 0 }}>
@@ -35,11 +37,11 @@ export const TokenItemView = ({ token }: Props) => {
           <Top>
             <TokenName>{token?.meta?.name}</TokenName>
             <Dollor>
-              {formatTokenAmount(
+              {`$ ${formatTokenAmount(
                 token?.tokenBalance?.meta?.balance || '0',
-                token?.meta?.symbol || '',
+                'USD',
                 token?.meta?.decimals || 0
-              )}
+              )}`}
             </Dollor>
           </Top>
           <Bottom>
@@ -56,6 +58,6 @@ export const TokenItemView = ({ token }: Props) => {
         {/* <li>contractAddress:{token.contractAddress}</li> */}
       </Wrapper>
       <Line />
-    </div>
+    </Container>
   );
 };

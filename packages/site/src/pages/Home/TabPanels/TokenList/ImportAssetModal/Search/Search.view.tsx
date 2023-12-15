@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
-import { InputWithLabel } from 'ui/atom/InputWithLabel';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { InputWithLabel } from 'ui/molecule/InputWithLabel';
 import { debounce } from 'lodash';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { scanApi } from 'apis/scanApi';
 import { Token } from 'types';
 import { List } from 'ui/molecule';
 import { setToken } from 'slices/walletSlice';
-import { setError } from 'slices/UISlice';
+import { setError, setSelectedToken } from 'slices/UISlice';
 
-export const SearchView = () => {
+interface Props {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const SearchView = ({ setIsOpen }: Props) => {
   const networks = useAppSelector((state) => state.networks);
   const { tokenType } = useAppSelector((state) => state.UI);
   const [search, setSearch] = useState('');
@@ -24,7 +28,7 @@ export const SearchView = () => {
         try {
           const getSearchedToken = (
             await scanApiInstance.get(
-              `tokenVerified?q=(name_lower:*${value.toLowerCase()}* OR symbol_lower:*${value.toLowerCase()}*) AND type:${tokenType}`,
+              `tokenVerified?q=(name_lower:*${value.toLowerCase()}* OR symbol_lower:*${value.toLowerCase()}*) AND type:${tokenType}`
             )
           ).data.hits;
 
@@ -45,14 +49,18 @@ export const SearchView = () => {
     if (tokens[networks.chainIdLabel]) {
       if (
         !tokens[networks.chainIdLabel].some(
-          (addedToken) => addedToken.hash === token.hash,
+          (addedToken) => addedToken.hash === token.hash
         )
       ) {
         dispatch(setToken(payload));
       } else {
         console.log(`Already Added ${token.meta.name}`);
       }
+    } else {
+      dispatch(setToken(payload));
     }
+    setIsOpen(false);
+    dispatch(setSelectedToken(payload.token));
   };
 
   return (

@@ -6,8 +6,7 @@ export const HeaderWrapper = styled.header`
   position: relative;
   width: 80vw;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  place-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 2.4rem 0;
   ${({ theme }) => theme.mediaQueries.small} {
     width: 100vw;
@@ -31,11 +30,18 @@ export const LogoWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 2rem;
+  /* margin: 0 2rem; */
+  margin-left: 3rem;
+  ${({ theme }) => theme.mediaQueries.small} {
+    margin-left: 2rem;
+  }
+  /* @media (max-width: 400px) {
+    display: none;
+  } */
 `;
 
 export const AccountWrapper = styled.div`
-  margin-right: ${(props) => props.theme.spacing.large};
+  /* margin-right: ${(props) => props.theme.spacing.large}; */
   width: 100%;
   text-align: center;
 `;
@@ -68,7 +74,8 @@ export const MenuSection = styled.div`
 `;
 
 export const Right = styled.div`
-  margin-right: 1rem;
+  justify-content: flex-end;
+  margin-right: 3rem;
   display: flex;
   flex-direction: row;
   align-items: center;

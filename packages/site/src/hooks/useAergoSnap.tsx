@@ -103,7 +103,11 @@ export const useAergoSnap = () => {
     }
   };
 
-  const getWalletData = async (network: Network, address: string) => {
+  const getWalletData = async (
+    network: Network,
+    address: string,
+    tokenHash?: string
+  ) => {
     const { balance } = (await window.ethereum.request({
       method: 'wallet_invokeSnap',
       params: {
@@ -116,20 +120,44 @@ export const useAergoSnap = () => {
     }
 
     const scanApiInstance = await scanApi(network);
+
     if (scanApiInstance && address) {
       try {
-        const transactions = (
-          await scanApiInstance.get(
-            `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`
-          )
-        ).data.hits;
+        let transactions;
+
+        if (tokenHash) {
+          const getTransactionsWithReceipt = await Promise.all(
+            (
+              await scanApiInstance.get(
+                `tokenTransfers?q=(from:${address} OR to:${address}) AND address:${tokenHash}&size=10000&sort=ts:desc`
+              )
+            ).data.hits.map(async (transaction: any) => {
+              const hash = transaction.hash.slice(0, -2) as string;
+              const receipt = (
+                await scanApiInstance.get(`Transactions?q=_id:${hash}`)
+              ).data.hits[0];
+
+              return { ...transaction, receipt };
+            })
+          );
+          transactions = getTransactionsWithReceipt;
+        } else {
+          transactions = (
+            await scanApiInstance.get(
+              `transactions/?q=(from:${address} OR to:${address})&size=10000&sort=ts:desc`
+            )
+          ).data.hits;
+        }
+
         const getTokenBalances = (
           await scanApiInstance.get(`tokenBalance?q=${address}&size=10000`)
         ).data.hits;
+
         const chainIdLabel = `${network.chainId}/${network.label}`;
+
         if (getTokenBalances.length > 0) {
           // Update Token Balance
-          const updatedTokens = tokens[chainIdLabel].map((token) => {
+          const updatedTokens = tokens[chainIdLabel].map((token: any) => {
             const tokenBalance = getTokenBalances.find(
               (tokenBalance: any) => tokenBalance.token.hash === token.hash
             );
@@ -145,7 +173,7 @@ export const useAergoSnap = () => {
 
         dispatch(setTransactions(transactions));
       } catch (err) {
-        console.error(err);
+        console.error('Error in getWalletData:', err);
         dispatch(setError(err));
       }
     }
