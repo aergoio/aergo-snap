@@ -785,7 +785,7 @@ export const useAergoSnap = () => {
           snapId,
           request: {
             method: 'getStaking',
-            params: { account: address }
+            params: { address }
           }
         }
       })) as any;

@@ -2,6 +2,8 @@ import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text, copyable, divider, heading } from '@metamask/snaps-ui';
 import { getKeys } from './getKeys';
 import funcAergo from './aergo';
+import base58 from './utils/base58';
+import { encodeAddress } from './utils/encode';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -109,7 +111,7 @@ const sendVote = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: 'aergo.system',
+    to: encodeAddress(Buffer.from('aergo.system')),
     amount: '0',
     nonce: account.nonce + 1,
     type: 1,
@@ -159,7 +161,7 @@ const sendStake = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: 'aergo.system',
+    to: encodeAddress(Buffer.from('aergo.system')),
     amount: params.amount,
     nonce: account.nonce + 1,
     type: 1,
@@ -204,7 +206,7 @@ const sendUnStake = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: 'aergo.system',
+    to: encodeAddress(Buffer.from('aergo.system')),
     amount: params.amount,
     nonce: account.nonce + 1,
     type: 1,

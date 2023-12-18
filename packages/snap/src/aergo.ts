@@ -332,8 +332,8 @@ const getServerInfo = async (params: any) => {
 };
 
 const getStaking = async (params: any) => {
-  const data: { account: string } = {
-    account: params.account
+  const data: { address: string } = {
+    address: params.address
   };
 
   const response = await fetch(
