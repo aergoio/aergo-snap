@@ -1,32 +1,55 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { AccountImage } from '../AccountImage';
+import {
+  Dispatch,
+  ReactElement,
+  ReactNode,
+  SetStateAction,
+  useState
+} from 'react';
+import { AccountImage } from '../../atom/AccountImage';
 import { Wrapper, Label, InputWrapper, Input } from './InputWithLabel.style';
 
 interface Props {
   disabled?: boolean;
   type?: string;
   label?: string;
+  labelButton?:ReactNode;
   address?: string;
   placeholder?: string;
   value: string | number;
+  leftIcon?: ReactNode;
   setValue?: Dispatch<SetStateAction<string>>;
+  width?: string;
+  align?: string;
+  children?: ReactNode;
 }
 
 export const InputWithLabelView = ({
   disabled = false,
   type = 'text',
   label,
+  labelButton,
   address,
   placeholder,
+  leftIcon,
   value,
   setValue,
+  width,
+  align = 'flex-start',
+  children
 }: Props) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <Wrapper>
-      <Label>{label}</Label>
-      <InputWrapper isFocused={isFocused} disabled={disabled}>
+    <Wrapper align={align}>
+      <Label>
+        {label}
+        {labelButton}
+      </Label>
+      <InputWrapper
+        isFocused={isFocused}
+        disabled={disabled}
+        width={width || ''}
+      >
         {address ? (
           <AccountImage
             size={36}
@@ -34,6 +57,7 @@ export const InputWithLabelView = ({
             style={{ marginLeft: '8px' }}
           />
         ) : null}
+        {leftIcon}
         <Input
           disabled={disabled}
           address={address || ''}
@@ -44,6 +68,7 @@ export const InputWithLabelView = ({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
         />
+        {children}
       </InputWrapper>
     </Wrapper>
   );

@@ -9,7 +9,6 @@ export const Wrapper = styled.div<{
   align-items: center;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : '')};
   background-color: ${({ theme }) => theme.colors.card.default};
-  padding: ${({ theme }) => theme.spacing.large2};
   border-radius: ${({ theme }) => theme.radii.rounded};
   box-shadow: ${({ theme }) => theme.shadows.default};
   filter: opacity(${({ disabled }) => (disabled ? '.4' : '1')});

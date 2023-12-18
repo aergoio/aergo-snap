@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { List, PopIn } from 'ui/molecule';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { useAergoSnap } from 'hooks/useAergoSnap';
-import { setTokenType } from 'slices/UISlice';
+import { setSelectedToken, setTokenType } from 'slices/UISlice';
 import { AergoToken, TokenItem } from './TokenItem';
-import { Wrapper, ButtonWrapper, StyledButton } from './TokenList.style';
+import { Wrapper, ButtonWrapper, StyledButton, NoNft } from './TokenList.style';
 import { ImportAssetModal } from './ImportAssetModal';
+import { Token } from 'types';
 
 interface Props {
   tokenType: 'ARC1' | 'ARC2';
@@ -17,30 +18,54 @@ export const TokenListView = ({ tokenType }: Props) => {
   const { getWalletData } = useAergoSnap();
   const { tokens, address } = useAppSelector((state) => state.wallet);
   const { network, chainIdLabel } = useAppSelector((state) => state.networks);
+  const { selectedToken, loader } = useAppSelector((state) => state.UI);
+  const isNoNFT =
+    tokenType === 'ARC2' &&
+    (tokens[chainIdLabel]?.filter(
+      (token: any) => token?.meta?.type === tokenType
+    ).length === 0 ||
+      !tokens[chainIdLabel]);
 
   const handleClickRefresh = () => {
-    getWalletData(network, address);
+    getWalletData(
+      network,
+      address,
+      selectedToken !== 'AERGO' ? selectedToken.hash : null
+    );
   };
 
   useEffect(() => {
     dispatch(setTokenType(tokenType));
   }, []);
 
+  const handleChangeToken = (tokenType: any) => {
+    dispatch(setSelectedToken(tokenType));
+  };
+
   return (
     <Wrapper>
       <PopIn isOpen={importAssetModal} setIsOpen={setImportAssetModal}>
-        <ImportAssetModal />
+        <ImportAssetModal setIsOpen={setImportAssetModal} />
       </PopIn>
-      {tokenType === 'ARC1' ? <AergoToken /> : null}
-      <List
-        data={
-          tokens[chainIdLabel]?.filter(
-            (token) => token?.meta?.type === tokenType
-          ) || []
-        }
-        render={(token: any) => <TokenItem token={token} />}
-        keyExtractor={(token: any) => token.hash.toString()}
-      />
+      {tokenType === 'ARC1' ? (
+        <AergoToken onClick={() => handleChangeToken('AERGO')} />
+      ) : null}
+
+      {!loader.isLoading && (
+        <List
+          data={
+            tokens[chainIdLabel]?.filter(
+              (token: any) => token?.meta?.type === tokenType
+            ) || []
+          }
+          render={(token: any) => (
+            <TokenItem token={token} onClick={() => handleChangeToken(token)} />
+          )}
+          keyExtractor={(token: any) => token.hash.toString()}
+        />
+      )}
+
+      {isNoNFT && <NoNft>No NFT</NoNft>}
 
       <ButtonWrapper>
         <StyledButton

@@ -1,12 +1,8 @@
 import { useAppSelector } from 'hooks/redux';
-import {
-  ListWrapper,
-  Wrapper,
-  NoTransactions,
-} from './TransactionHistory.style';
-import { TransactionHistoryItem } from './TransactionHistoryItem';
+import { ListWrapper, Wrapper, NoActivity } from './Activity.style';
+import { ActivityItem } from './ActivityItem';
 
-export const TransactionHistoryView = () => {
+export const ActivityView = () => {
   const { loader } = useAppSelector((state) => state.UI);
   const { transactions } = useAppSelector((state) => state.wallet);
 
@@ -17,12 +13,12 @@ export const TransactionHistoryView = () => {
           <ListWrapper
             data={transactions}
             render={(transaction: any) => (
-              <TransactionHistoryItem transaction={transaction} />
+              <ActivityItem transaction={transaction} />
             )}
             keyExtractor={(transaction: any) => transaction.hash.toString()}
           />
         ) : (
-          <NoTransactions>No Transactions</NoTransactions>
+          <NoActivity>No Transactions</NoActivity>
         ))}
     </Wrapper>
   );

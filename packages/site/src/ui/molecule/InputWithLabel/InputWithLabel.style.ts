@@ -3,18 +3,30 @@ import styled from 'styled-components';
 interface InputWrapperProps {
   isFocused: boolean;
   disabled: boolean;
+  width: string;
 }
 
 interface InputProps {
   address: string;
 }
 
-export const Wrapper = styled.div`
+interface LabelProps {
+  align: string;
+}
+
+export const Wrapper = styled.div<LabelProps>`
+  width: 100%;
   display: flex;
+  justify-content: ${(props) => (props.align ? props.align : 'flex-start')};
+  align-items: ${(props) => (props.align ? props.align : 'flex-start')};
   flex-direction: column;
 `;
 
 export const Label = styled.span`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: ${(props) => props.theme.colors.grey.grey6};
   font-size: smaller;
   font-weight: 700;
@@ -23,6 +35,7 @@ export const Label = styled.span`
 `;
 
 export const InputWrapper = styled.div<InputWrapperProps>`
+  width: ${(props) => (props.width ? props.width : '100%')};
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -48,7 +61,7 @@ export const Input = styled.input<InputProps>`
   padding: ${(props) => (props.address ? '8px' : '12px')};
   outline: none;
   background-color: transparent;
-  width: 100px;
+  width: auto;
   line-height: 1;
   color: ${(props) => props.theme.colors.grey.grey8};
 `;

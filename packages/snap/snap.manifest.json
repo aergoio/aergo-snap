@@ -1,18 +1,17 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Manage Aergo accounts and assets with Metamask.",
   "proposedName": "Aergo Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/aergoio/aergo-snap.git"
   },
-  "source": {
-    "shasum": "aXauKb1BhL348syKr8D/mzPk8WUrkRgpTxTQ1qiuvAA=",
+    "shasum": "F9TQ1vvJh1okDucb3ia+KPPO3RHM155jlAiXs3QDpsI=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "@aergo/aergo-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

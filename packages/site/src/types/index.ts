@@ -21,8 +21,10 @@ export interface Network {
 }
 
 export type Transaction = {
+  token: any;
   hash: string;
   meta: {
+    decimals: number;
     amount: string;
     amount_float: number;
     block_id: string;
@@ -44,6 +46,32 @@ export type Transaction = {
     ts: string;
     tx_idx: number;
     type: number;
+  };
+  receipt?: {
+    hash: string;
+    meta: {
+      blockno: number;
+      block_id: string;
+      ts: string;
+      tx_idx: number;
+      payload: string;
+      from: string;
+      to: string;
+      amount: string;
+      amount_float: number;
+      type: number;
+      category: string;
+      method: string;
+      status: string;
+      result: string;
+      contract: string;
+      nonce: number;
+      fee_delegation: boolean;
+      gas_price: string;
+      gas_limit: number;
+      gas_used: number;
+      fee_used: string;
+    };
   };
 };
 

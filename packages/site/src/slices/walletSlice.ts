@@ -21,12 +21,7 @@ const initialState: WalletState = {
   address: '',
   accountBalance: '',
   transactions: [],
-  tokens: {
-    'aergo.io/Aergo Mainnet': [],
-    'testnet.aergo.io/Aergo Testnet': [],
-    'alpha.aergo.io/Aergo Alpha': [],
-    'bmt.aergo.io/BMT': []
-  },
+  tokens: {},
   provider: undefined
 };
 
@@ -53,7 +48,11 @@ export const walletSlice = createSlice({
       state.transactions = payload;
     },
     setToken: (state, { payload: { chainIdLabel, token } }) => {
-      state.tokens[chainIdLabel] = [...state.tokens[chainIdLabel], token];
+      if (!state.tokens[chainIdLabel]) {
+        state.tokens[chainIdLabel] = [token];
+      } else {
+        state.tokens[chainIdLabel] = [...state.tokens[chainIdLabel], token];
+      }
     },
     setTokens: (state, { payload: { chainIdLabel, tokens } }) => {
       state.tokens[chainIdLabel] = tokens;
