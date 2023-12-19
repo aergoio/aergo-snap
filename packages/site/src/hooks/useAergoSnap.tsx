@@ -62,7 +62,7 @@ export const useAergoSnap = () => {
       })) as GetKeysResponse;
 
       console.log('address', address);
-      dispatch(setAddress(address.address));
+      dispatch(setAddress(address));
       dispatch(disableLoading());
     } catch (err) {
       // console.error(err);
