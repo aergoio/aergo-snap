@@ -111,7 +111,7 @@ const sendVote = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: encodeAddress(Buffer.from('aergo.system')),
+    to: 'aergo.system',
     amount: '0',
     nonce: account.nonce + 1,
     type: 1,
@@ -161,7 +161,7 @@ const sendStake = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: encodeAddress(Buffer.from('aergo.system')),
+    to: 'aergo.system',
     amount: params.amount,
     nonce: account.nonce + 1,
     type: 1,
@@ -206,7 +206,7 @@ const sendUnStake = async (params: any) => {
 
   const tx = {
     from: params.from,
-    to: encodeAddress(Buffer.from('aergo.system')),
+    to: 'aergo.system',
     amount: params.amount,
     nonce: account.nonce + 1,
     type: 1,
