@@ -2,8 +2,6 @@ import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text, copyable, divider, heading } from '@metamask/snaps-ui';
 import { getKeys } from './getKeys';
 import funcAergo from './aergo';
-import base58 from './utils/base58';
-import { encodeAddress } from './utils/encode';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.

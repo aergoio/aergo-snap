@@ -7,7 +7,7 @@
     "url": "https://github.com/aergoio/aergo-snap.git"
   },
   "source": {
-    "shasum": "1bgRDjBOUOLCsuFkV6JuYuF57p1NuSf+kvG/Fw+BnSI=",
+    "shasum": "dZMfpBrVTxSQRI38WtpGuPZ7s3wduGMWhgoEO7L5nMw=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

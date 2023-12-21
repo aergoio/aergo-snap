@@ -401,7 +401,7 @@ const sendSignedTransaction = async (params: any, key: any) => {
   } = {
     from: params.from,
     to: params.to,
-    amount: params.amount,
+    amount: params.amount ? params.amount : '0',
     type: params.type ? params.type : 4,
     nonce: params.nonce,
     chainIdHash: params.chainIdHash

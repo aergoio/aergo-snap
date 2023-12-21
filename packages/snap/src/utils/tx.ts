@@ -86,8 +86,10 @@ const hashTransaction = async (
     fromNumber(tx.nonce, 64 / 8),
     decodeAddress(tx.from.toString()),
     tx.to ? decodeAddress(tx.to.toString()) : Buffer.from([]),
-    fromBigInt(amount != '' ? amount : 0),
-    tx.payload ? Buffer.from(tx.payload as any) : Buffer.from([]),
+    ['', '0'].includes(amount) ? Buffer.from([]) : fromBigInt(amount),
+    tx.payloadJson
+      ? Buffer.from(JSON.stringify(tx.payloadJson))
+      : Buffer.from([]),
     fromNumber(tx.limit || 0, 64 / 8),
     tx.price ? fromBigInt(tx.price.toString()) : Buffer.from([]),
     fromNumber(type, 32 / 8),
