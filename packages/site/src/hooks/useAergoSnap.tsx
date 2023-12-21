@@ -62,7 +62,7 @@ export const useAergoSnap = () => {
       })) as GetKeysResponse;
 
       console.log('address', address);
-      dispatch(setAddress(address));
+      dispatch(setAddress(address.address));
       dispatch(disableLoading());
     } catch (err) {
       // console.error(err);
@@ -905,7 +905,7 @@ export const useAergoSnap = () => {
   const sendTransaction = async (params: {
     from: string;
     to: string;
-    amount: string;
+    amount?: string;
     type: number;
     nonce?: number;
     chainIdHash?: string;
@@ -937,7 +937,7 @@ export const useAergoSnap = () => {
         }
       })) as any;
 
-      console.log('sendTransaction', sendTransaction);
+      console.log('sendTransaction', sendTransaction.results[0]);
 
       dispatch(disableLoading());
     } catch (err) {
