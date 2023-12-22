@@ -454,8 +454,8 @@ export const GovernanceView = () => {
               <VotingTitle>{`Stake [ ${inputStakingChartData.datasets[0].data[0].toFixed(
                 0
               )}/${
-                inputStakingChartData.datasets[0].data[0].toFixed(0) +
-                stakingChartData.datasets[0].data[1].toFixed(0)
+                +stakingChartData.datasets[0].data[0].toFixed(0) +
+                +stakingChartData.datasets[0].data[1].toFixed(0)
               } ]`}</VotingTitle>
 
               <Row style={{ width: '20rem' }}>
