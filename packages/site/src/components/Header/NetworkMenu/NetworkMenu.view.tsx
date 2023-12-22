@@ -37,7 +37,7 @@ export const NetworkMenuView = () => {
           position: 'relative',
           border: `1px solid ${theme.colors.grey.grey1}`,
           borderRadius: '24px',
-          padding: '1rem 2rem',
+          padding: '0 2rem',
           display: 'flex',
           alignItems: 'center',
           textAlign: 'left'
