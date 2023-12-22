@@ -172,6 +172,8 @@ export const useAergoSnap = () => {
           } else {
             console.log('here??');
           }
+        } else {
+          console.log('no imported tokens');
         }
       } catch (err) {
         console.error('Error in getWalletData:', err);
@@ -934,11 +936,9 @@ export const useAergoSnap = () => {
         }
       })) as any;
 
-      // console.log('results', results[0] 0.16 aergo === 1block  * count);
-      if (results.length > 0) {
-        dispatch(disableLoading());
-        return results;
-      }
+      console.log('sendTransaction', sendTransaction.results[0]);
+
+      dispatch(disableLoading());
     } catch (err) {
       console.error(err);
       dispatch(setError(err));
