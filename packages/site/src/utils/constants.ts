@@ -35,3 +35,6 @@ export const Networks: Network[] = [
     web3Url: 'https://webconnect.blocko.io'
   }
 ];
+
+export const defaultSnapOrigin =
+  process.env.SNAP_ORIGIN ?? `local:http://localhost:8080`;

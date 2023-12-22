@@ -21,9 +21,9 @@ export const FooterView = () => {
           <MetaMask color={theme.colors.text.default} />
         </PoweredByContainer>
       </PoweredByButton>
-      {/* <Button variant="gradation" spacing="xlarge" onClick={connectToSnap}>
+      <Button variant="gradation" spacing="xlarge" onClick={connectToSnap}>
         Reconnect
-      </Button> */}
+      </Button>
     </FooterWrapper>
   );
 };

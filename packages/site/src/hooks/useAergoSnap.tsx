@@ -21,15 +21,15 @@ import { useAppDispatch, useAppSelector } from './redux';
 import { resetWallet } from 'slices/walletSlice';
 
 export const useAergoSnap = () => {
-  const snapId = process.env.REACT_APP_SNAP_ID
-    ? process.env.REACT_APP_SNAP_ID
+  const snapId = process.env.SNAP_ORIGIN
+    ? process.env.SNAP_ORIGIN
     : 'local:http://localhost:8080/';
   const snapVersion = process.env.REACT_APP_SNAP_VERSION
     ? process.env.REACT_APP_SNAP_VERSION
     : '*';
 
   const dispatch = useAppDispatch();
-  const { provider, address, tokens } = useAppSelector((state) => state.wallet);
+  const { provider, tokens } = useAppSelector((state) => state.wallet);
   const connectToSnap = () => {
     dispatch(enableLoadingWithMessage('Connecting...'));
     //* Set Public Networks: Constants objects
@@ -56,7 +56,7 @@ export const useAergoSnap = () => {
     dispatch(enableLoadingWithMessage('Getting... Address'));
     try {
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      const address = (await window.ethereum.request({
+      const { address } = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: { snapId, request: { method: 'getAddress' } }
       })) as GetKeysResponse;
@@ -917,7 +917,7 @@ export const useAergoSnap = () => {
     dispatch(enableLoadingWithMessage('Getting... SendTransaction'));
     try {
       if (!params.nonce) {
-        const account = await getState(address);
+        const account = await getState(params.from);
         params.nonce = account.nonce + 1;
       }
 
@@ -926,7 +926,7 @@ export const useAergoSnap = () => {
         params.chainIdHash = info.chainIdHash;
       }
 
-      const sendTransaction = (await window.ethereum.request({
+      const { results } = (await window.ethereum.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId,
@@ -937,9 +937,22 @@ export const useAergoSnap = () => {
         }
       })) as any;
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
       console.log('sendTransaction', sendTransaction.results[0]);
 
       dispatch(disableLoading());
+=======
+=======
+>>>>>>> Stashed changes
+      if (results.length > 0) {
+        dispatch(disableLoading());
+        return results;
+      }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     } catch (err) {
       console.error(err);
       dispatch(setError(err));
@@ -947,7 +960,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const sendAergo = async (to: string, amount: string) => {
+  const sendAergo = async (address: string, to: string, amount: string) => {
     dispatch(enableLoadingWithMessage('Getting... sendAergo'));
     try {
       const info = await blockchain();
@@ -981,7 +994,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const sendVote = async (payload: any) => {
+  const sendVote = async (address: string, payload: any) => {
     dispatch(enableLoadingWithMessage('Getting... sendVote'));
     try {
       const sendVote = (await window.ethereum.request({
@@ -1008,7 +1021,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const sendStake = async (amount: string) => {
+  const sendStake = async (address: string, amount: string) => {
     dispatch(enableLoadingWithMessage('Getting... sendStake'));
     try {
       const sendStake = (await window.ethereum.request({
@@ -1035,7 +1048,7 @@ export const useAergoSnap = () => {
     }
   };
 
-  const sendUnStake = async (amount: string) => {
+  const sendUnStake = async (address: string, amount: string) => {
     dispatch(enableLoadingWithMessage('Getting... sendUnStake'));
     try {
       const sendUnStake = (await window.ethereum.request({

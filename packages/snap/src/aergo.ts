@@ -335,7 +335,6 @@ const getStaking = async (params: any) => {
   const data: { address: string } = {
     address: params.address
   };
-
   const response = await fetch(
     buildUrl(`${await getApiUrl()}/getStaking`, data)
   );

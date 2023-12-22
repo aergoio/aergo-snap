@@ -30,6 +30,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   max-width: 100vw;
+  overflow-y: hidden;
 `;
 
 export type AppProps = {
