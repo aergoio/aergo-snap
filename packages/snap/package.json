@@ -1,6 +1,6 @@
 {
   "name": "@aergo/aergo-snap",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "metamask snap for aergo",
   "repository": {
     "type": "git",
@@ -11,6 +11,7 @@
   "files": [
     "dist/",
     "images/",
+    "src/",
     "snap.manifest.json"
   ],
   "scripts": {

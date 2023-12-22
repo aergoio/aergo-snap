@@ -55,8 +55,8 @@ const isSystemName = (name: string): boolean => {
 
 const decodeAddress = (encodedString: string): Uint8Array => {
   if (
-    encodedString.length <= ACCOUNT_NAME_LENGTH ||
-    isSystemName(encodedString)
+    isSystemName(encodedString) ||
+    encodedString.length <= ACCOUNT_NAME_LENGTH
   ) {
     return Buffer.from(encodedString);
   }

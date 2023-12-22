@@ -6,12 +6,12 @@ const scanApiInstance = (baseURL: string): AxiosInstance =>
     baseURL,
     timeout: 5000,
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   });
 
 export const scanApi = async (
-  network: Network,
+  network: Network
 ): Promise<AxiosInstance | null> => {
   if (network?.scanApiUrl) {
     const scanApiUrl = network?.scanApiUrl;

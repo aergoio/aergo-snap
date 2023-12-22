@@ -13,11 +13,6 @@ interface AmountProps {
 
 export const Container = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.large};
-  cursor: pointer;
-  transition: transform 0.3s;
-  :hover {
-    transform: scale(1.01);
-  }
 `;
 
 export const Content = styled.div`

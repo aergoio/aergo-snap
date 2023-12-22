@@ -1,28 +1,25 @@
 import { InputWithLabel } from 'ui/molecule/InputWithLabel';
 import { Wrapper, TokenType, Usd, StyledMax } from './SendModal.style';
-import { useState } from 'react';
-import { useAergoSnap } from 'hooks/useAergoSnap';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { useAergoSnap } from 'apis/useAergoSnap';
 import { useAppSelector } from 'hooks/redux';
 import { Button } from 'ui/atom/Button';
 import { DefaultAergo } from 'assets/images';
 import { AergoSnapLogo } from 'assets/images/AergoSnapLogo';
-import { formatTokenAmount } from 'utils/utils';
+import { amountWithDecimals, formatTokenAmount } from 'utils/utils';
 
-export const SendModalView = () => {
+interface Props {
+  setSendModal: Dispatch<SetStateAction<boolean>>;
+  setHash: Dispatch<SetStateAction<string>>;
+}
+
+export const SendModalView = ({ setSendModal, setHash }: Props) => {
   const { address, accountBalance } = useAppSelector((state) => state.wallet);
   const { selectedToken, tokenType } = useAppSelector((state) => state.UI);
   const [amount, setAmount] = useState('');
   const [to, setTo] = useState('');
   const { sendTransaction } = useAergoSnap();
 
-  const amountWithDecimals = (amount:string,decimals:number) => {
-    return +amount * Math.pow(10,decimals);
-  }
-
-  const payload = {
-    name: 'transfer',
-    // args: [`${to}`, `${amountWithDecimals(amount, selectedToken.)}`, ``]
-  };
   const leftIcon = () => {
     if (selectedToken === 'AERGO') {
       return (
@@ -45,6 +42,42 @@ export const SendModalView = () => {
     }
   };
 
+  const handleClickSendTx = async () => {
+    if (selectedToken === 'AERGO') {
+      const results = await sendTransaction({
+        from: address,
+        to,
+        amount: `${amount}000000000000000000`,
+        type: 4
+      });
+      console.log(results, 'results');
+      if (results.length > 0) {
+        const hash = results[0].hash;
+        setSendModal(false);
+        setHash(hash);
+      }
+    } else {
+      const results = await sendTransaction({
+        from: address,
+        to: selectedToken.hash,
+        amount: `0`,
+        type: 5,
+        payloadJson: {
+          name: 'transfer',
+          args: [
+            `${to}`,
+            `${amountWithDecimals(amount, selectedToken.meta.decimals)}`,
+            ``
+          ]
+        }
+      });
+
+      if (results.length > 0) {
+        console.log(results, results);
+      }
+    }
+  };
+
   const asset: string =
     selectedToken !== 'AERGO' ? selectedToken.meta.name : 'AERGO';
   const balance: string =
@@ -55,20 +88,19 @@ export const SendModalView = () => {
           '',
           selectedToken.meta.decimals
         );
-  console.log(balance, 'balance');
+
   const tokenTypeFormat = () => {
-    if (tokenType === 'ARC1') {
-      if (selectedToken === 'AERGO') {
-        return '';
-      } else {
-        return 'ARC1';
-      }
-    } else if (tokenType === 'ARC2') {
-      return 'ARC2';
-    } else {
+    if (selectedToken === 'AERGO') {
       return '';
     }
+
+    if (tokenType === 'ARC1' || tokenType === 'ARC2') {
+      return tokenType;
+    }
+
+    return '';
   };
+
   const handleClickMax = () => {
     setAmount(balance);
   };
@@ -92,20 +124,12 @@ export const SendModalView = () => {
           setValue={setAmount}
         >
           <div style={{ display: 'flex', marginRight: '1rem' }}>
-            <Usd> {amount} ≈ USD</Usd>
+            <Usd>≈ {amount} USD</Usd>
           </div>
         </InputWithLabel>
         <InputWithLabel disabled value={+balance - +amount} />
       </div>
-      <Button
-        onClick={() =>
-          selectedToken === 'AERGO'
-            ? sendTransaction(address, to, `${amount}000000000000000000`, 4)
-            : sendTransaction(address, selectedToken.hash, `0`, 5, payload)
-        }
-      >
-        Send
-      </Button>
+      <Button onClick={handleClickSendTx}>Send</Button>
     </Wrapper>
   );
 };

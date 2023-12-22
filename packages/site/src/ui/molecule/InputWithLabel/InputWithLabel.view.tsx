@@ -7,12 +7,14 @@ import {
 } from 'react';
 import { AccountImage } from '../../atom/AccountImage';
 import { Wrapper, Label, InputWrapper, Input } from './InputWithLabel.style';
+import { CSSProperties } from 'styled-components';
 
 interface Props {
+  style?: CSSProperties;
   disabled?: boolean;
   type?: string;
   label?: string;
-  labelButton?:ReactNode;
+  labelButton?: ReactNode;
   address?: string;
   placeholder?: string;
   value: string | number;
@@ -24,6 +26,7 @@ interface Props {
 }
 
 export const InputWithLabelView = ({
+  style,
   disabled = false,
   type = 'text',
   label,
@@ -46,6 +49,7 @@ export const InputWithLabelView = ({
         {labelButton}
       </Label>
       <InputWrapper
+        style={style}
         isFocused={isFocused}
         disabled={disabled}
         width={width || ''}

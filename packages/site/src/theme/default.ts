@@ -272,6 +272,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${(props) => props.theme.fonts.default};
     font-size: ${(props) => props.theme.fontSizes.small};
     margin: 0;
+    
+    /* overflow-y:hidden; */
   }
 
   * {

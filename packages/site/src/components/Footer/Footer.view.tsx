@@ -6,7 +6,7 @@ import {
   PoweredByContainer
 } from './Footer.style';
 import { Button } from 'ui/atom/Button';
-import { useAergoSnap } from 'hooks/useAergoSnap';
+import { useAergoSnap } from 'apis/useAergoSnap';
 
 export const FooterView = () => {
   const theme = useTheme();
@@ -21,9 +21,9 @@ export const FooterView = () => {
           <MetaMask color={theme.colors.text.default} />
         </PoweredByContainer>
       </PoweredByButton>
-      {/* <Button variant="gradation" spacing="xlarge" onClick={connectToSnap}>
+      <Button variant="gradation" spacing="xlarge" onClick={connectToSnap}>
         Reconnect
-      </Button> */}
+      </Button>
     </FooterWrapper>
   );
 };

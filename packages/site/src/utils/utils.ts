@@ -63,5 +63,12 @@ export function formatTokenAmount(
   unit: string,
   decimals: number
 ) {
-  return `${moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
+  if (amount) {
+    return `${moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
+  }
 }
+
+export const amountWithDecimals = (amount: string, decimals: number) => {
+  console.log(amount, decimals);
+  return BigInt(+amount * Math.pow(10, decimals)).toString();
+};

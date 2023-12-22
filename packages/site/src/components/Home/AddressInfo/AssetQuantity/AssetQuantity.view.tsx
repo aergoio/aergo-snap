@@ -39,7 +39,7 @@ export const AssetQuantityView = () => {
   return (
     <Wrapper>
       <Asset>{asset}</Asset>
-      <Dollor>{dollor}</Dollor>
+      <Dollor>≈ {dollor}</Dollor>
     </Wrapper>
   );
 };

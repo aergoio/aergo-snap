@@ -17,11 +17,11 @@ export const HomeView = () => {
       <Bottom>
         <Line />
         <Tabs
-          tabs={['Governance', 'Token', 'NFT', 'Activity']}
+          tabs={['Token', 'NFT', 'Governance', 'Activity']}
           panels={[
-            <Governance />,
             <TokenList tokenType="ARC1" />,
             <TokenList tokenType="ARC2" />,
+            <Governance />,
             <Activity />
           ]}
         />

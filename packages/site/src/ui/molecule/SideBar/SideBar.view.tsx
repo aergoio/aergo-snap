@@ -12,8 +12,9 @@ interface Props {
 export const SideBarView = ({ type, buttons, sidebar, setSidebar }: Props) => {
   return (
     <Wrapper type={type}>
-      {buttons?.map((button: any) => (
+      {buttons?.map((button: any, idx) => (
         <StyledButton
+          key={button.text + idx}
           iconLeft={button.icon}
           backgroundTransparent
           upperCaseOnly={false}

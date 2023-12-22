@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Max } from 'pages/Home/TabPanels/Governance/Governance.style';
+import { Max } from 'components/Home/TabPanels/Governance/Governance.style';
 
 export const Wrapper = styled.div`
   display: flex;
