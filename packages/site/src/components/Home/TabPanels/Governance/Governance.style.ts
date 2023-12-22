@@ -71,19 +71,20 @@ export const VoteWrapper = styled.div`
   height: 1rem;
 `;
 export const Voted = styled.span<VotedProps>`
-  display: inline-block;
+  display: ${(props) => (props.percentage === 0 ? 'none' : 'inline-block')};
   width: ${(props) => `${props.percentage}%`};
   border: solid 1px ${(props) => props.theme.colors.primary.main};
   background: ${(props) => props.theme.colors.primary.main};
-  border-radius: 8px 0 0 8px;
+  border-radius: ${(props) =>
+    props.percentage === 100 ? '8px' : '0 8px 8px 0'};
 `;
 
 export const UnVoted = styled.span<VotedProps>`
-  display: inline-block;
+  display: ${(props) => (props.percentage === 100 ? 'none' : 'inline-block')};
   width: ${(props) => `${100 - props.percentage}%`};
   border: solid 1px ${(props) => props.theme.colors.grey.grey2};
   background: ${(props) => props.theme.colors.grey.grey2};
-  border-radius: 0 8px 8px 0;
+  border-radius: ${(props) => (props.percentage === 0 ? '8px' : '0 8px 8px 0')};
 `;
 
 export const Percentage = styled.span`
@@ -118,7 +119,7 @@ export const FlexEnd = styled.div`
 
 export const VotingPowerValue = styled.span`
   color: ${(props) => props.theme.colors.grey.grey6};
-  font-size: ${(props) => props.theme.fontSizes.xsmall};
+  font-size: ${(props) => props.theme.fontSizes.small};
   font-weight: 600;
 `;
 
@@ -169,4 +170,10 @@ export const Td = styled.td`
   padding: 1rem;
   box-shadow: inset 0 -1px 0 0 ${(props) => props.theme.colors.grey.grey2};
   line-height: 1.5;
+`;
+
+export const IsStake = styled.div`
+  > * {
+    cursor: pointer;
+  }
 `;

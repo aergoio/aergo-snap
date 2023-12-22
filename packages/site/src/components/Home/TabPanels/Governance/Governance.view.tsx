@@ -24,7 +24,8 @@ import {
   TableBody,
   Th,
   Tr,
-  Td
+  Td,
+  IsStake
 } from './Governance.style';
 import { useEffect, useState } from 'react';
 import { Button } from 'ui/atom/Button';
@@ -58,6 +59,8 @@ const options = {
   }
 };
 
+const maxArr = ['10', '25', '50', '75', '100'];
+
 export const GovernanceView = () => {
   const theme = useTheme();
   const { network } = useAppSelector((state) => state.networks);
@@ -68,6 +71,7 @@ export const GovernanceView = () => {
   const {
     getStaking,
     sendStake,
+    sendUnStake,
     getVotes,
     getConsensusInfo,
     getAccountVotes,
@@ -122,7 +126,7 @@ export const GovernanceView = () => {
     ]
   });
   const [inputStakingChartData, setInputStakingChartData] = useState({
-    labels: ['Staked: 0 aergo', 'UnStake: 0 aergo', 'Input: 0 aergo'],
+    labels: ['Staked: 0 aergo', 'UnStake: 0 aergo', 'New Staking: 0 aergo'],
     datasets: [
       {
         label: '# of AERGOS',
@@ -143,12 +147,13 @@ export const GovernanceView = () => {
     datasets: [
       {
         label: '# of Voting Power',
-        data: [10, 20, 30, 40, 50, 20],
+        data: [0, 0, 0, 0, 0, 0],
         borderWidth: 1
       }
     ]
   });
   const [rewards, setRewards] = useState({ blockCount: 0, blockPerDay: [] });
+  const [hash, setHash] = useState('');
 
   useEffect(() => {
     const getStakedBalance = async () => {
@@ -156,13 +161,9 @@ export const GovernanceView = () => {
       if (amount && accountBalance) {
         const staked = Number(formatTokenAmount(amount, '', 18));
         const unstaked = Number(
-          formatTokenAmount(
-            String(BigInt(accountBalance) - BigInt(amount)),
-            '',
-            18
-          )
+          formatTokenAmount(String(BigInt(accountBalance)), '', 18)
         );
-        if (staked && unstaked) {
+        if (staked || unstaked) {
           const newStakingChartData = {
             labels: [`Staked: ${staked} AERGO`, `UnStaked: ${unstaked} AERGO`],
             datasets: [
@@ -174,8 +175,11 @@ export const GovernanceView = () => {
             ]
           };
           setStakingChartData(newStakingChartData);
+
           const newInputStakingChartData = cloneDeep(newStakingChartData);
-          newInputStakingChartData.labels.push('Input: 0 AERGO');
+          newInputStakingChartData.labels.push(
+            `New ${isStake ? 'Staking' : 'UnStaking'}: ${value} AERGO`
+          );
           newInputStakingChartData.datasets[0].data.push(0);
           setInputStakingChartData(newInputStakingChartData);
         }
@@ -187,13 +191,23 @@ export const GovernanceView = () => {
     } else {
       console.log('no Balance');
     }
-  }, [address, accountBalance]);
+  }, [address, accountBalance, isStake]);
 
   const handleStake = async () => {
     const valueWithDecimals = amountWithDecimals(value, 18);
-    // console.log(valueWithDecimals, 'valueWithDecimals');
-    const results = await sendStake(address, valueWithDecimals);
-    console.log(results, 'results');
+    if (isStake) {
+      const stakeResults = await sendStake(address, valueWithDecimals);
+      console.log(stakeResults, 'stakeResults');
+    } else {
+      const unStakeResults = await sendUnStake(address, valueWithDecimals);
+      console.log(unStakeResults, 'unStakeResults');
+    }
+  };
+
+  const handleClickVotingPower = async (payload: any) => {
+    const sendVoteResults = await sendVote(address, payload);
+    console.log(sendVoteResults[0].hash, 'sendVoteResults hash');
+    setHash(sendVoteResults[0].hash);
   };
 
   useEffect(() => {
@@ -201,6 +215,7 @@ export const GovernanceView = () => {
       const { bps } = await getConsensusInfo();
       const { chainInfo } = await blockchain();
       const { voting } = await getAccountVotes(address);
+      const newVotingChartData = cloneDeep(votingChartData);
 
       votesList.find((votes) =>
         votes.id === 'voteBP'
@@ -209,8 +224,16 @@ export const GovernanceView = () => {
               name: 'v1voteBP',
               args: bps?.map((bp: any) => bp.PeerID)
             }),
-            (votes.userVotes = voting.find(
+            (votes.userVotes = voting?.find(
               (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[0] = Number(
+              formatTokenAmount(
+                voting?.find((accountVote: any) => accountVote.id === votes.id)
+                  ?.amount,
+                '',
+                18
+              )
             )))
           : null
       );
@@ -222,8 +245,16 @@ export const GovernanceView = () => {
               name: 'v1voteDAO',
               args: ['BPCOUNT', String(chainInfo?.bpNumber)]
             }),
-            (votes.userVotes = voting.find(
+            (votes.userVotes = voting?.find(
               (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[1] = Number(
+              formatTokenAmount(
+                voting?.find((accountVote: any) => accountVote.id === votes.id)
+                  ?.amount,
+                '',
+                18
+              )
             )))
           : null
       );
@@ -239,8 +270,16 @@ export const GovernanceView = () => {
               name: 'v1voteDAO',
               args: ['STAKINGMIN', chainInfo?.stakingminimum]
             }),
-            (votes.userVotes = voting.find(
+            (votes.userVotes = voting?.find(
               (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[2] = Number(
+              formatTokenAmount(
+                voting?.find((accountVote: any) => accountVote.id === votes.id)
+                  ?.amount,
+                '',
+                18
+              )
             )))
           : null
       );
@@ -256,8 +295,16 @@ export const GovernanceView = () => {
               name: 'v1voteDAO',
               args: ['GASPRICE', chainInfo?.gasprice]
             }),
-            (votes.userVotes = voting.find(
+            (votes.userVotes = voting?.find(
               (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[3] = Number(
+              formatTokenAmount(
+                voting?.find((accountVote: any) => accountVote.id === votes.id)
+                  ?.amount,
+                '',
+                18
+              )
             )))
           : null
       );
@@ -273,33 +320,50 @@ export const GovernanceView = () => {
               name: 'v1voteDAO',
               args: ['NAMEPRICE', chainInfo?.nameprice]
             }),
-            (votes.userVotes = voting.find(
+            (votes.userVotes = voting?.find(
               (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[4] = Number(
+              formatTokenAmount(
+                voting?.find((accountVote: any) => accountVote.id === votes.id)
+                  ?.amount,
+                '',
+                18
+              )
             )))
           : null
       );
+
+      setVotingChartData(newVotingChartData);
     };
     if (address) {
       getVotesFunc();
     }
-  }, [address]);
-
-  const handleClickVotingPower = async (payload: any) => {
-    console.log(payload, 'payload');
-    const results = await sendVote(address, payload);
-    console.log(results, 'results');
-  };
+  }, [address, hash]);
 
   useEffect(() => {
+    const newInputChartData = cloneDeep(inputStakingChartData);
+    newInputChartData.labels[2] = `New ${
+      isStake ? 'Staking' : 'UnStaking'
+    }: ${value} AERGO`;
     if (isStake) {
-      const newInputChartData = cloneDeep(inputStakingChartData);
-      console.log(newInputChartData, 'newInputChartData1');
-      newInputChartData.labels[2] = `${value} AERGO`;
       newInputChartData.datasets[0].data[2] = +value;
-      console.log(newInputChartData, 'newInputChartData2');
-      setInputStakingChartData(newInputChartData);
+      newInputChartData.labels[1] = `UnStaked: ${
+        stakingChartData.datasets[0].data[1] - +value
+      } AERGO`;
+      newInputChartData.datasets[0].data[1] =
+        stakingChartData.datasets[0].data[1] - +value;
+    } else if (stakingChartData.datasets[0].data[0] > +value) {
+      newInputChartData.labels[0] = `Staked: ${
+        stakingChartData.datasets[0].data[0] - +value
+      } AERGO`;
+      newInputChartData.datasets[0].data[0] =
+        stakingChartData.datasets[0].data[0] - +value;
+    } else if (stakingChartData.datasets[0].data[0] < +value) {
+      console.log('Cannot Unstake, because No staked enough');
     }
-  }, [value]);
+    setInputStakingChartData(newInputChartData);
+  }, [isStake, value]);
 
   useEffect(() => {
     const getRewards = async () => {
@@ -315,6 +379,10 @@ export const GovernanceView = () => {
     };
     getRewards();
   }, [address]);
+
+  const handleClickAmountPercent = (percent: string) => {
+    setValue(String(stakingChartData.datasets[0].data[1] * (+percent / 100)));
+  };
 
   return (
     <Wrapper>
@@ -363,7 +431,7 @@ export const GovernanceView = () => {
           <TableBody>
             {rewards.blockPerDay.length > 0 ? (
               rewards.blockPerDay.map((block: any, idx) => (
-                <Tr>
+                <Tr key={idx}>
                   <Td>{idx + 1}</Td>
                   <Td>{block['key_as_string']}</Td>
                   <Td>{block['doc_count']}</Td>
@@ -383,22 +451,30 @@ export const GovernanceView = () => {
         <ModalWrapper>
           <Column>
             <TextWrapper>
-              <VotingTitle>{`Stake [ ${
-                inputStakingChartData.datasets[0].data[0]
-              }/${
-                inputStakingChartData.datasets[0].data[0] +
-                inputStakingChartData.datasets[0].data[1]
+              <VotingTitle>{`Stake [ ${inputStakingChartData.datasets[0].data[0].toFixed(
+                0
+              )}/${
+                +stakingChartData.datasets[0].data[0].toFixed(0) +
+                +stakingChartData.datasets[0].data[1].toFixed(0)
               } ]`}</VotingTitle>
 
               <Row style={{ width: '20rem' }}>
-                <div>
-                  <input type="radio" />
+                <IsStake onClick={() => setIsStake(true)}>
+                  <input
+                    type="radio"
+                    checked={isStake}
+                    onChange={() => setIsStake(true)}
+                  />
                   <label>Stake</label>
-                </div>
-                <div>
-                  <input type="radio" />
+                </IsStake>
+                <IsStake onClick={() => setIsStake(false)}>
+                  <input
+                    type="radio"
+                    checked={!isStake}
+                    onChange={() => setIsStake(false)}
+                  />
                   <label>UnStake</label>
-                </div>
+                </IsStake>
               </Row>
             </TextWrapper>
 
@@ -419,11 +495,12 @@ export const GovernanceView = () => {
                 marginBottom: '2rem'
               }}
             >
-              <Max>10%</Max>
-              <Max>25%</Max>
-              <Max>50%</Max>
-              <Max>75%</Max>
-              <Max>MAX</Max>
+              {maxArr.map((max) => (
+                <Max
+                  key={max}
+                  onClick={() => handleClickAmountPercent(max)}
+                >{`${max}%`}</Max>
+              ))}
             </Row>
           </Column>
           <Button style={{ width: '100%' }} onClick={handleStake}>
@@ -435,9 +512,11 @@ export const GovernanceView = () => {
         <ModalWrapper>
           <Column>
             <TextWrapper>
-              <VotingTitle>{`Voting Power [ ${
-                stakingChartData.datasets[0].data[0]
-              }/${stakingChartData.datasets[0].data[0] * 5} ]`}</VotingTitle>
+              <VotingTitle>{`Voting Power [ ${stakingChartData.datasets[0].data[0].toFixed(
+                0
+              )}/${(stakingChartData.datasets[0].data[0] * 5).toFixed(
+                0
+              )} ]`}</VotingTitle>
             </TextWrapper>
             <TextWrapper>
               <VotingInfo>- Next voting time in 1 day</VotingInfo>
@@ -455,7 +534,7 @@ export const GovernanceView = () => {
               <RewardValue>{rewards.blockCount * 0.16} AERGO</RewardValue>
             </TextWrapper>
             {votesList.map(({ name, defaultValue, payload, userVotes }) => (
-              <Row style={{ width: '100%' }}>
+              <Row style={{ width: '100%' }} key={name}>
                 <InputWithLabel
                   style={{ padding: '0 0.5rem' }}
                   label={`${name}: ${defaultValue}`}
@@ -465,39 +544,53 @@ export const GovernanceView = () => {
                   <VoteWrapper>
                     <Voted
                       percentage={
-                        (Number(
-                          formatTokenAmount(userVotes.amount || '0', '', 18)
-                        ) /
-                          stakingChartData.datasets[0].data[0]) *
-                        100
+                        stakingChartData.datasets[0].data[0] !== 0
+                          ? (Number(
+                              formatTokenAmount(
+                                userVotes?.amount || '0',
+                                '',
+                                18
+                              )
+                            ) /
+                              stakingChartData.datasets[0].data[0]) *
+                            100
+                          : 0
                       }
                     />
                     <UnVoted
                       percentage={
-                        (Number(
-                          formatTokenAmount(userVotes.amount || '0', '', 18)
-                        ) /
-                          stakingChartData.datasets[0].data[0]) *
-                        100
+                        stakingChartData.datasets[0].data[0] !== 0
+                          ? (Number(
+                              formatTokenAmount(
+                                userVotes?.amount || '0',
+                                '',
+                                18
+                              )
+                            ) /
+                              stakingChartData.datasets[0].data[0]) *
+                            100
+                          : 0
                       }
                     />
                   </VoteWrapper>
                   <Percentage>
                     {`${
-                      (Number(
-                        formatTokenAmount(userVotes.amount || '0', '', 18)
-                      ) /
-                        stakingChartData.datasets[0].data[0]) *
-                      100
+                      stakingChartData.datasets[0].data[0] !== 0
+                        ? (Number(
+                            formatTokenAmount(userVotes?.amount || '0', '', 18)
+                          ) /
+                            stakingChartData.datasets[0].data[0]) *
+                          100
+                        : 0
                     }%`}
                   </Percentage>
                 </InputWithLabel>
                 <FlexEnd>
                   <VotingPowerValue>{`[ ${Number(
-                    formatTokenAmount(userVotes.amount || '0', '', 18)
-                  )}/${
-                    stakingChartData.datasets[0].data[0]
-                  } ]`}</VotingPowerValue>
+                    formatTokenAmount(userVotes?.amount || '0', '', 18)
+                  ).toFixed(0)}/${stakingChartData.datasets[0].data[0].toFixed(
+                    0
+                  )} ]`}</VotingPowerValue>
                   <Button
                     onClick={() => handleClickVotingPower(payload)}
                     variant="font-gradation"

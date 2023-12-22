@@ -50,12 +50,10 @@ export const SendModalView = ({ setSendModal, setHash }: Props) => {
         amount: `${amount}000000000000000000`,
         type: 4
       });
-      console.log(results, 'results');
-      if (results.length > 0) {
-        const hash = results[0].hash;
-        setSendModal(false);
-        setHash(hash);
-      }
+      const hash = results[0]?.hash;
+      console.log(hash, 'hash');
+      setSendModal(false);
+      setHash(hash);
     } else {
       const results = await sendTransaction({
         from: address,
@@ -71,10 +69,10 @@ export const SendModalView = ({ setSendModal, setHash }: Props) => {
           ]
         }
       });
-
-      if (results.length > 0) {
-        console.log(results, results);
-      }
+      const hash = results[0]?.hash;
+      console.log(hash, 'hash');
+      setSendModal(false);
+      setHash(hash);
     }
   };
 
