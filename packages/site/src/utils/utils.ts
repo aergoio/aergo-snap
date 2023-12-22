@@ -69,5 +69,6 @@ export function formatTokenAmount(
 }
 
 export const amountWithDecimals = (amount: string, decimals: number) => {
-  return String(+amount * Math.pow(10, decimals));
+  console.log(amount, decimals);
+  return BigInt(+amount * Math.pow(10, decimals)).toString();
 };

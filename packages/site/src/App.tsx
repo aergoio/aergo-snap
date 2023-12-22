@@ -12,12 +12,8 @@ import {
   setSelectedToken
 } from 'slices/UISlice';
 import { ToggleThemeContext } from './Root';
-import {
-  useAergoSnap,
-  useAppDispatch,
-  useAppSelector,
-  useHasMetamask
-} from './hooks';
+import { useAppDispatch, useAppSelector, useHasMetamask } from './hooks';
+import { useAergoSnap } from 'apis/useAergoSnap';
 import { Footer, Header } from './components';
 
 library.add(fas);
