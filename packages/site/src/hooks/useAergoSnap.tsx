@@ -1062,6 +1062,64 @@ export const useAergoSnap = () => {
     }
   };
 
+  const sendToken = async (contact: string, to: string, amount: string) => {
+    dispatch(enableLoadingWithMessage('Getting... sendToken'));
+    try {
+      const sendToken = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendToken',
+            params: {
+              from: address,
+              contact,
+              to,
+              amount
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendToken', sendToken);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
+  const sendNft = async (nftHash: string, to: string, amount: string) => {
+    dispatch(enableLoadingWithMessage('Getting... sendNft'));
+    try {
+      const sendNft = (await window.ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId,
+          request: {
+            method: 'sendNft',
+            params: {
+              from: address,
+              nftHash,
+              to,
+              amount
+            }
+          }
+        }
+      })) as any;
+
+      console.log('sendNft', sendNft);
+
+      dispatch(disableLoading());
+    } catch (err) {
+      console.error(err);
+      dispatch(setError(err));
+      dispatch(disableLoading());
+    }
+  };
+
   return {
     connectToSnap,
     checkConnection,
@@ -1103,6 +1161,8 @@ export const useAergoSnap = () => {
     sendAergo,
     sendVote,
     sendStake,
-    sendUnStake
+    sendUnStake,
+    sendToken,
+    sendNft
   };
 };

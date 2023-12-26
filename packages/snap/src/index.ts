@@ -33,6 +33,10 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return await sendStake(request.params);
     case 'sendUnStake':
       return await sendUnStake(request.params);
+    case 'sendToken':
+      return await sendToken(request.params);
+    case 'sendNft':
+      return await sendNft(request.params);
     default:
       const func = funcAergo[request.method];
       if (func) {
@@ -215,6 +219,114 @@ const sendUnStake = async (params: any) => {
 
   const pn: any[] = [heading(`From`), copyable(`${tx.from}`)];
 
+  if (tx.amount) {
+    pn.push(heading(`Amount`));
+    pn.push(text(tx.amount));
+  }
+
+  const result = await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel(pn)
+    }
+  });
+
+  if (result) {
+    const { key } = await getKeys();
+    const result = await funcAergo.sendSignedTransaction(tx, key);
+
+    try {
+      return JSON.parse(result);
+    } catch {
+      return { err: result };
+    }
+  }
+  return { result: 'cancel' };
+};
+
+const sendToken = async (params: any) => {
+  const info = JSON.parse(await funcAergo.blockchain(params));
+  const account = JSON.parse(
+    await funcAergo.getState({ account: params.from })
+  );
+
+  const tx = {
+    from: params.from,
+    to: params.contract,
+    amount: '0',
+    nonce: account.nonce + 1,
+    type: 5,
+    limit: 0,
+    payloadJson: {
+      name: 'transfer',
+      args: [params.to, params.amount, '']
+    },
+    chainIdHash: info.chainIdHash
+  };
+
+  const pn: any[] = [
+    heading(`Contract`),
+    copyable(`${params.contract}`),
+    heading(`From`),
+    copyable(`${tx.from}`),
+    heading(`To`),
+    copyable(`${tx.to}`)
+  ];
+  if (tx.amount) {
+    pn.push(heading(`Amount`));
+    pn.push(text(tx.amount));
+  }
+
+  const result = await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel(pn)
+    }
+  });
+
+  if (result) {
+    const { key } = await getKeys();
+    const result = await funcAergo.sendSignedTransaction(tx, key);
+
+    try {
+      return JSON.parse(result);
+    } catch {
+      return { err: result };
+    }
+  }
+  return { result: 'cancel' };
+};
+
+const sendNft = async (params: any) => {
+  const info = JSON.parse(await funcAergo.blockchain(params));
+  const account = JSON.parse(
+    await funcAergo.getState({ account: params.from })
+  );
+
+  const tx = {
+    from: params.from,
+    to: params.nftHash,
+    amount: '0',
+    nonce: account.nonce + 1,
+    type: 5,
+    limit: 0,
+    payloadJson: {
+      name: 'transfer',
+      args: [params.to, params.amount, '']
+    },
+    chainIdHash: info.chainIdHash
+  };
+
+  const pn: any[] = [
+    heading(`NFT`),
+    copyable(`${params.nftHash}`),
+    heading(`From`),
+    copyable(`${tx.from}`),
+    heading(`To`),
+    copyable(`${tx.to}`)
+  ];
   if (tx.amount) {
     pn.push(heading(`Amount`));
     pn.push(text(tx.amount));
