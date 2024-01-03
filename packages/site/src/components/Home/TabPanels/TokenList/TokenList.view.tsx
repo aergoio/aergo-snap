@@ -6,7 +6,6 @@ import { setSelectedToken, setTokenType } from 'slices/UISlice';
 import { AergoToken, TokenItem } from './TokenItem';
 import { Wrapper, ButtonWrapper, StyledButton, NoNft } from './TokenList.style';
 import { ImportAssetModal } from './ImportAssetModal';
-import { Token } from 'types';
 
 interface Props {
   tokenType: 'ARC1' | 'ARC2';

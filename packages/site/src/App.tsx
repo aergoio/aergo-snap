@@ -1,4 +1,10 @@
-import { FunctionComponent, ReactNode, useContext, useEffect } from 'react';
+import {
+  FunctionComponent,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -90,7 +96,7 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     if (address) {
       getWalletDataWhenTokenChange();
     }
-  }, [selectedToken]);
+  }, [networks.activeNetwork, selectedToken]);
 
   useEffect(() => {
     const getWalletDataIntervalEvery10Seconds = setInterval(() => {

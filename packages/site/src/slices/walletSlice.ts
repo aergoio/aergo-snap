@@ -1,4 +1,4 @@
-import { Account, Token, Transaction } from 'types';
+import { Token, Transaction } from 'types';
 import { createSlice } from '@reduxjs/toolkit';
 
 export type WalletState = {

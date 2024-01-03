@@ -90,8 +90,13 @@ export const useAergoSnap = () => {
       );
       if (connectToWeb3.url === 'undefined') {
         //* Not Found Web3 Url, Error Notification
-        dispatch(resetWallet());
-        console.log('Not founded web3');
+        dispatch(enableLoadingWithMessage('Not Founded Web3'));
+        setTimeout(() => {
+          dispatch(resetWallet());
+          dispatch(setWalletConnection(true));
+          dispatch(disableLoading());
+        }, 3000);
+        return;
       }
       console.log(`Connected Web3 Url: ${connectToWeb3.url}`);
       dispatch(setWalletConnection(true));
@@ -169,11 +174,9 @@ export const useAergoSnap = () => {
           });
           if (updatedTokens.length > 0) {
             dispatch(setTokens({ chainIdLabel, tokens: updatedTokens }));
-          } else {
-            console.log('here??');
           }
         } else {
-          console.log('no imported tokens');
+          console.log('No Token Balances');
         }
       } catch (err) {
         console.error('Error in getWalletData:', err);
@@ -301,7 +304,6 @@ export const useAergoSnap = () => {
         }
       })) as any;
 
-      console.log('getBlock', data);
       return data;
     } catch (err) {
       console.error(err);
@@ -909,8 +911,8 @@ export const useAergoSnap = () => {
     nonce?: number;
     chainIdHash?: string;
     payloadJson?: {
-      name: string;
-      args?: any[];
+      Name: string;
+      Args?: any[];
     };
   }) => {
     dispatch(enableLoadingWithMessage('Getting... SendTransaction'));

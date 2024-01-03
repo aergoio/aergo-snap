@@ -36,6 +36,7 @@ export const theme = {
     large3: '3rem',
     large2: '2.4rem',
     large: '1.6rem',
+    tiny: '1.2rem',
     tiny1: '1rem',
     tiny2: '0.8rem',
     small: '0.6rem',

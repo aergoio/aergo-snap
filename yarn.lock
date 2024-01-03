@@ -10605,6 +10605,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^3.0.6":
+  version: 3.0.6
+  resolution: "date-fns@npm:3.0.6"
+  checksum: ee62b8e764e4c11c418d342f401d3e85adb4a631b196746e49ac89099c8d34cb141f10ae953c4a72bd3c76fe4d8740ec89564c8599a31256c82adbbed56c0014
+  languageName: node
+  linkType: hard
+
 "debounce@npm:^1.2.1":
   version: 1.2.1
   resolution: "debounce@npm:1.2.1"
@@ -21212,7 +21219,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.62.0
     axios: ^1.6.2
     crypto-browserify: ^3.12.0
-    elliptic: ^6.5.4
+    date-fns: ^3.0.6
     eslint: ^8.55.0
     eslint-config-prettier: ^8.10.0
     eslint-plugin-import: ^2.29.0

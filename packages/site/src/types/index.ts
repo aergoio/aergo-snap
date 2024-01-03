@@ -12,6 +12,7 @@ export type GetKeysResponse = {
 };
 
 export interface Network {
+  consensus:string;
   label: string;
   chainId: string;
   nodeUrl: string;
