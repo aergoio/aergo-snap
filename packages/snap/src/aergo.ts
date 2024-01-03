@@ -394,8 +394,8 @@ const sendSignedTransaction = async (params: any, key: any) => {
     nonce: number;
     chainIdHash: string;
     payloadJson?: {
-      name: string;
-      args?: any[];
+      Name: string;
+      Args?: any[];
     };
   } = {
     from: params.from,
@@ -407,8 +407,8 @@ const sendSignedTransaction = async (params: any, key: any) => {
   };
 
   if (params.payloadJson) {
-    tx.payloadJson = { name: params.payloadJson.name };
-    if (params.payloadJson.args) tx.payloadJson.args = params.payloadJson.args;
+    tx.payloadJson = { Name: params.payloadJson.Name };
+    if (params.payloadJson.Args) tx.payloadJson.Args = params.payloadJson.Args;
   }
 
   const data = await signTx(tx, key);
