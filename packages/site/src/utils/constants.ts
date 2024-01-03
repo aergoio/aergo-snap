@@ -6,27 +6,32 @@ export const POPOVER_DURATION = 1000;
 
 export const Networks: Network[] = [
   {
-    label: 'Aergo Mainnet',
+    consensus: 'dpos',
+    label: 'Mainnet',
     chainId: 'aergo.io',
     nodeUrl: 'https://mainnet-api-http.aergo.io',
     scanExplorerUrl: 'https://mainnet.aergoscan.io',
     scanApiUrl: 'https://api2-mainnet.aergoscan.io/v2'
   },
   {
-    label: 'Aergo Testnet',
+    consensus: 'dpos',
+    label: 'Testnet',
     chainId: 'testnet.aergo.io',
     nodeUrl: 'https://testnet-api-http.aergo.io',
     scanExplorerUrl: 'https://testnet.aergoscan.io',
     scanApiUrl: 'https://api2-testnet.aergoscan.io/v2'
   },
   {
-    label: 'Aergo Alpha',
+    consensus: 'raft',
+    label: 'Alpha',
     chainId: 'alpha.aergo.io',
     nodeUrl: 'https://alpha-api-http.aergo.io',
     scanExplorerUrl: 'https://alpha.aergoscan.io',
-    scanApiUrl: 'https://api2-alpha.aergoscan.io/v2'
+    scanApiUrl: 'https://api2-alpha.aergoscan.io/v2',
+    web3Url: 'https://alpha-api-web.aergo.io'
   },
   {
+    consensus: 'dpos',
     label: 'Snaps',
     chainId: 'snap.aergo.io',
     nodeUrl: 'https://nodeconnect.blocko.io',

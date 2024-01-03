@@ -46,26 +46,17 @@ import { amountWithDecimals, formatTokenAmount } from 'utils/utils';
 import { useTheme } from 'styled-components';
 import { cloneDeep } from 'lodash';
 import { scanApi } from 'apis/scanApi';
+import { formatDistance } from 'date-fns';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Colors);
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: true,
-      position: 'right'
-    }
-  }
-};
-
-const maxArr = ['10', '25', '50', '75', '100'];
-
 export const GovernanceView = () => {
   const theme = useTheme();
-  const { network } = useAppSelector((state) => state.networks);
+  const { network, activeNetwork } = useAppSelector((state) => state.networks);
   const { address, accountBalance } = useAppSelector((state) => state.wallet);
-  const [sidebar, setSidebar] = useState<{ text: string; icon: IconName }>({});
+  const [sidebar, setSidebar] = useState<{ text: string; icon: IconName } | {}>(
+    {}
+  );
   const [value, setValue] = useState('0');
   const [isStake, setIsStake] = useState(true);
   const {
@@ -73,95 +64,32 @@ export const GovernanceView = () => {
     sendStake,
     sendUnStake,
     getVotes,
+    getBlock,
     getConsensusInfo,
     getAccountVotes,
     blockchain,
     sendVote
   } = useAergoSnap();
-  const [votesList, setVotesList] = useState([
-    {
-      id: 'voteBP',
-      name: 'Block Producers',
-      defaultValue: '',
-      payload: { name: 'v1voteBP', args: [] },
-      userVotes: { amount: '', candidates: [], id: '' }
-    },
-    {
-      id: 'BPCOUNT',
-      name: 'Block Producer Count',
-      defaultValue: '',
-      payload: { name: 'v1voteDAO', args: ['BPCOUNT', ''] },
-      userVotes: { amount: '', candidates: [], id: '' }
-    },
-    {
-      id: 'STAKINGMIN',
-      name: 'Staking Minimum',
-      defaultValue: '',
-      payload: { name: 'v1voteDAO', args: ['STAKINGMIN', ''] },
-      userVotes: { amount: '', candidates: [], id: '' }
-    },
-    {
-      id: 'GASPRICE',
-      name: 'Gas Price',
-      defaultValue: '',
-      payload: { name: 'v1voteDAO', args: ['GASPRICE', ''] },
-      userVotes: { amount: '', candidates: [], id: '' }
-    },
-    {
-      id: 'NAMEPRICE',
-      name: 'Name Transaction Price',
-      defaultValue: '',
-      payload: { name: 'v1voteDAO', args: ['NAMEPRICE', ''] },
-      userVotes: { amount: '', candidates: [], id: '' }
-    }
-  ]);
-  const [stakingChartData, setStakingChartData] = useState({
-    labels: ['Staked: 0 aergo', 'UnStake: 0 aergo'],
-    datasets: [
-      {
-        label: '# of AERGOS',
-        data: [0, 0],
-        borderWidth: 1
-      }
-    ]
-  });
-  const [inputStakingChartData, setInputStakingChartData] = useState({
-    labels: ['Staked: 0 aergo', 'UnStake: 0 aergo', 'New Staking: 0 aergo'],
-    datasets: [
-      {
-        label: '# of AERGOS',
-        data: [0, 0, 0],
-        borderWidth: 1
-      }
-    ]
-  });
-  const [votingChartData, setVotingChartData] = useState({
-    labels: [
-      'BP',
-      'BP Count',
-      'Gas Price',
-      'Staking Minimum',
-      'Name Price',
-      'UnVoting'
-    ],
-    datasets: [
-      {
-        label: '# of Voting Power',
-        data: [0, 0, 0, 0, 0, 0],
-        borderWidth: 1
-      }
-    ]
-  });
+
+  const [stakingChartData, setStakingChartData] = useState(
+    initialStakingChartData
+  );
+  const [inputStakingChartData, setInputStakingChartData] = useState(
+    initialInputStakingChart
+  );
+  const [votingChartData, setVotingChartData] = useState(initialVotingChart);
   const [rewards, setRewards] = useState({ blockCount: 0, blockPerDay: [] });
   const [hash, setHash] = useState('');
+  const [remainVotingTime, setRemainVotingTime] = useState('');
+  const [expectedRewards, setExpectedRewards] = useState(0);
 
   useEffect(() => {
     const getStakedBalance = async () => {
       const { amount } = await getStaking(address);
       if (amount && accountBalance) {
-        const staked = Number(formatTokenAmount(amount, '', 18));
-        const unstaked = Number(
-          formatTokenAmount(String(BigInt(accountBalance)), '', 18)
+        const staked = Math.floor(Number(formatTokenAmount(amount, '', 18)));
+        const unstaked = Math.floor(
+          Number(formatTokenAmount(String(BigInt(accountBalance)), '', 18))
         );
         if (staked || unstaked) {
           const newStakingChartData = {
@@ -175,7 +103,6 @@ export const GovernanceView = () => {
             ]
           };
           setStakingChartData(newStakingChartData);
-
           const newInputStakingChartData = cloneDeep(newStakingChartData);
           newInputStakingChartData.labels.push(
             `New ${isStake ? 'Staking' : 'UnStaking'}: ${value} AERGO`
@@ -191,7 +118,7 @@ export const GovernanceView = () => {
     } else {
       console.log('no Balance');
     }
-  }, [address, accountBalance, isStake]);
+  }, [address, accountBalance, isStake, activeNetwork]);
 
   const handleStake = async () => {
     const valueWithDecimals = amountWithDecimals(value, 18);
@@ -206,140 +133,14 @@ export const GovernanceView = () => {
 
   const handleClickVotingPower = async (payload: any) => {
     const sendVoteResults = await sendVote(address, payload);
+    console.log(sendVoteResults, 'sendVoteResults');
     console.log(sendVoteResults[0].hash, 'sendVoteResults hash');
-    setHash(sendVoteResults[0].hash);
-  };
-
-  useEffect(() => {
-    const getVotesFunc = async () => {
-      const { bps } = await getConsensusInfo();
-      const { chainInfo } = await blockchain();
-      const { voting } = await getAccountVotes(address);
-      const newVotingChartData = cloneDeep(votingChartData);
-
-      votesList.find((votes) =>
-        votes.id === 'voteBP'
-          ? ((votes.defaultValue = 'ALL'),
-            (votes.payload = {
-              name: 'v1voteBP',
-              args: bps?.map((bp: any) => bp.PeerID)
-            }),
-            (votes.userVotes = voting?.find(
-              (accountVote: any) => accountVote.id === votes.id
-            )),
-            (newVotingChartData.datasets[0].data[0] = Number(
-              formatTokenAmount(
-                voting?.find((accountVote: any) => accountVote.id === votes.id)
-                  ?.amount,
-                '',
-                18
-              )
-            )))
-          : null
-      );
-
-      votesList.find((votes) =>
-        votes.id === 'BPCOUNT'
-          ? ((votes.defaultValue = chainInfo?.bpNumber),
-            (votes.payload = {
-              name: 'v1voteDAO',
-              args: ['BPCOUNT', String(chainInfo?.bpNumber)]
-            }),
-            (votes.userVotes = voting?.find(
-              (accountVote: any) => accountVote.id === votes.id
-            )),
-            (newVotingChartData.datasets[0].data[1] = Number(
-              formatTokenAmount(
-                voting?.find((accountVote: any) => accountVote.id === votes.id)
-                  ?.amount,
-                '',
-                18
-              )
-            )))
-          : null
-      );
-
-      votesList.find((votes) =>
-        votes.id === 'STAKINGMIN'
-          ? ((votes.defaultValue = formatTokenAmount(
-              chainInfo?.stakingminimum,
-              'AERGO',
-              18
-            ) as string),
-            (votes.payload = {
-              name: 'v1voteDAO',
-              args: ['STAKINGMIN', chainInfo?.stakingminimum]
-            }),
-            (votes.userVotes = voting?.find(
-              (accountVote: any) => accountVote.id === votes.id
-            )),
-            (newVotingChartData.datasets[0].data[2] = Number(
-              formatTokenAmount(
-                voting?.find((accountVote: any) => accountVote.id === votes.id)
-                  ?.amount,
-                '',
-                18
-              )
-            )))
-          : null
-      );
-
-      votesList.find((votes) =>
-        votes.id === 'GASPRICE'
-          ? ((votes.defaultValue = formatTokenAmount(
-              chainInfo?.gasprice,
-              'gaer',
-              9
-            ) as string),
-            (votes.payload = {
-              name: 'v1voteDAO',
-              args: ['GASPRICE', chainInfo?.gasprice]
-            }),
-            (votes.userVotes = voting?.find(
-              (accountVote: any) => accountVote.id === votes.id
-            )),
-            (newVotingChartData.datasets[0].data[3] = Number(
-              formatTokenAmount(
-                voting?.find((accountVote: any) => accountVote.id === votes.id)
-                  ?.amount,
-                '',
-                18
-              )
-            )))
-          : null
-      );
-
-      votesList.find((votes) =>
-        votes.id === 'NAMEPRICE'
-          ? ((votes.defaultValue = formatTokenAmount(
-              chainInfo?.nameprice,
-              'AERGO',
-              18
-            ) as string),
-            (votes.payload = {
-              name: 'v1voteDAO',
-              args: ['NAMEPRICE', chainInfo?.nameprice]
-            }),
-            (votes.userVotes = voting?.find(
-              (accountVote: any) => accountVote.id === votes.id
-            )),
-            (newVotingChartData.datasets[0].data[4] = Number(
-              formatTokenAmount(
-                voting?.find((accountVote: any) => accountVote.id === votes.id)
-                  ?.amount,
-                '',
-                18
-              )
-            )))
-          : null
-      );
-
-      setVotingChartData(newVotingChartData);
-    };
-    if (address) {
-      getVotesFunc();
+    if (!sendVoteResults[0].error) {
+      setHash(sendVoteResults[0].hash);
+    } else {
+      console.log(sendVoteResults[0].error, 'Not Voting yet');
     }
-  }, [address, hash]);
+  };
 
   useEffect(() => {
     const newInputChartData = cloneDeep(inputStakingChartData);
@@ -367,6 +168,21 @@ export const GovernanceView = () => {
 
   useEffect(() => {
     const getRewards = async () => {
+      const { when } = await getStaking(address);
+      if (when) {
+        const { header } = await getBlock(when);
+        if (header?.timestamp) {
+          const nextActionTime =
+            header.timestamp / 1000000 + 60 * 60 * 24 * 1000;
+          const now = Math.floor(new Date().getTime());
+
+          if (nextActionTime < now) {
+            setRemainVotingTime('now');
+          } else {
+            setRemainVotingTime(formatDistance(new Date(), nextActionTime));
+          }
+        }
+      }
       const scanApiInstance = await scanApi(network);
       if (scanApiInstance && address) {
         const getRewardsHistory = (
@@ -377,12 +193,251 @@ export const GovernanceView = () => {
         setRewards(getRewardsHistory);
       }
     };
-    getRewards();
-  }, [address]);
+    if (address) {
+      getRewards();
+    }
+  }, [address, hash, activeNetwork]);
+
+  useEffect(() => {
+    const newVotingChartData = cloneDeep(votingChartData);
+    const getVotesFunc = async () => {
+      const { bps } = await getConsensusInfo();
+      const { voting } = await getAccountVotes(address);
+      console.log(voting, 'voting');
+      const { chainInfo } = await blockchain();
+      votesList.find(async (votes) =>
+        votes.id === 'voteBP'
+          ? ((votes.defaultValue = 'ALL'),
+            (votes.payload = {
+              name: 'v1voteBP',
+              args: bps?.map((bp: any) => bp.PeerID)
+            }),
+            (votes.userVotes = voting?.find(
+              (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[0] = Math.floor(
+              +Number(
+                formatTokenAmount(
+                  voting?.find(
+                    (accountVote: any) => accountVote.id === votes.id
+                  )?.amount,
+                  '',
+                  18
+                )
+              )
+            )),
+            (newVotingChartData.datasets[0].data[5] =
+              stakingChartData.datasets[0].data[0] * 5 -
+              Math.floor(
+                +Number(
+                  formatTokenAmount(
+                    voting?.find(
+                      (accountVote: any) => accountVote.id === votes.id
+                    )?.amount,
+                    '',
+                    18
+                  )
+                )
+              )))
+          : null
+      );
+
+      votesList.find((votes) =>
+        votes.id === 'BPCOUNT'
+          ? ((votes.defaultValue = chainInfo?.bpNumber),
+            (votes.payload = {
+              name: 'v1voteDAO',
+              args: ['BPCOUNT', String(chainInfo?.bpNumber)]
+            }),
+            (votes.userVotes = voting?.find(
+              (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[1] = Math.floor(
+              +Number(
+                formatTokenAmount(
+                  voting?.find(
+                    (accountVote: any) => accountVote.id === votes.id
+                  )?.amount,
+                  '',
+                  18
+                )
+              )
+            )),
+            (newVotingChartData.datasets[0].data[5] =
+              newVotingChartData.datasets[0].data[5] -
+              Math.floor(
+                +Number(
+                  formatTokenAmount(
+                    voting?.find(
+                      (accountVote: any) => accountVote.id === votes.id
+                    )?.amount,
+                    '',
+                    18
+                  )
+                )
+              )))
+          : null
+      );
+
+      votesList.find((votes) =>
+        votes.id === 'STAKINGMIN'
+          ? ((votes.defaultValue = formatTokenAmount(
+              chainInfo?.stakingminimum,
+              'AERGO',
+              18
+            ) as string),
+            (votes.payload = {
+              name: 'v1voteDAO',
+              args: ['STAKINGMIN', chainInfo?.stakingminimum]
+            }),
+            (votes.userVotes = voting?.find(
+              (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[2] = Math.floor(
+              +Number(
+                formatTokenAmount(
+                  voting?.find(
+                    (accountVote: any) => accountVote.id === votes.id
+                  )?.amount,
+                  '',
+                  18
+                )
+              )
+            )),
+            (newVotingChartData.datasets[0].data[5] =
+              newVotingChartData.datasets[0].data[5] -
+              Math.floor(
+                +Number(
+                  formatTokenAmount(
+                    voting?.find(
+                      (accountVote: any) => accountVote.id === votes.id
+                    )?.amount,
+                    '',
+                    18
+                  )
+                )
+              )))
+          : null
+      );
+
+      votesList.find((votes) =>
+        votes.id === 'GASPRICE'
+          ? ((votes.defaultValue = formatTokenAmount(
+              chainInfo?.gasprice,
+              'gaer',
+              9
+            ) as string),
+            (votes.payload = {
+              name: 'v1voteDAO',
+              args: ['GASPRICE', chainInfo?.gasprice]
+            }),
+            (votes.userVotes = voting?.find(
+              (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[3] = Math.floor(
+              +Number(
+                formatTokenAmount(
+                  voting?.find(
+                    (accountVote: any) => accountVote.id === votes.id
+                  )?.amount,
+                  '',
+                  18
+                )
+              )
+            )),
+            (newVotingChartData.datasets[0].data[5] =
+              newVotingChartData.datasets[0].data[5] -
+              Math.floor(
+                +Number(
+                  formatTokenAmount(
+                    voting?.find(
+                      (accountVote: any) => accountVote.id === votes.id
+                    )?.amount,
+                    '',
+                    18
+                  )
+                )
+              )))
+          : null
+      );
+
+      votesList.find((votes) =>
+        votes.id === 'NAMEPRICE'
+          ? ((votes.defaultValue = formatTokenAmount(
+              chainInfo?.nameprice,
+              'AERGO',
+              18
+            ) as string),
+            (votes.payload = {
+              name: 'v1voteDAO',
+              args: ['NAMEPRICE', chainInfo?.nameprice]
+            }),
+            (votes.userVotes = voting?.find(
+              (accountVote: any) => accountVote.id === votes.id
+            )),
+            (newVotingChartData.datasets[0].data[4] = Math.floor(
+              +Number(
+                formatTokenAmount(
+                  voting?.find(
+                    (accountVote: any) => accountVote.id === votes.id
+                  )?.amount,
+                  '',
+                  18
+                )
+              )
+            )),
+            (newVotingChartData.datasets[0].data[5] =
+              newVotingChartData.datasets[0].data[5] -
+              Math.floor(
+                +Number(
+                  formatTokenAmount(
+                    voting?.find(
+                      (accountVote: any) => accountVote.id === votes.id
+                    )?.amount,
+                    '',
+                    18
+                  )
+                )
+              )))
+          : null
+      );
+
+      setVotingChartData(newVotingChartData);
+    };
+    if (address && stakingChartData.datasets[0].data[0]) {
+      getVotesFunc();
+    }
+  }, [address, hash, activeNetwork, stakingChartData.datasets[0].data[0]]);
 
   const handleClickAmountPercent = (percent: string) => {
     setValue(String(stakingChartData.datasets[0].data[1] * (+percent / 100)));
   };
+
+  useEffect(() => {
+    const getExpectedRewards = async () => {
+      //* (My VotingPowers / Total Voting Power) * 86400
+      const { chainInfo } = await blockchain();
+      if (chainInfo?.totalvotingpower) {
+        const formatedTotalVotingPower = Number(
+          formatTokenAmount(chainInfo.totalvotingpower, '', 18)
+        );
+        setExpectedRewards(
+          Math.floor(
+            ((votingChartData.datasets[0].data[0] +
+              votingChartData.datasets[0].data[1] +
+              votingChartData.datasets[0].data[2] +
+              votingChartData.datasets[0].data[3] +
+              votingChartData.datasets[0].data[4]) /
+              formatedTotalVotingPower) *
+              86400 *
+              0.16 *
+              100
+          ) / 100
+        );
+      }
+    };
+    getExpectedRewards();
+  }, [votingChartData.datasets[0].data, stakingChartData.datasets[0].data]);
 
   return (
     <Wrapper>
@@ -411,6 +466,7 @@ export const GovernanceView = () => {
       />
       <TableWrapper>
         <TableTitle>Last 30 days Rewards</TableTitle>
+
         <Table>
           <TableHead>
             <Tr>
@@ -435,7 +491,7 @@ export const GovernanceView = () => {
                   <Td>{idx + 1}</Td>
                   <Td>{block['key_as_string']}</Td>
                   <Td>{block['doc_count']}</Td>
-                  <Td>{block['doc_count'] * 0.16}</Td>
+                  <Td>{Math.floor(block['doc_count'] * 0.16 * 100) / 100}</Td>
                 </Tr>
               ))
             ) : (
@@ -451,11 +507,11 @@ export const GovernanceView = () => {
         <ModalWrapper>
           <Column>
             <TextWrapper>
-              <VotingTitle>{`Stake [ ${inputStakingChartData.datasets[0].data[0].toFixed(
-                0
-              )}/${
-                +stakingChartData.datasets[0].data[0].toFixed(0) +
-                +stakingChartData.datasets[0].data[1].toFixed(0)
+              <VotingTitle>{`Stake [ ${
+                inputStakingChartData.datasets[0].data[0]
+              }/${
+                +stakingChartData.datasets[0].data[0] +
+                +stakingChartData.datasets[0].data[1]
               } ]`}</VotingTitle>
 
               <Row style={{ width: '20rem' }}>
@@ -510,103 +566,185 @@ export const GovernanceView = () => {
       </PopIn>
       <PopIn isOpen={sidebar.text === 'Voting'} setIsOpen={setSidebar}>
         <ModalWrapper>
-          <Column>
-            <TextWrapper>
-              <VotingTitle>{`Voting Power [ ${stakingChartData.datasets[0].data[0].toFixed(
-                0
-              )}/${(stakingChartData.datasets[0].data[0] * 5).toFixed(
-                0
-              )} ]`}</VotingTitle>
-            </TextWrapper>
-            <TextWrapper>
-              <VotingInfo>- Next voting time in 1 day</VotingInfo>
-            </TextWrapper>
-            <Pie
-              style={{ maxHeight: '300px' }}
-              data={votingChartData}
-              options={{
-                ...options,
-                plugins: { legend: { position: 'right' } }
-              }}
-            />
-            <TextWrapper style={{ textAlign: 'center' }}>
-              <RewardTitle>Expected Daily Reward</RewardTitle>
-              <RewardValue>{rewards.blockCount * 0.16} AERGO</RewardValue>
-            </TextWrapper>
-            {votesList.map(({ name, defaultValue, payload, userVotes }) => (
-              <Row style={{ width: '100%' }} key={name}>
-                <InputWithLabel
-                  style={{ padding: '0 0.5rem' }}
-                  label={`${name}: ${defaultValue}`}
-                  disabled
-                  value={''}
-                >
-                  <VoteWrapper>
-                    <Voted
-                      percentage={
-                        stakingChartData.datasets[0].data[0] !== 0
-                          ? (Number(
-                              formatTokenAmount(
-                                userVotes?.amount || '0',
-                                '',
-                                18
-                              )
-                            ) /
+          {stakingChartData.datasets[0].data[0] ? (
+            <Column>
+              <TextWrapper>
+                <VotingTitle>{`Voting Power [ ${
+                  votingChartData.datasets[0].data[0] +
+                  votingChartData.datasets[0].data[1] +
+                  votingChartData.datasets[0].data[2] +
+                  votingChartData.datasets[0].data[3] +
+                  votingChartData.datasets[0].data[4]
+                }/${stakingChartData.datasets[0].data[0] * 5} ]`}</VotingTitle>
+              </TextWrapper>
+              <TextWrapper>
+                <VotingInfo>
+                  - Next Voting time in {remainVotingTime}
+                </VotingInfo>
+              </TextWrapper>
+              <Pie
+                style={{ maxHeight: '300px' }}
+                data={votingChartData}
+                options={{
+                  ...options,
+                  plugins: { legend: { position: 'right' } }
+                }}
+              />
+              <TextWrapper style={{ textAlign: 'center' }}>
+                <RewardTitle>Expected Daily Reward</RewardTitle>
+                <RewardValue>
+                  {expectedRewards}
+                  {/* {Math.floor(rewards.blockCount * 0.16 * 10000) / 10000} AERGO */}
+                </RewardValue>
+              </TextWrapper>
+              {votesList.map(
+                ({ name, defaultValue, payload, userVotes }, idx) => (
+                  <Row style={{ width: '100%' }} key={name}>
+                    <InputWithLabel
+                      style={{ padding: '0 0.5rem' }}
+                      label={`${name}: ${defaultValue}`}
+                      disabled
+                      value={''}
+                    >
+                      <VoteWrapper>
+                        <Voted
+                          percentage={`${
+                            (votingChartData.datasets[0].data[idx] /
                               stakingChartData.datasets[0].data[0]) *
                             100
-                          : 0
-                      }
-                    />
-                    <UnVoted
-                      percentage={
-                        stakingChartData.datasets[0].data[0] !== 0
-                          ? (Number(
-                              formatTokenAmount(
-                                userVotes?.amount || '0',
-                                '',
-                                18
-                              )
-                            ) /
+                          }`}
+                        />
+                        <UnVoted
+                          percentage={`${
+                            (votingChartData.datasets[0].data[idx] /
                               stakingChartData.datasets[0].data[0]) *
                             100
-                          : 0
-                      }
-                    />
-                  </VoteWrapper>
-                  <Percentage>
-                    {`${
-                      stakingChartData.datasets[0].data[0] !== 0
-                        ? (Number(
-                            formatTokenAmount(userVotes?.amount || '0', '', 18)
-                          ) /
-                            stakingChartData.datasets[0].data[0]) *
-                          100
-                        : 0
-                    }%`}
-                  </Percentage>
-                </InputWithLabel>
-                <FlexEnd>
-                  <VotingPowerValue>{`[ ${Number(
-                    formatTokenAmount(userVotes?.amount || '0', '', 18)
-                  ).toFixed(0)}/${stakingChartData.datasets[0].data[0].toFixed(
-                    0
-                  )} ]`}</VotingPowerValue>
-                  <Button
-                    onClick={() => handleClickVotingPower(payload)}
-                    variant="font-gradation"
-                    style={{
-                      marginLeft: '2rem'
-                    }}
-                    fontSize="1.4rem"
-                  >
-                    Power Up
-                  </Button>
-                </FlexEnd>
-              </Row>
-            ))}
-          </Column>
+                          }`}
+                        />
+                      </VoteWrapper>
+                      <Percentage>
+                        {`${
+                          Math.floor(
+                            (votingChartData.datasets[0].data[idx] /
+                              stakingChartData.datasets[0].data[0]) *
+                              100 *
+                              10
+                          ) / 10
+                        }%`}
+                      </Percentage>
+                    </InputWithLabel>
+                    <FlexEnd>
+                      <VotingPowerValue>{`[ ${votingChartData.datasets[0].data[idx]}/${stakingChartData.datasets[0].data[0]} ]`}</VotingPowerValue>
+                      <Button
+                        onClick={() => handleClickVotingPower(payload)}
+                        variant="font-gradation"
+                        style={{
+                          marginLeft: '2rem'
+                        }}
+                        fontSize="1.4rem"
+                      >
+                        Power Up
+                      </Button>
+                    </FlexEnd>
+                  </Row>
+                )
+              )}
+            </Column>
+          ) : (
+            <span>Staking first</span>
+          )}
         </ModalWrapper>
       </PopIn>
     </Wrapper>
   );
 };
+
+const votesList = [
+  {
+    id: 'voteBP',
+    name: 'Block Producers',
+    defaultValue: '',
+    payload: { name: 'v1voteBP', args: [] },
+    userVotes: { amount: '', candidates: [], id: '' }
+  },
+  {
+    id: 'BPCOUNT',
+    name: 'Block Producer Count',
+    defaultValue: '',
+    payload: { name: 'v1voteDAO', args: ['BPCOUNT', ''] },
+    userVotes: { amount: '', candidates: [], id: '' }
+  },
+  {
+    id: 'STAKINGMIN',
+    name: 'Staking Minimum',
+    defaultValue: '',
+    payload: { name: 'v1voteDAO', args: ['STAKINGMIN', ''] },
+    userVotes: { amount: '', candidates: [], id: '' }
+  },
+  {
+    id: 'GASPRICE',
+    name: 'Gas Price',
+    defaultValue: '',
+    payload: { name: 'v1voteDAO', args: ['GASPRICE', ''] },
+    userVotes: { amount: '', candidates: [], id: '' }
+  },
+  {
+    id: 'NAMEPRICE',
+    name: 'Name Transaction Price',
+    defaultValue: '',
+    payload: { name: 'v1voteDAO', args: ['NAMEPRICE', ''] },
+    userVotes: { amount: '', candidates: [], id: '' }
+  }
+];
+
+const initialVotingChart = {
+  labels: [
+    'BP',
+    'BP Count',
+    'Gas Price',
+    'Staking Minimum',
+    'Name Price',
+    'UnVoting'
+  ],
+  datasets: [
+    {
+      label: '# of Voting Power',
+      data: [0, 0, 0, 0, 0, 0],
+      borderWidth: 1
+    }
+  ]
+};
+
+const initialStakingChartData = {
+  labels: ['Staked: 0 aergo', 'UnStake: 0 aergo'],
+  datasets: [
+    {
+      label: '# of AERGOS',
+      data: [0, 0],
+      borderWidth: 1
+    }
+  ]
+};
+
+const initialInputStakingChart = {
+  labels: ['Staked: 0 aergo', 'UnStake: 0 aergo', 'New Staking: 0 aergo'],
+  datasets: [
+    {
+      label: '# of AERGOS',
+      data: [0, 0, 0],
+      borderWidth: 1
+    }
+  ]
+};
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'right'
+    }
+  }
+};
+
+const maxArr = ['10', '25', '50', '75', '100'];

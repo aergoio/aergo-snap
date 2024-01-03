@@ -79,11 +79,11 @@ const sendTransaction = async (tx: any) => {
 
   if (tx.payloadJson) {
     pn.push(heading(`Function`));
-    pn.push(text(tx.payloadJson.name));
+    pn.push(text(tx.payloadJson.Name));
 
-    if (tx.payloadJson.args) {
+    if (tx.payloadJson.Args) {
       pn.push(heading(`Arguments`));
-      pn.push(text(`${tx.payloadJson.args.toString()}`));
+      pn.push(text(`${tx.payloadJson.Args.toString()}`));
     }
   }
 
@@ -127,12 +127,14 @@ const sendVote = async (params: any) => {
   const pn: any[] = [heading(`From`), copyable(`${tx.from}`)];
 
   if (tx.payloadJson) {
+    pn.push(heading(`To`));
+    pn.push(text('aergo.system'));
     pn.push(heading(`Function`));
-    pn.push(text(tx.payloadJson.name));
+    pn.push(text(tx.payloadJson.Name));
 
-    if (tx.payloadJson.args) {
+    if (tx.payloadJson.Args) {
       pn.push(heading(`Arguments`));
-      pn.push(text(`${tx.payloadJson.args.toString()}`));
+      pn.push(text(`${tx.payloadJson.Args.toString()}`));
     }
   }
 
@@ -170,13 +172,15 @@ const sendStake = async (params: any) => {
     nonce: account.nonce + 1,
     type: 1,
     limit: 0,
-    payloadJson: { name: 'v1stake' },
+    payloadJson: { Name: 'v1stake' },
     chainIdHash: info.chainIdHash
   };
 
   const pn: any[] = [heading(`From`), copyable(`${tx.from}`)];
 
   if (tx.amount) {
+    pn.push(heading(`To`));
+    pn.push(text('aergo.system'));
     pn.push(heading(`Amount`));
     pn.push(text(tx.amount));
   }
@@ -215,13 +219,15 @@ const sendUnStake = async (params: any) => {
     nonce: account.nonce + 1,
     type: 1,
     limit: 0,
-    payloadJson: { name: 'v1unstake' },
+    payloadJson: { Name: 'v1unstake' },
     chainIdHash: info.chainIdHash
   };
 
   const pn: any[] = [heading(`From`), copyable(`${tx.from}`)];
 
   if (tx.amount) {
+    pn.push(heading(`To`));
+    pn.push(text('aergo.system'));
     pn.push(heading(`Amount`));
     pn.push(text(tx.amount));
   }
@@ -261,8 +267,8 @@ const sendToken = async (params: any) => {
     type: 5,
     limit: 0,
     payloadJson: {
-      name: 'transfer',
-      args: [params.to, params.amount, '']
+      Name: 'transfer',
+      Args: [params.to, params.amount, '']
     },
     chainIdHash: info.chainIdHash
   };
@@ -315,8 +321,8 @@ const sendNft = async (params: any) => {
     type: 5,
     limit: 0,
     payloadJson: {
-      name: 'transfer',
-      args: [params.to, params.amount, '']
+      Name: 'transfer',
+      Args: [params.to, params.amount, '']
     },
     chainIdHash: info.chainIdHash
   };

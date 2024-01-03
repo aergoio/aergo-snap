@@ -14,6 +14,7 @@ import {
   Dollor
 } from './TokenItem.style';
 import { formatTokenAmount } from 'utils/utils';
+import { useState, useEffect } from 'react';
 
 interface Props {
   onClick: () => void;
@@ -22,6 +23,23 @@ interface Props {
 export const AergoTokenView = ({ onClick }: Props) => {
   const theme = useTheme();
   const { accountBalance } = useAppSelector((state) => state.wallet);
+  const [dollor, setDollor] = useState('0 USD');
+  const [aergo, setAergo] = useState('0 AERGO');
+
+  useEffect(() => {
+    if (accountBalance) {
+      const formattedAsset = formatTokenAmount(
+        String(accountBalance || '0'),
+        '',
+        18
+      ) as string;
+      setAergo(`${String(Math.floor(+formattedAsset * 10000) / 10000)} AERGO`);
+      setDollor(`${String(Math.floor(+formattedAsset * 10000) / 10000)} USD`);
+    } else {
+      setAergo(`0 AERGO`);
+      setDollor(`0 USD`);
+    }
+  }, [accountBalance]);
 
   return (
     <Container onClick={onClick}>
@@ -32,18 +50,12 @@ export const AergoTokenView = ({ onClick }: Props) => {
         <Content>
           <Top>
             <TokenName>AERGO</TokenName>
-            <Dollor>
-              {`$ ${formatTokenAmount(accountBalance || '0', 'USD', 18)}`}
-            </Dollor>
+            <Dollor>{`$ ${dollor}`}</Dollor>
           </Top>
           <Bottom>
-            <Amount>
-              {formatTokenAmount(accountBalance || '0', 'AERGO', 18)}
-            </Amount>
+            <Amount>{`${aergo}`}</Amount>
           </Bottom>
         </Content>
-        {/* <li>hash:{token.hash}</li> */}
-        {/* <li>contractAddress:{token.contractAddress}</li> */}
       </Wrapper>
       <Line />
     </Container>

@@ -61,8 +61,8 @@ export const SendModalView = ({ setSendModal, setHash }: Props) => {
         amount: `0`,
         type: 5,
         payloadJson: {
-          name: 'transfer',
-          args: [
+          Name: 'transfer',
+          Args: [
             `${to}`,
             `${amountWithDecimals(amount, selectedToken.meta.decimals)}`,
             ``

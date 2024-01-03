@@ -18,7 +18,7 @@ export const AccountAddressCopyButtonView = ({
 }: Props) => {
   const [isCopied, setIsCopied] = useState(false);
   const handleAddressClick = (address: string) => {
-    console.log(address,'copied address')
+    console.log(address, 'copied address');
     navigator.clipboard.writeText(address);
     setIsCopied(true);
   };
@@ -36,14 +36,14 @@ export const AccountAddressCopyButtonView = ({
       <PopperTooltip
         content="Copied!"
         closeTrigger="timeout"
-        offSet={[108, 15]}
+        offSet={[0, 0]}
         placement={placement}
       >
         <PopperTooltip
-          content="Copy to clipboard"
+          content={address}
           closeTrigger="hover"
           contentStyle={isCopied ? { display: 'none' } : {}}
-          offSet={[150, 15]}
+          offSet={[0, 0]}
           placement={placement}
         >
           <Wrapper

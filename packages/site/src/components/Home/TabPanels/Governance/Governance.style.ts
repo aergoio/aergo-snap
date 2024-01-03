@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface VotedProps {
-  percentage: number;
+  percentage: number | string;
 }
 
 export const Wrapper = styled.div`
@@ -76,7 +76,7 @@ export const Voted = styled.span<VotedProps>`
   border: solid 1px ${(props) => props.theme.colors.primary.main};
   background: ${(props) => props.theme.colors.primary.main};
   border-radius: ${(props) =>
-    props.percentage === 100 ? '8px' : '0 8px 8px 0'};
+    props.percentage === 100 ? '8px' : '8px 0 0 8px'};
 `;
 
 export const UnVoted = styled.span<VotedProps>`

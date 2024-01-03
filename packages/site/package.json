@@ -35,6 +35,7 @@
     "@metamask/providers": "^9.1.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
+    "date-fns": "^3.0.6",
     "jdenticon": "^3.2.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

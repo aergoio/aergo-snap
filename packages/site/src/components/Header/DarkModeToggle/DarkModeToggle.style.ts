@@ -19,6 +19,9 @@ export const Wrapper = styled.div`
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `;
 
 export const ToggleInput = styled.input`

@@ -6,7 +6,7 @@ import {
   Wrapper,
   InfoWrapper,
   StyledAccountImage,
-  AssetWrapper,
+  AssetWrapper
 } from './AddressInfo.style';
 import { AssetQuantity } from './AssetQuantity';
 
@@ -25,13 +25,13 @@ export const AddressInfoView = () => {
                   address={address}
                   size={50}
                 />
-                <AccountAddressCopyButton address={address} />
+                <AccountAddressCopyButton address={address} placement="top" />
               </InfoWrapper>
               <AssetWrapper>
                 <AssetQuantity />
               </AssetWrapper>
             </Wrapper>
-          ),
+          )
         }}
       />
     </Container>
