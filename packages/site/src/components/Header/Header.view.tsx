@@ -13,10 +13,10 @@ import {
   AccountNameWrapper,
   AccountName,
   Right,
-  StyledFaEllipsisV,
   Title
 } from './Header.style';
 import { NetworkMenu } from './NetworkMenu';
+import { OptionMenu } from './OptionMenu';
 
 export const HeaderView = ({
   handleToggleClick
@@ -26,9 +26,6 @@ export const HeaderView = ({
   const theme = useTheme();
   const { address } = useAppSelector((state) => state.wallet);
   const [accountModal, setAccountModal] = useState(false);
-  const handleOptions = () => {
-    console.log('handleOptions');
-  };
 
   return (
     <div>
@@ -54,10 +51,7 @@ export const HeaderView = ({
             onToggle={handleToggleClick}
             defaultChecked={getThemePreference()}
           />
-          <StyledFaEllipsisV
-            icon={['fas', 'ellipsis-vertical']}
-            onClick={handleOptions}
-          />
+          <OptionMenu />
         </Right>
       </HeaderWrapper>
       <Line />

@@ -4,7 +4,7 @@
   "private": true,
   "license": "(MIT-0 OR Apache-2.0)",
   "scripts": {
-    "build": "GATSBY_TELEMETRY_DISABLED=1 gatsby build",
+    "build": "GATSBY_TELEMETRY_DISABLED=1 gatsby clean && gatsby build",
     "clean": "rimraf public",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
@@ -35,7 +35,7 @@
     "@metamask/providers": "^9.1.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
-    "elliptic": "^6.5.4",
+    "date-fns": "^3.0.6",
     "jdenticon": "^3.2.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

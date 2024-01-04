@@ -335,7 +335,6 @@ const getStaking = async (params: any) => {
   const data: { address: string } = {
     address: params.address
   };
-
   const response = await fetch(
     buildUrl(`${await getApiUrl()}/getStaking`, data)
   );
@@ -408,8 +407,9 @@ const sendSignedTransaction = async (params: any, key: any) => {
   };
 
   if (params.payloadJson) {
-    tx.payloadJson = { Name: params.payloadJson.name };
-    if (params.payloadJson.args) tx.payloadJson.Args = params.payloadJson.args;
+    tx.payloadJson = { Name: params.payloadJson.Name };
+    if (params.payloadJson.Args) tx.payloadJson.Args = params.payloadJson.Args;
+    else tx.payloadJson.Args = [];
   }
 
   const data = await signTx(tx, key);

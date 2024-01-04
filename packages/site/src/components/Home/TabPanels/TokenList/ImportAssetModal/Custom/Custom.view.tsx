@@ -7,7 +7,7 @@ import { Token } from 'types';
 import { setToken } from 'slices/walletSlice';
 import { Button } from 'ui/atom/Button';
 import { InputWrapper } from './Custom.style';
-import { useAergoSnap } from 'hooks/useAergoSnap';
+import { useAergoSnap } from 'apis/useAergoSnap';
 import { setSelectedToken } from 'slices/UISlice';
 interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

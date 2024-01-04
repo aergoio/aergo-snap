@@ -6,7 +6,7 @@ import { Wrapper, CloseButton, Panel } from './PopIn.style';
 
 type Props = {
   isOpen: boolean;
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean | any>>;
   showClose?: boolean;
   initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
   children?: ReactNode;

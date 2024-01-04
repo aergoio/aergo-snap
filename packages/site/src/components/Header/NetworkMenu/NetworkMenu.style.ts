@@ -2,40 +2,12 @@ import {
   FontAwesomeIcon,
   FontAwesomeIconProps
 } from '@fortawesome/react-fontawesome';
-import { Menu } from '@headlessui/react';
 import { AergoSvg } from 'assets/images';
 import styled from 'styled-components';
 
 interface StyledFaCircleProps extends FontAwesomeIconProps {
   checked: boolean;
 }
-
-export const Wrapper = styled.div`
-  @media screen and (max-width: 1000px) {
-    display: none;
-  }
-`;
-
-export const MenuItems = styled(Menu.Items)`
-  width: 25rem;
-  z-index: 1;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  right: 0;
-  background: ${(props) => props.theme.colors.background.default};
-  border: 1px solid ${(props) => props.theme.colors.grey.grey1};
-  box-shadow: 0px 14px 24px -6px rgba(106, 115, 125, 0.2);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  padding: ${(props) => props.theme.spacing.large} 0;
-  /* gap: 8px; */
-
-  /* ${({ theme }) => theme.mediaQueries.small} {
-    display: none;
-  } */
-`;
 
 export const MenuItem = styled.span`
   /* padding-right: 5rem; */

@@ -1,4 +1,10 @@
-import { FunctionComponent, ReactNode, useContext, useEffect } from 'react';
+import {
+  FunctionComponent,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -12,12 +18,8 @@ import {
   setSelectedToken
 } from 'slices/UISlice';
 import { ToggleThemeContext } from './Root';
-import {
-  useAergoSnap,
-  useAppDispatch,
-  useAppSelector,
-  useHasMetamask
-} from './hooks';
+import { useAppDispatch, useAppSelector, useHasMetamask } from './hooks';
+import { useAergoSnap } from 'apis/useAergoSnap';
 import { Footer, Header } from './components';
 
 library.add(fas);
@@ -30,6 +32,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   max-width: 100vw;
+  overflow-y: hidden;
 `;
 
 export type AppProps = {
@@ -93,7 +96,7 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     if (address) {
       getWalletDataWhenTokenChange();
     }
-  }, [selectedToken]);
+  }, [networks.activeNetwork, selectedToken]);
 
   useEffect(() => {
     const getWalletDataIntervalEvery10Seconds = setInterval(() => {

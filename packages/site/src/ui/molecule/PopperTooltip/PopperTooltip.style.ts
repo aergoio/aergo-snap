@@ -9,9 +9,9 @@ export const Wrapper = styled.div`
 `;
 
 export const PopperContainer = styled.div<IDiv>`
-  border-radius: ${(props) => props.theme.radii.rounded};
-  background-color: ${(props) => props.theme.colors.grey.white};
-  padding: ${(props) => props.theme.spacing.large};
+  border-radius: ${(props) => props.theme.radii.rect};
+  background-color: ${(props) => props.theme.colors.grey.grey1};
+  padding: ${(props) => props.theme.spacing.tiny};
   text-align: center;
   box-shadow: 0px 0px 60px 0px rgba(106, 115, 125, 0.2);
 
@@ -32,7 +32,8 @@ export const PopperContainer = styled.div<IDiv>`
   }
 
   &[data-popper-placement^='top'] > .arrow {
-    bottom: -37px;
+    display: none;
+    /* bottom: -37px; */
   }
 
   &[data-popper-placement^='right'] > .arrow {
@@ -51,10 +52,10 @@ export const PopperContainer = styled.div<IDiv>`
 `;
 
 export const ToolTipContent = styled.div`
-  font-size: ${(props) => props.theme.fontSizes.large};
-  /* color: ${(props) => props.theme.colors.primary.main}; */
-  background: ${(props) => props.theme.colors.gradation.main};
+  color: ${(props) => props.theme.colors.primary.main};
+  font-size: ${(props) => props.theme.fontSizes.small};
+  /* background: ${(props) => props.theme.colors.gradation.main};
   -webkit-background-clip: text; /* Safari/Chrome 지원을 위한 접두사 */
-  background-clip: text;
-  color: transparent;
+  /* background-clip: text; */
+  /* color: transparent; */ */
 `;

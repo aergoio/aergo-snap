@@ -6,7 +6,7 @@ import { POPOVER_DURATION } from 'utils/constants';
 import {
   PopperContainer,
   ToolTipContent,
-  Wrapper,
+  Wrapper
 } from './PopperTooltip.style';
 
 type CloseTriggers = 'timeout' | 'click' | 'hover';
@@ -27,7 +27,7 @@ export const PopperTooltipView = ({
   closeTrigger = 'timeout',
   arrowVisible = true,
   offSet,
-  placement,
+  placement
 }: Props) => {
   const [popperVisible, setPopperVisible] = useState(false);
 
@@ -66,14 +66,14 @@ export const PopperTooltipView = ({
     getTooltipProps,
     setTooltipRef,
     setTriggerRef,
-    visible,
+    visible
   } = usePopperTooltip({
     trigger: 'click',
     offset: offSet || [0, 23],
     visible: popperVisible,
     onVisibleChange: handlePopperVisibleChange,
     closeOnOutsideClick: closeTrigger === 'click',
-    placement,
+    placement
   });
   return (
     <>

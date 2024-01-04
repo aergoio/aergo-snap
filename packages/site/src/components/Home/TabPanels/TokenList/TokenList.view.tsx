@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { List, PopIn } from 'ui/molecule';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
-import { useAergoSnap } from 'hooks/useAergoSnap';
+import { useAergoSnap } from 'apis/useAergoSnap';
 import { setSelectedToken, setTokenType } from 'slices/UISlice';
 import { AergoToken, TokenItem } from './TokenItem';
 import { Wrapper, ButtonWrapper, StyledButton, NoNft } from './TokenList.style';
 import { ImportAssetModal } from './ImportAssetModal';
-import { Token } from 'types';
 
 interface Props {
   tokenType: 'ARC1' | 'ARC2';
@@ -26,8 +25,8 @@ export const TokenListView = ({ tokenType }: Props) => {
     ).length === 0 ||
       !tokens[chainIdLabel]);
 
-  const handleClickRefresh = () => {
-    getWalletData(
+  const handleClickRefresh = async () => {
+    await getWalletData(
       network,
       address,
       selectedToken !== 'AERGO' ? selectedToken.hash : null

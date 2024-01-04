@@ -36,6 +36,7 @@ export const theme = {
     large3: '3rem',
     large2: '2.4rem',
     large: '1.6rem',
+    tiny: '1.2rem',
     tiny1: '1rem',
     tiny2: '0.8rem',
     small: '0.6rem',
@@ -272,6 +273,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${(props) => props.theme.fonts.default};
     font-size: ${(props) => props.theme.fontSizes.small};
     margin: 0;
+    
+    /* overflow-y:hidden; */
   }
 
   * {
